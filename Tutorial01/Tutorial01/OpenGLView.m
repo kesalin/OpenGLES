@@ -95,10 +95,10 @@
 }
 
 - (void)layoutSubviews {
-    [EAGLContext setCurrentContext:_context];
-    
     [self setupLayer];        
-    [self setupContext];                
+    [self setupContext];
+    
+    [self destoryRenderAndFrameBuffer];
     [self setupRenderBuffer];        
     [self setupFrameBuffer];    
     
