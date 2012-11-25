@@ -17,6 +17,9 @@
 		2171BC721661B27E007B4825 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2171BC711661B27E007B4825 /* QuartzCore.framework */; };
 		2171BC741661B297007B4825 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2171BC731661B297007B4825 /* MainWindow.xib */; };
 		2171BC771661B2FA007B4825 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2171BC761661B2FA007B4825 /* OpenGLView.m */; };
+		2171BC7E1661B64A007B4825 /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2171BC7D1661B64A007B4825 /* GLESUtils.m */; };
+		2171BC811661C260007B4825 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2171BC7F1661BB4D007B4825 /* VertexShader.glsl */; };
+		2171BC821661C260007B4825 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2171BC801661BB65007B4825 /* FragmentShader.glsl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +38,10 @@
 		2171BC731661B297007B4825 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		2171BC751661B2FA007B4825 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		2171BC761661B2FA007B4825 /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
+		2171BC7C1661B64A007B4825 /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLESUtils.h; sourceTree = "<group>"; };
+		2171BC7D1661B64A007B4825 /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
+		2171BC7F1661BB4D007B4825 /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		2171BC801661BB65007B4825 /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +96,8 @@
 				2171BC681661B25A007B4825 /* AppDelegate.m */,
 				2171BC751661B2FA007B4825 /* OpenGLView.h */,
 				2171BC761661B2FA007B4825 /* OpenGLView.m */,
+				2171BC7C1661B64A007B4825 /* GLESUtils.h */,
+				2171BC7D1661B64A007B4825 /* GLESUtils.m */,
 				2171BC5F1661B25A007B4825 /* Supporting Files */,
 			);
 			path = Tutorial02;
@@ -98,6 +107,8 @@
 			isa = PBXGroup;
 			children = (
 				2171BC731661B297007B4825 /* MainWindow.xib */,
+				2171BC7F1661BB4D007B4825 /* VertexShader.glsl */,
+				2171BC801661BB65007B4825 /* FragmentShader.glsl */,
 				2171BC601661B25A007B4825 /* Tutorial02-Info.plist */,
 				2171BC611661B25A007B4825 /* InfoPlist.strings */,
 				2171BC641661B25A007B4825 /* main.m */,
@@ -156,6 +167,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2171BC811661C260007B4825 /* VertexShader.glsl in Resources */,
+				2171BC821661C260007B4825 /* FragmentShader.glsl in Resources */,
 				2171BC631661B25A007B4825 /* InfoPlist.strings in Resources */,
 				2171BC741661B297007B4825 /* MainWindow.xib in Resources */,
 			);
@@ -171,6 +184,7 @@
 				2171BC651661B25A007B4825 /* main.m in Sources */,
 				2171BC691661B25A007B4825 /* AppDelegate.m in Sources */,
 				2171BC771661B2FA007B4825 /* OpenGLView.m in Sources */,
+				2171BC7E1661B64A007B4825 /* GLESUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

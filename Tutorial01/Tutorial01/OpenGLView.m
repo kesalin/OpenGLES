@@ -99,6 +99,7 @@
     [self setupContext];
     
     [self destoryRenderAndFrameBuffer];
+    
     [self setupRenderBuffer];        
     [self setupFrameBuffer];    
     
