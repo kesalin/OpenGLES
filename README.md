@@ -13,7 +13,7 @@ modification, are permitted provided that the following conditions are met:
 Redistributions of source code must retain the above copyright notice, this 
 list of conditions and the following disclaimer.
 
-Neither the name of Chaos In Motion nor the names of its contributors may be 
+Neither the name of kesalin nor the names of its contributors may be 
 used to endorse or promote products derived from this software without 
 specific prior written permission.
 
@@ -29,7 +29,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
 THE POSSIBILITY OF SUCH DAMAGE.
 
-Contact William Woody at kesalin@gmail.com or l_zhaohui@163.com.
+Contact kesalin at kesalin@gmail.com or l_zhaohui@163.com.
 This is my technology blog: http://blog.csdn.net/kesalin/.
 
 This version is modified and maintained by kesalin@gmail.com.
