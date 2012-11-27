@@ -3,7 +3,7 @@
 //  Tutorial01
 //
 //  Created by kesalin on 12-11-24.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Copyright (c) 2012年 Created by kesalin@gmail.com on. All rights reserved.
 //
 
 #import "OpenGLView.h"
@@ -15,11 +15,11 @@
 
 - (void)setupLayer;
 - (void)setupContext;
-- (void)setupRenderBuffer;
-- (void)destoryRenderAndFrameBuffer;
-- (void)render;
+- (void)setupBuffers;
+- (void)destoryBuffers;
 
 - (void)setupProgram;
+- (void)setupProjection;
 
 - (void)updateTransform;
 
@@ -29,6 +29,8 @@
 @synthesize posX = _posX;
 @synthesize posY = _posY;
 @synthesize posZ = _posZ;
+@synthesize scaleY = _scaleY;
+@synthesize rotateZ = _rotateZ;
 
 + (Class)layerClass {
     // 只有 [CAEAGLLayer class] 类型的 layer 才支持在其上描绘 OpenGL 内容。
@@ -52,26 +54,25 @@
     EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
     _context = [[EAGLContext alloc] initWithAPI:api];
     if (!_context) {
-        NSLog(@"Failed to initialize OpenGLES 2.0 context");
+        NSLog(@" >> Error: Failed to initialize OpenGLES 2.0 context");
         exit(1);
     }
     
     // 设置为当前上下文
     if (![EAGLContext setCurrentContext:_context]) {
-        NSLog(@"Failed to set current OpenGL context");
+        _context = nil;
+        NSLog(@" >> Error: Failed to set current OpenGL context");
         exit(1);
     }
 }
 
-- (void)setupRenderBuffer {
+- (void)setupBuffers {
     glGenRenderbuffers(1, &_colorRenderBuffer);
     // 设置为当前 renderbuffer
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     // 为 color renderbuffer 分配存储空间
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];    
-}
-
-- (void)setupFrameBuffer {    
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+    
     glGenFramebuffers(1, &_frameBuffer);
     // 设置为当前 framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -80,12 +81,28 @@
                               GL_RENDERBUFFER, _colorRenderBuffer);
 }
 
-- (void)destoryRenderAndFrameBuffer
+- (void)destoryBuffers
 {
-    glDeleteFramebuffers(1, &_frameBuffer);
-    _frameBuffer = 0;
     glDeleteRenderbuffers(1, &_colorRenderBuffer);
     _colorRenderBuffer = 0;
+    
+    glDeleteFramebuffers(1, &_frameBuffer);
+    _frameBuffer = 0;
+}
+
+- (void)cleanup
+{
+    [self destoryBuffers];
+    
+    if (_programHandle != 0) {
+        glDeleteProgram(_programHandle);
+        _programHandle = 0;
+    }
+
+    if (_context && [EAGLContext currentContext] == _context)
+        [EAGLContext setCurrentContext:nil];
+    
+    _context = nil;
 }
 
 - (void)setupProgram
@@ -96,44 +113,11 @@
                                                                   ofType:@"glsl"];
     NSString * fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"FragmentShader"
                                                                     ofType:@"glsl"];
-    GLuint vertexShader = [GLESUtils loadShader:GL_VERTEX_SHADER
-                                   withFilepath:vertexShaderPath]; 
-    GLuint fragmentShader = [GLESUtils loadShader:GL_FRAGMENT_SHADER
-                                     withFilepath:fragmentShaderPath];
-
-    // Create program, attach shaders.
-    _programHandle = glCreateProgram();
-    if (!_programHandle) {
-        NSLog(@"Failed to create program.");
-        return;
-    }
     
-    glAttachShader(_programHandle, vertexShader);
-    glAttachShader(_programHandle, fragmentShader);
-    
-    // Link program
-    //
-    glLinkProgram(_programHandle);
-    
-    // Check the link status
-    GLint linked;
-    glGetProgramiv(_programHandle, GL_LINK_STATUS, &linked );
-    if (!linked) 
-    {
-        GLint infoLen = 0;
-        glGetProgramiv (_programHandle, GL_INFO_LOG_LENGTH, &infoLen );
-        
-        if (infoLen > 1)
-        {
-            char * infoLog = malloc(sizeof(char) * infoLen);
-            glGetProgramInfoLog (_programHandle, infoLen, NULL, infoLog );
-            NSLog(@"Error linking program:\n%s\n", infoLog );            
-            
-            free (infoLog );
-        }
-        
-        glDeleteProgram(_programHandle);
-        _programHandle = 0;
+    _programHandle = [GLESUtils loadProgram:vertexShaderPath
+                 withFragmentShaderFilepath:fragmentShaderPath];
+    if (_programHandle == 0) {
+        NSLog(@" >> Error: Failed to setup program.");
         return;
     }
     
@@ -143,77 +127,40 @@
     //
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     
-    // Get the uniform model-view-projection matrix slot from program
+    // Get the uniform model-view matrix slot from program
     //
-    _mvpMatrixSlot = glGetUniformLocation(_programHandle, "mvpMatrix");
-}
-
--(void)setPosX:(float)x
-{
-    _posX = x;
-
-    [self updateTransform];
-    [self render];
-}
-
--(float)posX
-{
-    return _posX;
-}
-
--(void)setPosY:(float)y
-{
-    _posY = y;
+    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     
-    [self updateTransform];
-    [self render];
+    // Get the uniform projection matrix slot from program
+    //
+    _projectionSlot = glGetUniformLocation(_programHandle, "projection");
 }
 
--(float)posY
+-(void)setupProjection
 {
-    return _posY;
-}
-
--(void)setPosZ:(float)z
-{
-    _posZ = z;
-
-    [self updateTransform];
-    [self render];
-}
-
--(float)posZ
-{
-    return _posZ;
+    // Generate a perspective matrix with a 60 degree FOV
+    //
+    float aspect = self.frame.size.width / self.frame.size.height;
+    ksMatrixLoadIdentity(&_projectionMatrix);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 1.0f, 20.0f);
 }
 
 - (void)updateTransform
 {
-    KSMatrix4 perspective;
-    KSMatrix4 modelview;
-    
-    // Generate a perspective matrix with a 60 degree FOV
-    //
-    float aspect = self.frame.size.width / self.frame.size.height;
-    ksMatrixLoadIdentity(&perspective);
-    ksPerspective(&perspective, 60.0, aspect, 1.0f, 20.0f);
-    
     // Generate a model view matrix to rotate/translate/scale
     //
-    ksMatrixLoadIdentity(&modelview);
+    ksMatrixLoadIdentity(&_modelViewMatrix);
     
     // Translate away from the viewer
     //
-    ksTranslate(&modelview, self.posX, self.posY, self.posZ);
+    ksTranslate(&_modelViewMatrix, self.posX, self.posY, self.posZ);
     
-    // Rotate the trangle
+    // Rotate the triangle
     //
-    ksRotate(&modelview, 0.0, 0.0, 0.0, 1.0);
+    ksRotate(&_modelViewMatrix, self.rotateZ, 0.0, 0.0, 1.0);
     
-    // Compute the final MVP by multiplying the 
-    // modevleiw and perspective matrices together
-    //
-    ksMatrixMultiply(&_mvpMatrix4, &modelview, &perspective);
+    // Scale the triangle
+    ksScale(&_modelViewMatrix, 1.0, self.scaleY, 1.0);
 }
 
 - (void)render
@@ -235,8 +182,10 @@
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
     
-    // Load the MVP matrix
-    glUniformMatrix4fv(_mvpMatrixSlot, 1, GL_FALSE, (GLfloat*)&_mvpMatrix4.m[0][0]);
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+    
+    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
     // Draw triangle
     //
@@ -249,11 +198,12 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        ksMatrixLoadIdentity(&_mvpMatrix4);
-        
-        _posX = 0.0;
-        _posY = 0.0;
-        _posZ = -5.5;
+        [self setupLayer];        
+        [self setupContext];
+        [self setupProgram];
+        [self setupProjection];
+
+        [self resetTransform];
     }
 
     return self;
@@ -261,16 +211,13 @@
 
 - (void)layoutSubviews
 {
-    [self setupLayer];        
-    [self setupContext];
-    
-    [self destoryRenderAndFrameBuffer];
-    
-    [self setupRenderBuffer];        
-    [self setupFrameBuffer];    
-    
-    [self setupProgram];
+    [EAGLContext setCurrentContext:_context];
+    glUseProgram(_programHandle);
 
+    [self destoryBuffers];
+    
+    [self setupBuffers];
+    
     [self updateTransform];
 
     [self render];
@@ -284,5 +231,86 @@
     // Drawing code
 }
 */
+
+#pragma mark - Transform properties
+
+- (void)resetTransform
+{
+    _posX = 0.0;
+    _posY = 0.0;
+    _posZ = -5.5;
+    
+    _scaleY = 1.0;
+    _rotateZ = 0.0;
+    
+    [self updateTransform];
+}
+
+- (void)setPosX:(float)x
+{
+    _posX = x;
+    
+    [self updateTransform];
+    [self render];
+}
+
+- (float)posX
+{
+    return _posX;
+}
+
+- (void)setPosY:(float)y
+{
+    _posY = y;
+    
+    [self updateTransform];
+    [self render];
+}
+
+- (float)posY
+{
+    return _posY;
+}
+
+- (void)setPosZ:(float)z
+{
+    _posZ = z;
+    
+    [self updateTransform];
+    [self render];
+}
+
+- (float)posZ
+{
+    return _posZ;
+}
+
+- (void)setScaleY:(float)scaleY
+{
+    _scaleY = scaleY;
+    
+    [self updateTransform];
+    [self render];
+}
+
+- (float)scaleY
+{
+    return _scaleY;
+}
+
+- (void)setRotateZ:(float)rotateZ
+{
+    _rotateZ = rotateZ;
+    
+    [self updateTransform];
+    [self render];
+}
+
+- (float)rotateZ
+{
+    return _rotateZ;
+}
+
+#pragma mark
 
 @end

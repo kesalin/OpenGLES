@@ -2,8 +2,8 @@
 //  GLESMath.c
 //  Tutorial03
 //
-//  Created by  on 12-11-26.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Created by kesalin@gmail.com on 12-11-26.
+//  Copyright (c) 2012年 Created by kesalin@gmail.com on. All rights reserved.
 //
 
 #include "GLESMath.h"

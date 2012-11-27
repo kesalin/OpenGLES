@@ -3,7 +3,7 @@
 //  Tutorial01
 //
 //  Created by kesalin on 12-11-24.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Copyright (c) 2012年 Created by kesalin@gmail.com on. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -20,17 +20,29 @@
     
     GLuint _programHandle;
     GLuint _positionSlot;
-    GLint _mvpMatrixSlot;
+    GLint _modelViewSlot;
+    GLint _projectionSlot;
     
-    KSMatrix4 _mvpMatrix4;
+    KSMatrix4 _modelViewMatrix;
+    KSMatrix4 _projectionMatrix;
     
     float _posX;
     float _posY;
     float _posZ;
+    
+    float _rotateZ;
+    float _scaleY;
 }
 
 @property (nonatomic, assign) float posX;
 @property (nonatomic, assign) float posY;
 @property (nonatomic, assign) float posZ;
+
+@property (nonatomic, assign) float scaleY;
+@property (nonatomic, assign) float rotateZ;
+
+- (void)resetTransform;
+- (void)render;
+- (void)cleanup;
 
 @end

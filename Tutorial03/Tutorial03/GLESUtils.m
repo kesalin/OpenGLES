@@ -2,8 +2,8 @@
 //  GLESUtils.m
 //  Tutorial02
 //
-//  Created by  on 12-11-25.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Created by kesalin@gmail.com on 12-11-25.
+//  Copyright (c) 2012年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import "GLESUtils.h"
@@ -61,6 +61,60 @@
     }
 
     return shader;
+}
+
++(GLuint)loadProgram:(NSString *)vertexShaderFilepath withFragmentShaderFilepath:(NSString *)fragmentShaderFilepath
+{
+    // Load the vertex/fragment shaders
+    GLuint vertexShader = [self loadShader:GL_VERTEX_SHADER
+                              withFilepath:vertexShaderFilepath];
+    if (vertexShader == 0)
+        return 0;
+    
+    GLuint fragmentShader = [self loadShader:GL_FRAGMENT_SHADER
+                                withFilepath:fragmentShaderFilepath];
+    if (fragmentShader == 0) {
+        glDeleteShader(vertexShader);
+        return 0;
+    }
+    
+    // Create the program object
+    GLuint programHandle = glCreateProgram();
+    if (programHandle == 0)
+        return 0;
+    
+    glAttachShader(programHandle, vertexShader);
+    glAttachShader(programHandle, fragmentShader);
+    
+    // Link the program
+    glLinkProgram(programHandle);
+    
+    // Check the link status
+    GLint linked;
+    glGetProgramiv(programHandle, GL_LINK_STATUS, &linked);
+    
+    if (!linked) {
+        GLint infoLen = 0;
+        glGetProgramiv(programHandle, GL_INFO_LOG_LENGTH, &infoLen);
+        
+        if (infoLen > 1){
+            char * infoLog = malloc(sizeof(char) * infoLen);
+            glGetProgramInfoLog(programHandle, infoLen, NULL, infoLog);
+
+            NSLog(@"Error linking program:\n%s\n", infoLog);            
+            
+            free(infoLog);
+        }
+        
+        glDeleteProgram(programHandle );
+        return 0;
+    }
+    
+    // Free up no longer needed shader resources
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    
+    return programHandle;
 }
 
 @end
