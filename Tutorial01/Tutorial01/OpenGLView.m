@@ -49,6 +49,8 @@
     
     // 设置为当前上下文
     if (![EAGLContext setCurrentContext:_context]) {
+        _context = nil;
+
         NSLog(@"Failed to set current OpenGL context");
         exit(1);
     }
@@ -90,13 +92,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setupLayer];        
+        [self setupContext];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [self setupLayer];        
-    [self setupContext];
+    [EAGLContext setCurrentContext:_context];
     
     [self destoryRenderAndFrameBuffer];
     
