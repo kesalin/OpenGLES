@@ -2,8 +2,8 @@
 //  OpenGLView.m
 //  Tutorial01
 //
-//  Created by kesalin on 12-11-24.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Created by kesalin@gmail.com on 12-11-24.
+//  Copyright (c) 2012年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import "OpenGLView.h"
@@ -14,11 +14,12 @@
 
 - (void)setupLayer;
 - (void)setupContext;
-- (void)setupRenderBuffer;
-- (void)destoryRenderAndFrameBuffer;
-- (void)render;
-
 - (void)setupProgram;
+
+- (void)setupBuffers;
+- (void)destoryBuffers;
+
+- (void)render;
 
 @end
 
@@ -52,20 +53,20 @@
     
     // 设置为当前上下文
     if (![EAGLContext setCurrentContext:_context]) {
+        _context = nil;
         NSLog(@"Failed to set current OpenGL context");
         exit(1);
     }
 }
 
-- (void)setupRenderBuffer {
+- (void)setupBuffers
+{
     glGenRenderbuffers(1, &_colorRenderBuffer);
     // 设置为当前 renderbuffer
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     // 为 color renderbuffer 分配存储空间
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];    
-}
-
-- (void)setupFrameBuffer {    
+    
     glGenFramebuffers(1, &_frameBuffer);
     // 设置为当前 framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -74,12 +75,13 @@
                               GL_RENDERBUFFER, _colorRenderBuffer);
 }
 
-- (void)destoryRenderAndFrameBuffer
+- (void)destoryBuffers
 {
-    glDeleteFramebuffers(1, &_frameBuffer);
-    _frameBuffer = 0;
     glDeleteRenderbuffers(1, &_colorRenderBuffer);
     _colorRenderBuffer = 0;
+
+    glDeleteFramebuffers(1, &_frameBuffer);
+    _frameBuffer = 0;
 }
 
 - (void)setupProgram
@@ -90,44 +92,13 @@
                                                                   ofType:@"glsl"];
     NSString * fragmentShaderPath = [[NSBundle mainBundle] pathForResource:@"FragmentShader"
                                                                     ofType:@"glsl"];
-    GLuint vertexShader = [GLESUtils loadShader:GL_VERTEX_SHADER
-                                   withFilepath:vertexShaderPath]; 
-    GLuint fragmentShader = [GLESUtils loadShader:GL_FRAGMENT_SHADER
-                                     withFilepath:fragmentShaderPath];
 
-    // Create program, attach shaders.
-    _programHandle = glCreateProgram();
-    if (!_programHandle) {
-        NSLog(@"Failed to create program.");
-        return;
-    }
-    
-    glAttachShader(_programHandle, vertexShader);
-    glAttachShader(_programHandle, fragmentShader);
-    
-    // Link program
+    // Create program, attach shaders, compile and link program
     //
-    glLinkProgram(_programHandle);
-    
-    // Check the link status
-    GLint linked;
-    glGetProgramiv(_programHandle, GL_LINK_STATUS, &linked );
-    if (!linked) 
-    {
-        GLint infoLen = 0;
-        glGetProgramiv (_programHandle, GL_INFO_LOG_LENGTH, &infoLen );
-        
-        if (infoLen > 1)
-        {
-            char * infoLog = malloc(sizeof(char) * infoLen);
-            glGetProgramInfoLog (_programHandle, infoLen, NULL, infoLog );
-            NSLog(@"Error linking program:\n%s\n", infoLog );            
-            
-            free (infoLog );
-        }
-        
-        glDeleteProgram(_programHandle);
-        _programHandle = 0;
+    _programHandle = [GLESUtils loadProgram:vertexShaderPath
+                 withFragmentShaderFilepath:fragmentShaderPath];
+    if (_programHandle == 0) {
+        NSLog(@" >> Error: Failed to setup program.");
         return;
     }
     
@@ -138,7 +109,8 @@
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
 }
 
-- (void)render {
+- (void)render
+{
     glClearColor(0, 1.0, 0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -167,21 +139,21 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setupLayer];        
+        [self setupContext];
+        [self setupProgram];
     }
+
     return self;
 }
 
 - (void)layoutSubviews
 {
-    [self setupLayer];        
-    [self setupContext];
+    [EAGLContext setCurrentContext:_context];
+
+    [self destoryBuffers];
     
-    [self destoryRenderAndFrameBuffer];
-    
-    [self setupRenderBuffer];        
-    [self setupFrameBuffer];    
-    
-    [self setupProgram];
+    [self setupBuffers];
 
     [self render];
 }

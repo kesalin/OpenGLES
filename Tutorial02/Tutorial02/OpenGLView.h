@@ -2,8 +2,8 @@
 //  OpenGLView.h
 //  Tutorial01
 //
-//  Created by kesalin on 12-11-24.
-//  Copyright (c) 2012年 kesalin@gmail.com. All rights reserved.
+//  Created by kesalin@gmail.com on 12-11-24.
+//  Copyright (c) 2012年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
