@@ -141,29 +141,6 @@
             </objects>
         </scene>
     </scenes>
-    <classes>
-        <class className="OpenGLView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OpenGLView.h"/>
-        </class>
-        <class className="ViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="autoButtonClick:"/>
-                <relationship kind="action" name="resetButtonClick:"/>
-                <relationship kind="action" name="rotateXSliderValueChanged:"/>
-                <relationship kind="action" name="scaleZSliderValueChanged:"/>
-                <relationship kind="action" name="xSliderValueChanged:"/>
-                <relationship kind="action" name="ySliderValueChanged:"/>
-                <relationship kind="outlet" name="controlView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="openGLView" candidateClass="OpenGLView"/>
-                <relationship kind="outlet" name="posXSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="posYSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="posZSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="rotateXSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="scaleZSlider" candidateClass="UISlider"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

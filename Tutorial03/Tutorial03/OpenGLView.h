@@ -44,5 +44,6 @@
 - (void)resetTransform;
 - (void)render;
 - (void)cleanup;
+- (void)toggleDisplayLink;
 
 @end

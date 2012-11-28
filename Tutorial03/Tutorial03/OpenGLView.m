@@ -12,6 +12,9 @@
 
 // 使用匿名 category 来声明私有成员
 @interface OpenGLView()
+{
+    CADisplayLink * _displayLink;
+}
 
 - (void)setupLayer;
 - (void)setupContext;
@@ -22,6 +25,7 @@
 - (void)setupProjection;
 
 - (void)updateTransform;
+- (void)displayLinkCallback:(CADisplayLink*)displayLink;
 
 @end
 
@@ -262,8 +266,30 @@
 
 #pragma mark - Transform properties
 
+- (void)toggleDisplayLink
+{
+    if (_displayLink == nil) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    else {
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+}
+
+- (void)displayLinkCallback:(CADisplayLink*)displayLink
+{
+    self.rotateX += displayLink.duration * 90;
+}
+
 - (void)resetTransform
 {
+    if (_displayLink != nil) {
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+    
     _posX = 0.0;
     _posY = 0.0;
     _posZ = -5.5;
