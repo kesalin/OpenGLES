@@ -29,8 +29,8 @@
 @synthesize posX = _posX;
 @synthesize posY = _posY;
 @synthesize posZ = _posZ;
-@synthesize scaleY = _scaleY;
-@synthesize rotateZ = _rotateZ;
+@synthesize scaleZ = _scaleZ;
+@synthesize rotateX = _rotateX;
 
 + (Class)layerClass {
     // 只有 [CAEAGLLayer class] 类型的 layer 才支持在其上描绘 OpenGL 内容。
@@ -143,6 +143,9 @@
     float aspect = self.frame.size.width / self.frame.size.height;
     ksMatrixLoadIdentity(&_projectionMatrix);
     ksPerspective(&_projectionMatrix, 60.0, aspect, 1.0f, 20.0f);
+    
+    // Load projection matrix
+    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
 }
 
 - (void)updateTransform
@@ -157,10 +160,51 @@
     
     // Rotate the triangle
     //
-    ksRotate(&_modelViewMatrix, self.rotateZ, 0.0, 0.0, 1.0);
+    ksRotate(&_modelViewMatrix, self.rotateX, 1.0, 0.0, 0.0);
     
     // Scale the triangle
-    ksScale(&_modelViewMatrix, 1.0, self.scaleY, 1.0);
+    ksScale(&_modelViewMatrix, 1.0, 1.0, self.scaleZ);
+    
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+}
+
+- (void)drawTriangle
+{
+    GLfloat vertices[] = {
+        0.0f,  0.5f, 0.0f, 
+        -0.5f, -0.5f, 0.0f,
+        0.5f,  -0.5f, 0.0f };
+    
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
+    glEnableVertexAttribArray(_positionSlot);
+    
+    // Draw triangle
+    //
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+- (void)drawTriCone
+{
+    GLfloat vertices[] = {
+        0.5f, 0.5f, 0.0f, 
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 
+        0.0f, 0.0f, -0.707f,
+    };
+    
+    GLubyte indices[] = {
+        0, 1, 1, 2, 2, 3, 3, 0,
+        4, 0, 4, 1, 4, 2, 4, 3
+    };
+    
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
+    glEnableVertexAttribArray(_positionSlot);
+    
+    // Draw lines
+    //
+    glDrawElements(GL_LINES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }
 
 - (void)render
@@ -170,27 +214,11 @@
 
     // Setup viewport
     //
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    GLfloat vertices[] = {
-        0.0f,  0.5f, 0.0f, 
-        -0.5f, -0.5f, 0.0f,
-        0.5f,  -0.5f, 0.0f };
-    
-    // Load the vertex data
-    //
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
-    glEnableVertexAttribArray(_positionSlot);
-    
-    // Load the model-view matrix
-    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
-    
-    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
-    
-    // Draw triangle
-    //
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    
+    //[self drawTriangle];
+    [self drawTriCone];
+
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -240,8 +268,8 @@
     _posY = 0.0;
     _posZ = -5.5;
     
-    _scaleY = 1.0;
-    _rotateZ = 0.0;
+    _scaleZ = 1.0;
+    _rotateX = 0.0;
     
     [self updateTransform];
 }
@@ -285,30 +313,30 @@
     return _posZ;
 }
 
-- (void)setScaleY:(float)scaleY
+- (void)setScaleZ:(float)scaleZ
 {
-    _scaleY = scaleY;
+    _scaleZ = scaleZ;
     
     [self updateTransform];
     [self render];
 }
 
-- (float)scaleY
+- (float)scaleZ
 {
-    return _scaleY;
+    return _scaleZ;
 }
 
-- (void)setRotateZ:(float)rotateZ
+- (void)setRotateX:(float)rotateX
 {
-    _rotateZ = rotateZ;
+    _rotateX = rotateX;
     
     [self updateTransform];
     [self render];
 }
 
-- (float)rotateZ
+- (float)rotateX
 {
-    return _rotateZ;
+    return _rotateX;
 }
 
 #pragma mark

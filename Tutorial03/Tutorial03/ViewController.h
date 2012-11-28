@@ -17,15 +17,15 @@
 @property (nonatomic, strong) IBOutlet UISlider * posXSlider;
 @property (nonatomic, strong) IBOutlet UISlider * posYSlider;
 @property (nonatomic, strong) IBOutlet UISlider * posZSlider;
-@property (nonatomic, strong) IBOutlet UISlider * scaleYSlider;
-@property (nonatomic, strong) IBOutlet UISlider * rotateZSlider;
+@property (nonatomic, strong) IBOutlet UISlider * scaleZSlider;
+@property (nonatomic, strong) IBOutlet UISlider * rotateXSlider;
 
 - (IBAction)xSliderValueChanged:(id)sender; 
 - (IBAction)ySliderValueChanged:(id)sender; 
 - (IBAction)ySliderValueChanged:(id)sender;
 
-- (IBAction)scaleYSliderValueChanged:(id)sender; 
-- (IBAction)rotateZSliderValueChanged:(id)sender;
+- (IBAction)scaleZSliderValueChanged:(id)sender; 
+- (IBAction)rotateXSliderValueChanged:(id)sender;
 
 - (IBAction)autoButtonClick:(id)sender;
 - (IBAction)resetButtonClick:(id)sender;

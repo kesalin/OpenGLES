@@ -68,14 +68,14 @@
                                         <rect key="frame" x="217" y="5" width="96" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="rotateZSliderValueChanged:" destination="2" eventType="valueChanged" id="eQ5-Kn-bXM"/>
+                                            <action selector="rotateXSliderValueChanged:" destination="2" eventType="valueChanged" id="e1Z-19-R8V"/>
                                         </connections>
                                     </slider>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="2" id="coC-xT-e0V">
                                         <rect key="frame" x="217" y="35" width="96" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="scaleYSliderValueChanged:" destination="2" eventType="valueChanged" id="hj5-SR-Amg"/>
+                                            <action selector="scaleZSliderValueChanged:" destination="2" eventType="valueChanged" id="QTQ-Wu-k0N"/>
                                         </connections>
                                     </slider>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cfL-b9-4Np">
@@ -93,14 +93,14 @@
                                             <action selector="resetButtonClick:" destination="2" eventType="touchUpInside" id="LP0-za-zEO"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Rotate Z" lineBreakMode="tailTruncation" minimumFontSize="10" id="fkP-iU-Nef">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Rotate X" lineBreakMode="tailTruncation" minimumFontSize="10" id="fkP-iU-Nef">
                                         <rect key="frame" x="156" y="6" width="55" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Scale Y" lineBreakMode="tailTruncation" minimumFontSize="10" id="p7O-ca-NWq">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Scale Z" lineBreakMode="tailTruncation" minimumFontSize="10" id="p7O-ca-NWq">
                                         <rect key="frame" x="156" y="35" width="55" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -134,8 +134,8 @@
                         <outlet property="posXSlider" destination="uXI-ed-I08" id="dh4-zT-LHF"/>
                         <outlet property="posYSlider" destination="SX2-EZ-Lef" id="a0A-BW-9Sd"/>
                         <outlet property="posZSlider" destination="U8T-uP-2ZP" id="IOb-MF-iqJ"/>
-                        <outlet property="rotateZSlider" destination="fEd-Th-OBw" id="kSK-MU-GMe"/>
-                        <outlet property="scaleYSlider" destination="coC-xT-e0V" id="bqa-dY-O1m"/>
+                        <outlet property="rotateXSlider" destination="fEd-Th-OBw" id="VyW-iI-abO"/>
+                        <outlet property="scaleZSlider" destination="coC-xT-e0V" id="WfU-ba-lXK"/>
                     </connections>
                 </viewController>
             </objects>
@@ -150,8 +150,8 @@
             <relationships>
                 <relationship kind="action" name="autoButtonClick:"/>
                 <relationship kind="action" name="resetButtonClick:"/>
-                <relationship kind="action" name="rotateZSliderValueChanged:"/>
-                <relationship kind="action" name="scaleYSliderValueChanged:"/>
+                <relationship kind="action" name="rotateXSliderValueChanged:"/>
+                <relationship kind="action" name="scaleZSliderValueChanged:"/>
                 <relationship kind="action" name="xSliderValueChanged:"/>
                 <relationship kind="action" name="ySliderValueChanged:"/>
                 <relationship kind="outlet" name="controlView" candidateClass="UIView"/>
@@ -159,8 +159,8 @@
                 <relationship kind="outlet" name="posXSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="posYSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="posZSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="rotateZSlider" candidateClass="UISlider"/>
-                <relationship kind="outlet" name="scaleYSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="rotateXSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="scaleZSlider" candidateClass="UISlider"/>
             </relationships>
         </class>
     </classes>

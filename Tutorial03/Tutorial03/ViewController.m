@@ -18,7 +18,7 @@
 
 @synthesize controlView, openGLView;
 @synthesize posXSlider, posYSlider, posZSlider;
-@synthesize scaleYSlider, rotateZSlider;
+@synthesize scaleZSlider, rotateXSlider;
 
 - (void)didReceiveMemoryWarning
 {
@@ -46,8 +46,8 @@
     self.posXSlider = nil;
     self.posYSlider = nil;
     self.posZSlider = nil;
-    self.scaleYSlider = nil;
-    self.rotateZSlider = nil;
+    self.scaleZSlider = nil;
+    self.rotateXSlider = nil;
     self.controlView = nil;
 }
 
@@ -107,24 +107,24 @@
     NSLog(@" >> current z is %f", currentValue);
 }
 
-- (IBAction)scaleYSliderValueChanged:(id)sender
+- (IBAction)scaleZSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
     float currentValue = [slider value];
     
-    openGLView.scaleY = currentValue;
+    openGLView.scaleZ = currentValue;
     
-    NSLog(@" >> current y scale is %f", currentValue);
+    NSLog(@" >> current z scale is %f", currentValue);
 }
 
-- (IBAction)rotateZSliderValueChanged:(id)sender
+- (IBAction)rotateXSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
     float currentValue = [slider value];
     
-    openGLView.rotateZ = currentValue;
+    openGLView.rotateX = currentValue;
     
-    NSLog(@" >> current z rotation is %f", currentValue);   
+    NSLog(@" >> current x rotation is %f", currentValue);   
 }
 
 - (IBAction)autoButtonClick:(id)sender
@@ -146,8 +146,8 @@
     [posYSlider setValue:self.openGLView.posY];
     [posZSlider setValue:self.openGLView.posZ];
     
-    [scaleYSlider setValue:self.openGLView.scaleY];
-    [rotateZSlider setValue:self.openGLView.rotateZ];
+    [scaleZSlider setValue:self.openGLView.scaleZ];
+    [rotateXSlider setValue:self.openGLView.rotateX];
 }
 
 @end

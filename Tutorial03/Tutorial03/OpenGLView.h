@@ -30,16 +30,16 @@
     float _posY;
     float _posZ;
     
-    float _rotateZ;
-    float _scaleY;
+    float _rotateX;
+    float _scaleZ;
 }
 
 @property (nonatomic, assign) float posX;
 @property (nonatomic, assign) float posY;
 @property (nonatomic, assign) float posZ;
 
-@property (nonatomic, assign) float scaleY;
-@property (nonatomic, assign) float rotateZ;
+@property (nonatomic, assign) float scaleZ;
+@property (nonatomic, assign) float rotateX;
 
 - (void)resetTransform;
 - (void)render;
