@@ -135,7 +135,6 @@
     NSString * text = button.titleLabel.text;
     if ([text isEqualToString:@"Auto"]) {
         [button setTitle: @"Stop" forState: UIControlStateNormal];
-        
     }
     else {
         [button setTitle: @"Auto" forState: UIControlStateNormal];
