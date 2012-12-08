@@ -1,6 +1,6 @@
 //
 //  OpenGLView.m
-//  Tutorial01
+//  Tutorial05
 //
 //  Created by kesalin on 12-11-24.
 //  Copyright (c) 2012年 Created by kesalin@gmail.com on. All rights reserved.
