@@ -189,19 +189,24 @@
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-- (void)drawTriCone
+- (void)drawRectangle
 {
     GLfloat vertices[] = {
-        0.5f, 0.5f, 0.0f, 
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 
-        0.0f, 0.0f, -0.707f,
+        -0.5f, -0.5f, 0.5f,
+        -0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f,
+        0.5f, -0.5f, 0.5f,
+        
+        0.5f, -0.5f, -0.5f,
+        0.5f, 0.5f, -0.5f,
+        -0.5f, 0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
     };
     
     GLubyte indices[] = {
         0, 1, 1, 2, 2, 3, 3, 0,
-        4, 0, 4, 1, 4, 2, 4, 3
+        4, 5, 5, 6, 6, 7, 7, 4,
+        0, 7, 1, 6, 2, 5, 3, 4
     };
     
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
@@ -222,7 +227,7 @@
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
     //[self drawTriangle];
-    [self drawTriCone];
+    [self drawRectangle];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
