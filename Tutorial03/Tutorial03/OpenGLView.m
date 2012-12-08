@@ -273,6 +273,7 @@
         [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     }
     else {
+        [_displayLink invalidate];
         [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         _displayLink = nil;
     }
