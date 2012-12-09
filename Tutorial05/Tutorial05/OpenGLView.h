@@ -20,8 +20,9 @@
     
     GLuint _programHandle;
     GLuint _positionSlot;
-    GLint _modelViewSlot;
-    GLint _projectionSlot;
+    GLuint _modelViewSlot;
+    GLuint _projectionSlot;
+    GLuint _colorSlot;
     
     KSMatrix4 _shouldModelViewMatrix;
     KSMatrix4 _elbowModelViewMatrix;

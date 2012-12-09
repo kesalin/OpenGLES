@@ -28,6 +28,8 @@
 - (void)updateElbowTransform;
 - (void)resetTransform;
 
+- (void)drawRectangle:(KSVec4) color;
+
 @end
 
 @implementation OpenGLView
@@ -131,6 +133,10 @@
     //
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     
+    // Get the attribute color slot from program
+    //
+    _colorSlot = glGetAttribLocation(_programHandle, "vSourceColor");
+    
     // Get the uniform model-view matrix slot from program
     //
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
@@ -162,7 +168,7 @@
     //
     ksRotate(&_shouldModelViewMatrix, self.rotateShoulder, 0.0, 0.0, 1.0);
     
-    // Scale the retangle to be a shoulder
+    // Scale the rectangle to be a shoulder
     //
     ksCopyMatrix4(&_modelViewMatrix, &_shouldModelViewMatrix);
     ksScale(&_modelViewMatrix, 1.5, 0.6, 0.6);
@@ -185,7 +191,7 @@
     //
     ksRotate(&_elbowModelViewMatrix, self.rotateElbow, 0.0, 0.0, 1.0);
     
-    // Scale the retangle to be a elbow
+    // Scale the rectangle to be a elbow
     ksCopyMatrix4(&_modelViewMatrix, &_elbowModelViewMatrix);
     ksScale(&_modelViewMatrix, 1.0, 0.4, 0.4);
     
@@ -193,7 +199,7 @@
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void)drawRetangle
+- (void)drawRectangle:(KSVec4) color
 {
     GLfloat vertices[] = {
         0.0f, -0.5f, 0.5f,
@@ -213,26 +219,34 @@
         0, 7, 1, 6, 2, 5, 3, 4
     };
     
+    glVertexAttrib4f(_colorSlot, color[0], color[1], color[2], color[3]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
-
+    
     glDrawElements(GL_LINES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }
 
 - (void)render
 {
-    glClearColor(0, 1.0, 0, 1.0);
+    KSVec4 colorRed = {1, 0, 0, 1};
+    KSVec4 colorWhite = {1, 1, 1, 1};
+
+    glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Setup viewport
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
+    // Draw shoulder
+    //
     [self updateShoulderTransform];
-    [self drawRetangle];
+    [self drawRectangle:colorRed];
     
+    // Draw elbow
+    //
     [self updateElbowTransform];
-    [self drawRetangle];
+    [self drawRectangle:colorWhite];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
