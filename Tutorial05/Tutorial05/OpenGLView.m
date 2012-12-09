@@ -28,7 +28,7 @@
 - (void)updateElbowTransform;
 - (void)resetTransform;
 
-- (void)drawRectangle:(KSVec4) color;
+- (void)drawCube:(KSVec4) color;
 
 @end
 
@@ -168,7 +168,7 @@
     //
     ksRotate(&_shouldModelViewMatrix, self.rotateShoulder, 0.0, 0.0, 1.0);
     
-    // Scale the rectangle to be a shoulder
+    // Scale the cube to be a shoulder
     //
     ksCopyMatrix4(&_modelViewMatrix, &_shouldModelViewMatrix);
     ksScale(&_modelViewMatrix, 1.5, 0.6, 0.6);
@@ -191,7 +191,7 @@
     //
     ksRotate(&_elbowModelViewMatrix, self.rotateElbow, 0.0, 0.0, 1.0);
     
-    // Scale the rectangle to be a elbow
+    // Scale the cube to be a elbow
     ksCopyMatrix4(&_modelViewMatrix, &_elbowModelViewMatrix);
     ksScale(&_modelViewMatrix, 1.0, 0.4, 0.4);
     
@@ -199,7 +199,17 @@
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void)drawRectangle:(KSVec4) color
+- (void) updateRectangleTransform
+{ 
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    
+    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+}
+
+- (void)drawCube:(KSVec4) color
 {
     GLfloat vertices[] = {
         0.0f, -0.5f, 0.5f,
@@ -226,6 +236,28 @@
     glDrawElements(GL_LINES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }
 
+- (void)drawColorRectangle
+{
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 1.0,
+        -0.5f, 0.5f, 0.0f, 0.0, 0.0, 1.0, 1.0,
+        0.5f, 0.5f, 0.0f, 1.0, 1.0, 0.0, 1.0,
+        0.5f, -0.5f, 0.0f, 1.0, 1.0, 1.0, 1.0
+    };
+    
+    GLubyte indices[] = {
+        0, 3, 2, 
+        0, 2, 1
+    };
+
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices + 3);
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_colorSlot);
+    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
+    glDisableVertexAttribArray(_colorSlot);
+}
+
 - (void)render
 {
     KSVec4 colorRed = {1, 0, 0, 1};
@@ -238,15 +270,20 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
+    // Draw rectangle
+    //
+    [self updateRectangleTransform];
+    [self drawColorRectangle];
+
     // Draw shoulder
     //
     [self updateShoulderTransform];
-    [self drawRectangle:colorRed];
+    [self drawCube:colorRed];
     
     // Draw elbow
     //
     [self updateElbowTransform];
-    [self drawRectangle:colorWhite];
+    [self drawCube:colorWhite];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
