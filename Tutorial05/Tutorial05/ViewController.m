@@ -9,6 +9,8 @@
 #import "ViewController.h"
 
 @implementation ViewController
+@synthesize shoulderSlider, elbowSlider;
+@synthesize openGLView;
 
 - (void)didReceiveMemoryWarning
 {
@@ -27,8 +29,12 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    
+    [self.openGLView cleanup];
+    self.openGLView = nil;
+
+    self.shoulderSlider = nil;
+    self.elbowSlider = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -55,6 +61,27 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+
+- (void) OnShoulderSliderValueChanged:(NSObject *)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float currentValue = [slider value];
+    
+    NSLog(@" >> current shoulder is %f", currentValue);
+    
+    self.openGLView.rotateShoulder = currentValue;
+}
+
+- (void) OnElbowSliderValueChanged:(NSObject *)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float currentValue = [slider value];
+    
+    NSLog(@" >> current elbow is %f", currentValue);
+    
+    self.openGLView.rotateElbow = currentValue;
 }
 
 @end

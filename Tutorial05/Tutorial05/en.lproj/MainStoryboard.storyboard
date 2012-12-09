@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="2">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="2">
     <dependencies>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
@@ -14,18 +14,53 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="eE7-SK-9F6" customClass="OpenGLView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="360"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="368"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="5nv-be-2e8">
-                                <rect key="frame" x="0.0" y="360" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="368" width="320" height="92"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-180" maxValue="180" id="0l0-ra-dgS">
+                                        <rect key="frame" x="95" y="20" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnShoulderSliderValueChanged:" destination="2" eventType="valueChanged" id="CCN-WJ-Zmy"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-180" maxValue="180" id="fUM-g8-1yy">
+                                        <rect key="frame" x="95" y="50" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnElbowSliderValueChanged:" destination="2" eventType="valueChanged" id="4dp-9y-2bL"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Shoulder" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="BRh-gW-7Jt">
+                                        <rect key="frame" x="20" y="20" width="69" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Elbow" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="Jd5-dc-AEX">
+                                        <rect key="frame" x="20" y="50" width="69" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.83903203940000004" green="0.91288630660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="elbowSlider" destination="fUM-g8-1yy" id="gEg-Wi-5SO"/>
+                        <outlet property="openGLView" destination="eE7-SK-9F6" id="jJw-oV-9Dd"/>
+                        <outlet property="shoulderSlider" destination="0l0-ra-dgS" id="N65-pk-9cs"/>
+                    </connections>
                 </viewController>
             </objects>
         </scene>
@@ -36,6 +71,13 @@
         </class>
         <class className="ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="OnElbowSliderValueChanged:" candidateClass="NSObject"/>
+                <relationship kind="action" name="OnShoulderSliderValueChanged:" candidateClass="NSObject"/>
+                <relationship kind="outlet" name="elbowSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="openGLView" candidateClass="OpenGLView"/>
+                <relationship kind="outlet" name="shoulderSlider" candidateClass="UISlider"/>
+            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OpenGLView.h"
 
 @interface ViewController : UIViewController
+
+
+@property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
+@property (nonatomic, strong) IBOutlet UISlider * shoulderSlider;
+@property (nonatomic, strong) IBOutlet UISlider * elbowSlider;
+
+- (IBAction) OnShoulderSliderValueChanged:(NSObject *)sender;
+- (IBAction) OnElbowSliderValueChanged:(NSObject *)sender;
 
 @end

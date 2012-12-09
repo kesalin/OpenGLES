@@ -217,6 +217,8 @@ extern "C" {
     //
     void PerpendicularVector( KSVec3 dst, const KSVec3 src );
     
+    void ksCopyMatrix4(KSMatrix4 *result, const KSMatrix4 * target);
+    
     //
     /// multiply matrix specified by result with a scaling matrix and return new matrix in result
     /// result Specifies the input matrix.  Scaled matrix is returned in result.

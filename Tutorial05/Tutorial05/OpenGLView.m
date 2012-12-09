@@ -24,17 +24,16 @@
 - (void)setupProgram;
 - (void)setupProjection;
 
-- (void)updateTransform;
-- (void)displayLinkCallback:(CADisplayLink*)displayLink;
+- (void)updateShoulderTransform;
+
+- (void)resetTransform;
 
 @end
 
 @implementation OpenGLView
-@synthesize posX = _posX;
-@synthesize posY = _posY;
-@synthesize posZ = _posZ;
-@synthesize scaleZ = _scaleZ;
-@synthesize rotateX = _rotateX;
+
+@synthesize rotateShoulder = _rotateShoulder;
+@synthesize rotateElbow = _rotateElbow;
 
 + (Class)layerClass {
     // Support for OpenGL ES
@@ -153,54 +152,59 @@
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
 }
 
-- (void)updateTransform
+- (void) updateShoulderTransform
 {
-    // Generate a model view matrix to rotate/translate/scale
-    //
-    ksMatrixLoadIdentity(&_modelViewMatrix);
+    ksMatrixLoadIdentity(&_shouldModelViewMatrix);
     
-    // Translate away from the viewer
-    //
-    ksTranslate(&_modelViewMatrix, self.posX, self.posY, self.posZ);
+    ksTranslate(&_shouldModelViewMatrix, -0.0, 0.0, -5.5);
     
-    // Rotate the triangle
+    // Rotate the shoulder
     //
-    ksRotate(&_modelViewMatrix, self.rotateX, 1.0, 0.0, 0.0);
+    ksRotate(&_shouldModelViewMatrix, self.rotateShoulder, 0.0, 0.0, 1.0);
     
-    // Scale the triangle
-    ksScale(&_modelViewMatrix, 1.0, 1.0, self.scaleZ);
+    // Scale the retangle to be a shoulder
+    //
+    ksCopyMatrix4(&_modelViewMatrix, &_shouldModelViewMatrix);
+    ksScale(&_modelViewMatrix, 1.5, 0.6, 0.6);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void)drawTriangle
+- (void) updateElbowTransform
 {
-    GLfloat vertices[] = {
-        0.0f,  0.5f, 0.0f, 
-        -0.5f, -0.5f, 0.0f,
-        0.5f,  -0.5f, 0.0f };
-    
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
-    glEnableVertexAttribArray(_positionSlot);
-    
-    // Draw triangle
+    // Relative to shoulder
     //
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ksCopyMatrix4(&_elbowModelViewMatrix, &_shouldModelViewMatrix);
+    
+    // Translate away from shoulder
+    //
+    ksTranslate(&_elbowModelViewMatrix, 1.5, 0.0, 0.0);
+    
+    // Rotate the elbow
+    //
+    ksRotate(&_elbowModelViewMatrix, self.rotateElbow, 0.0, 0.0, 1.0);
+    
+    // Scale the retangle to be a elbow
+    ksCopyMatrix4(&_modelViewMatrix, &_elbowModelViewMatrix);
+    ksScale(&_modelViewMatrix, 1.0, 0.4, 0.4);
+    
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void)drawRectangle
+- (void)drawRetangle
 {
     GLfloat vertices[] = {
-        -0.5f, -0.5f, 0.5f,
-        -0.5f, 0.5f, 0.5f,
-        0.5f, 0.5f, 0.5f,
-        0.5f, -0.5f, 0.5f,
+        0.0f, -0.5f, 0.5f,
+        0.0f, 0.5f, 0.5f,
+        1.0f, 0.5f, 0.5f,
+        1.0f, -0.5f, 0.5f,
         
-        0.5f, -0.5f, -0.5f,
-        0.5f, 0.5f, -0.5f,
-        -0.5f, 0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        1.0f, -0.5f, -0.5f,
+        1.0f, 0.5f, -0.5f,
+        0.0f, 0.5f, -0.5f,
+        0.0f, -0.5f, -0.5f,
     };
     
     GLubyte indices[] = {
@@ -211,9 +215,7 @@
     
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
-    
-    // Draw lines
-    //
+
     glDrawElements(GL_LINES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }
 
@@ -226,8 +228,11 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    //[self drawTriangle];
-    [self drawRectangle];
+    [self updateShoulderTransform];
+    [self drawRetangle];
+    
+    [self updateElbowTransform];
+    [self drawRetangle];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -255,121 +260,43 @@
     [self destoryBuffers];
     
     [self setupBuffers];
-    
-    [self updateTransform];
 
     [self render];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 #pragma mark - Transform properties
 
-- (void)toggleDisplayLink
-{
-    if (_displayLink == nil) {
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
-        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    }
-    else {
-        [_displayLink invalidate];
-        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        _displayLink = nil;
-    }
-}
-
-- (void)displayLinkCallback:(CADisplayLink*)displayLink
-{
-    self.rotateX += displayLink.duration * 90;
-}
-
 - (void)resetTransform
 {
-    if (_displayLink != nil) {
-        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        _displayLink = nil;
-    }
+    self.rotateShoulder = 0.0;
+    self.rotateElbow = 0.0;
     
-    _posX = 0.0;
-    _posY = 0.0;
-    _posZ = -5.5;
-    
-    _scaleZ = 1.0;
-    _rotateX = 0.0;
-    
-    [self updateTransform];
+    [self updateShoulderTransform];
+    [self updateElbowTransform];
 }
 
-- (void)setPosX:(float)x
+- (void)setRotateShoulder:(float)rotateShoulder
 {
-    _posX = x;
+    _rotateShoulder = rotateShoulder;
     
-    [self updateTransform];
     [self render];
 }
 
-- (float)posX
+- (float)rotateShoulder
 {
-    return _posX;
+    return _rotateShoulder;
 }
 
-- (void)setPosY:(float)y
+- (void)setRotateElbow:(float)rotateElbow
 {
-    _posY = y;
+    _rotateElbow = rotateElbow;
     
-    [self updateTransform];
     [self render];
 }
 
-- (float)posY
+- (float)rotateElbow
 {
-    return _posY;
-}
-
-- (void)setPosZ:(float)z
-{
-    _posZ = z;
-    
-    [self updateTransform];
-    [self render];
-}
-
-- (float)posZ
-{
-    return _posZ;
-}
-
-- (void)setScaleZ:(float)scaleZ
-{
-    _scaleZ = scaleZ;
-    
-    [self updateTransform];
-    [self render];
-}
-
-- (float)scaleZ
-{
-    return _scaleZ;
-}
-
-- (void)setRotateX:(float)rotateX
-{
-    _rotateX = rotateX;
-    
-    [self updateTransform];
-    [self render];
-}
-
-- (float)rotateX
-{
-    return _rotateX;
+    return _rotateElbow;
 }
 
 #pragma mark

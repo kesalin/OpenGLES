@@ -568,6 +568,10 @@ void ksMatrixMultiply(KSMatrix4 *result, const KSMatrix4 *srcA, const KSMatrix4 
     memcpy(result, &tmp, sizeof(KSMatrix4));
 }
 
+void ksCopyMatrix4(KSMatrix4 *result, const KSMatrix4 * target)
+{
+    memcpy(result, target, sizeof(KSMatrix4));
+}
 
 void ksMatrixLoadIdentity(KSMatrix4 *result)
 {
