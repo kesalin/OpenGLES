@@ -25,7 +25,7 @@
 - (void)setupProjection;
 
 - (void)updateShoulderTransform;
-
+- (void)updateElbowTransform;
 - (void)resetTransform;
 
 @end
