@@ -3,7 +3,7 @@
 //  Tutorial05
 //
 //  Created by LuoZhaohui on 12/8/12.
-//  Copyright (c) 2012 kesalin@gmail.com. All rights reserved.
+//  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

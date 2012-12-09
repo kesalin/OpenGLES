@@ -3,7 +3,7 @@
 //  Tutorial05
 //
 //  Created by kesalin on 12-11-24.
-//  Copyright (c) 2012年 Created by kesalin@gmail.com on. All rights reserved.
+//  Copyright (c) Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import "OpenGLView.h"
