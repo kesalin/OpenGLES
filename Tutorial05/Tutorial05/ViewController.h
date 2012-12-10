@@ -16,7 +16,8 @@
 @property (nonatomic, strong) IBOutlet UISlider * shoulderSlider;
 @property (nonatomic, strong) IBOutlet UISlider * elbowSlider;
 
-- (IBAction) OnShoulderSliderValueChanged:(NSObject *)sender;
-- (IBAction) OnElbowSliderValueChanged:(NSObject *)sender;
+- (IBAction) OnShoulderSliderValueChanged:(id)sender;
+- (IBAction) OnElbowSliderValueChanged:(id)sender;
+- (IBAction) OnRotateButtonClick:(id)sender;
 
 @end

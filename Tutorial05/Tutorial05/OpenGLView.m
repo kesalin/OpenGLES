@@ -29,10 +29,9 @@
 - (void)updateElbowTransform;
 - (void)resetTransform;
 
-- (void) updateRectangleTransform;
-- (void) updateColorCubeTransform;
-- (void) drawColorCube;
-- (void)toggleDisplayLink;
+- (void)updateRectangleTransform;
+- (void)updateColorCubeTransform;
+- (void)drawColorCube;
 
 - (void)drawCube:(KSVec4) color;
 
@@ -338,6 +337,7 @@
 //    [self drawColorRectangle];
     
     // Draw color cube
+    //
     [self updateColorCubeTransform];
     [self drawColorCube];
     
@@ -365,8 +365,6 @@
         [self setupProjection];
 
         [self resetTransform];
-        
-        [self toggleDisplayLink];
     }
 
     return self;
@@ -435,6 +433,8 @@
 - (void)displayLinkCallback:(CADisplayLink*)displayLink
 {
     _rotateColorCube += displayLink.duration * 90;
+    
+    [self render];
 }
 
 #pragma mark

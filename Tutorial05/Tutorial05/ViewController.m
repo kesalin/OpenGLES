@@ -64,7 +64,7 @@
 }
 
 
-- (void) OnShoulderSliderValueChanged:(NSObject *)sender
+- (void) OnShoulderSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
     float currentValue = [slider value];
@@ -74,7 +74,7 @@
     self.openGLView.rotateShoulder = currentValue;
 }
 
-- (void) OnElbowSliderValueChanged:(NSObject *)sender
+- (void) OnElbowSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
     float currentValue = [slider value];
@@ -82,6 +82,20 @@
     NSLog(@" >> current elbow is %f", currentValue);
     
     self.openGLView.rotateElbow = currentValue;
+}
+
+- (IBAction) OnRotateButtonClick:(id)sender
+{
+    [self.openGLView toggleDisplayLink];
+    
+    UIButton * button = (UIButton *)sender;
+    NSString * text = button.titleLabel.text;
+    if ([text isEqualToString:@"Rotate"]) {
+        [button setTitle: @"Stop" forState: UIControlStateNormal];
+    }
+    else {
+        [button setTitle: @"Rotate" forState: UIControlStateNormal];
+    }
 }
 
 @end

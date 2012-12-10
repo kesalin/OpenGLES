@@ -39,5 +39,6 @@
 
 - (void)render;
 - (void)cleanup;
+- (void)toggleDisplayLink;
 
 @end
