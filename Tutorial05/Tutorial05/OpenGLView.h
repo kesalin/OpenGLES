@@ -24,9 +24,6 @@
     GLuint _projectionSlot;
     GLuint _colorSlot;
     
-    KSMatrix4 _shouldModelViewMatrix;
-    KSMatrix4 _elbowModelViewMatrix;
-    
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
     

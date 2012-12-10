@@ -9,7 +9,6 @@
 #import "ViewController.h"
 
 @implementation ViewController
-@synthesize shoulderSlider, elbowSlider;
 @synthesize openGLView;
 
 - (void)didReceiveMemoryWarning
@@ -32,9 +31,6 @@
     
     [self.openGLView cleanup];
     self.openGLView = nil;
-
-    self.shoulderSlider = nil;
-    self.elbowSlider = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
