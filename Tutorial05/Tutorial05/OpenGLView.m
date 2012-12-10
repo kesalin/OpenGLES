@@ -14,6 +14,7 @@
 @interface OpenGLView()
 {
     CADisplayLink * _displayLink;
+    float _rotateColorCube;
 }
 
 - (void)setupLayer;
@@ -27,6 +28,11 @@
 - (void)updateShoulderTransform;
 - (void)updateElbowTransform;
 - (void)resetTransform;
+
+- (void) updateRectangleTransform;
+- (void) updateColorCubeTransform;
+- (void) drawColorCube;
+- (void)toggleDisplayLink;
 
 - (void)drawCube:(KSVec4) color;
 
@@ -156,6 +162,8 @@
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+    
+    glEnable(GL_CULL_FACE);
 }
 
 - (void) updateShoulderTransform
@@ -199,16 +207,6 @@
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void) updateRectangleTransform
-{ 
-    ksMatrixLoadIdentity(&_modelViewMatrix);
-    
-    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
-
-    // Load the model-view matrix
-    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
-}
-
 - (void)drawCube:(KSVec4) color
 {
     GLfloat vertices[] = {
@@ -236,6 +234,16 @@
     glDrawElements(GL_LINES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
 }
 
+- (void) updateRectangleTransform
+{ 
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    
+    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+    
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+}
+
 - (void)drawColorRectangle
 {
     GLfloat vertices[] = {
@@ -258,6 +266,60 @@
     glDisableVertexAttribArray(_colorSlot);
 }
 
+- (void) updateColorCubeTransform
+{
+    ksMatrixLoadIdentity(&_modelViewMatrix);
+    
+    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+    
+    ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
+    
+    // Load the model-view matrix
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+}
+
+- (void) drawColorCube
+{
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 1.0,     // red
+        -0.5f, 0.5f, 0.5f, 1.0, 1.0, 0.0, 1.0,      // yellow
+        0.5f, 0.5f, 0.5f, 0.0, 0.0, 1.0, 1.0,       // blue
+        0.5f, -0.5f, 0.5f, 1.0, 1.0, 1.0, 1.0,      // white
+        
+        0.5f, -0.5f, -0.5f, 1.0, 1.0, 0.0, 1.0,     // yellow
+        0.5f, 0.5f, -0.5f, 1.0, 0.0, 0.0, 1.0,      // red
+        -0.5f, 0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0,     // white
+        -0.5f, -0.5f, -0.5f, 0.0, 0.0, 1.0, 1.0,    // blue
+    };
+    
+    GLubyte indices[] = {
+        // Front face
+        0, 3, 2, 0, 2, 1,
+        
+        // Back face
+        7, 5, 4, 7, 6, 5,
+        
+        // Left face
+        0, 1, 6, 0, 6, 7,
+        
+        // Right face
+        3, 4, 5, 3, 5, 2,
+        
+        // Up face
+        1, 2, 5, 1, 5, 6,
+        
+        // Down face
+        0, 7, 4, 0, 4, 3
+    };
+    
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices);
+    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices + 3);
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_colorSlot);
+    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
+    glDisableVertexAttribArray(_colorSlot);
+}
+
 - (void)render
 {
     KSVec4 colorRed = {1, 0, 0, 1};
@@ -270,10 +332,15 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    // Draw rectangle
+    // Draw color rectangle
     //
-    [self updateRectangleTransform];
-    [self drawColorRectangle];
+//    [self updateRectangleTransform];
+//    [self drawColorRectangle];
+    
+    // Draw color cube
+    [self updateColorCubeTransform];
+    [self drawColorCube];
+    
 
     // Draw shoulder
     //
@@ -298,6 +365,8 @@
         [self setupProjection];
 
         [self resetTransform];
+        
+        [self toggleDisplayLink];
     }
 
     return self;
@@ -348,6 +417,24 @@
 - (float)rotateElbow
 {
     return _rotateElbow;
+}
+
+- (void)toggleDisplayLink
+{
+    if (_displayLink == nil) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+    else {
+        [_displayLink invalidate];
+        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        _displayLink = nil;
+    }
+}
+
+- (void)displayLinkCallback:(CADisplayLink*)displayLink
+{
+    _rotateColorCube += displayLink.duration * 90;
 }
 
 #pragma mark
