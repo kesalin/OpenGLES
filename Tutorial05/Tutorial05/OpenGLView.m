@@ -13,8 +13,12 @@
 // Declare private members inside anonymous category
 @interface OpenGLView()
 {
-    CADisplayLink * _displayLink;
+    KSMatrix4 _shouldModelViewMatrix;
+    KSMatrix4 _elbowModelViewMatrix;
+    
     float _rotateColorCube;
+    
+    CADisplayLink * _displayLink;
 }
 
 - (void)setupLayer;
@@ -326,7 +330,7 @@
 
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
     // Setup viewport
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    

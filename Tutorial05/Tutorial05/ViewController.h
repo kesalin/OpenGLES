@@ -11,10 +11,7 @@
 
 @interface ViewController : UIViewController
 
-
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
-@property (nonatomic, strong) IBOutlet UISlider * shoulderSlider;
-@property (nonatomic, strong) IBOutlet UISlider * elbowSlider;
 
 - (IBAction) OnShoulderSliderValueChanged:(id)sender;
 - (IBAction) OnElbowSliderValueChanged:(id)sender;
