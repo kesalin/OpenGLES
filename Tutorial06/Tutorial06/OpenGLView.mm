@@ -18,8 +18,11 @@
     CADisplayLink * _displayLink;
     
     GLuint _vertexBuffer;
-    GLuint _indexBuffer;
-    int _indexCount;
+    GLuint _lineIndexBuffer;
+    int _lineIndexCount;
+    
+    int _triangleIndexCount;
+    GLuint _triangleIndexBuffer;
 }
 
 - (void)setupLayer;
@@ -209,11 +212,17 @@
     GLfloat * vbuf = new GLfloat[vBufSize];
     surface->GenerateVertices(vbuf);
     
-    // Get indice from surface
+    // Get triangle indice from surface
     //
-    _indexCount = surface->GetLineIndexCount();
-    unsigned short * ibuf = new unsigned short[_indexCount];
-    surface->GenerateLineIndices(ibuf);
+    _triangleIndexCount = surface->GetTriangleIndexCount();
+    unsigned short * triangleBuf = new unsigned short[_triangleIndexCount];
+    surface->GenerateTriangleIndices(triangleBuf);
+    
+    // Get line indice from surface
+    //
+    _lineIndexCount = surface->GetLineIndexCount();
+    unsigned short * lineBuf = new unsigned short[_lineIndexCount];
+    surface->GenerateLineIndices(lineBuf);
     
     // Create the VBO for the vertice.
     //
@@ -221,22 +230,34 @@
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
     
-    // Create the VBO for the indice
+    // Create the VBO for the line indice
     //
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexCount * sizeof(GLushort), ibuf, GL_STATIC_DRAW);
+    glGenBuffers(1, &_lineIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lineIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _lineIndexCount * sizeof(GLushort), lineBuf, GL_STATIC_DRAW);
+    
+    // Create the VBO for the triangle indice
+    //
+    glGenBuffers(1, &_triangleIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexCount * sizeof(GLushort), triangleBuf, GL_STATIC_DRAW);
     
     delete [] vbuf;
-    delete [] ibuf;
+    delete [] lineBuf;
+    delete [] triangleBuf;
     delete surface;
 }
 
 - (void)destoryVBOs
 {
-    if (_indexBuffer != 0) {
-        glDeleteBuffers(1, &_indexBuffer);
-        _indexBuffer = 0;
+    if (_triangleIndexBuffer != 0) {
+        glDeleteBuffers(1, &_triangleIndexBuffer);
+        _triangleIndexBuffer = 0;
+    }
+    
+    if (_lineIndexBuffer != 0) {
+        glDeleteBuffers(1, &_lineIndexBuffer);
+        _lineIndexBuffer = 0;
     }
     
     if (_vertexBuffer) {
@@ -261,13 +282,22 @@
 {
     glEnableVertexAttribArray(_positionSlot);
     
-    glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
-    
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glDrawElements(GL_LINES, _indexCount, GL_UNSIGNED_SHORT, 0);
+    // Draw the red triangles.
+    //
+    glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexBuffer);
+    glDrawElements(GL_TRIANGLES, _triangleIndexCount, GL_UNSIGNED_SHORT, 0);
+    
+    // Draw the black lines.
+    //
+    glVertexAttrib4f(_colorSlot, 0.0, 0.0, 0.0, 1.0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lineIndexBuffer);
+    glDrawElements(GL_LINES, _lineIndexCount, GL_UNSIGNED_SHORT, 0);
+    
+    glDisableVertexAttribArray(_positionSlot);
 }
 
 - (void)render
@@ -335,6 +365,26 @@
     
     [self render];
 }
+
+#pragma mark
+
+#pragma mark - Touch events
+
+//- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
+//{
+//    UITouch* touch = [touches anyObject];
+//    CGPoint location  = [touch locationInView: self];
+//}
+//
+//- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event
+//{
+//    UITouch* touch = [touches anyObject];
+//    CGPoint location  = [touch locationInView: self];
+//}
+//
+//- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event
+//{
+//}
 
 #pragma mark
 
