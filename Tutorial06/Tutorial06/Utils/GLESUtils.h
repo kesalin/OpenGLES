@@ -1,7 +1,7 @@
 //
 //  GLESUtils.h
 //
-//  Created by kesalin on 12-11-25.
+//  Created by kesalin@gmail.com on 12-11-25.
 //  Copyright (c) Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 

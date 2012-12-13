@@ -10,6 +10,8 @@
 
 @implementation ViewController
 
+@synthesize openGLView = _openGLView;
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -29,6 +31,9 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    
+    [self.openGLView cleanup];
+    self.openGLView = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated

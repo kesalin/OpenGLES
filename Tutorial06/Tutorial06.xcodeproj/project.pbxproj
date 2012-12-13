@@ -22,6 +22,7 @@
 		2194534F1679554E009B9493 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2194534E1679554E009B9493 /* OpenGLES.framework */; };
 		21945353167955BD009B9493 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21945351167955B6009B9493 /* FragmentShader.glsl */; };
 		21945354167955BD009B9493 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21945352167955B6009B9493 /* VertexShader.glsl */; };
+		E3A5437816799DB2007156C0 /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E3A5437716799DB2007156C0 /* OpenGLView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,8 @@
 		2194534E1679554E009B9493 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21945351167955B6009B9493 /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = FragmentShader.glsl; path = Shader/FragmentShader.glsl; sourceTree = "<group>"; };
 		21945352167955B6009B9493 /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = VertexShader.glsl; path = Shader/VertexShader.glsl; sourceTree = "<group>"; };
+		E3A5437616799DB2007156C0 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
+		E3A5437716799DB2007156C0 /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +111,8 @@
 				21945330167952E7009B9493 /* MainStoryboard.storyboard */,
 				21945333167952E7009B9493 /* ViewController.h */,
 				21945334167952E7009B9493 /* ViewController.m */,
+				E3A5437616799DB2007156C0 /* OpenGLView.h */,
+				E3A5437716799DB2007156C0 /* OpenGLView.mm */,
 				21945325167952E7009B9493 /* Supporting Files */,
 			);
 			path = Tutorial06;
@@ -228,6 +233,7 @@
 				21945342167953E5009B9493 /* GLESMath.c in Sources */,
 				21945343167953E5009B9493 /* GLESUtils.m in Sources */,
 				21945347167953ED009B9493 /* ParametricSurface.cpp in Sources */,
+				E3A5437816799DB2007156C0 /* OpenGLView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +345,7 @@
 				2194533A167952E7009B9493 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
