@@ -2,7 +2,7 @@
 //  GLESUtils.h
 //
 //  Created by kesalin@gmail.com on 12-11-25.
-//  Copyright (c) Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
+//  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

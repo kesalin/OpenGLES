@@ -2,7 +2,7 @@
 //  GLESMath.h
 //
 //  Created by kesalin@gmail.com on 12-11-26.
-//  Copyright (c) Copyright (c) 2012 Äê http://blog.csdn.net/kesalin/. All rights reserved.
+//  Copyright (c) 2012 Äê http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #ifndef __GLESMATH_H__

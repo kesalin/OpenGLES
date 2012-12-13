@@ -3,7 +3,7 @@
 //  Tutorial05
 //
 //  Created by kesalin@gmail.com on 12-11-24.
-//  Copyright (c) Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
+//  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import "OpenGLView.h"
@@ -17,7 +17,6 @@
     
     CADisplayLink * _displayLink;
     
-    ISurface * _surface;
     GLuint _vertexBuffer;
     GLuint _indexBuffer;
     int _indexCount;
@@ -31,11 +30,10 @@
 - (void)setupProgram;
 - (void)setupProjection;
 
-- (void)setupSurface;
-- (void)destorySurface;
+- (void)setupVBOs;
+- (void)destoryVBOs;
 
-- (void)updateColorCubeTransform;
-- (void)drawColorCube;
+- (ISurface *)createSurface;
 
 @end
 
@@ -110,7 +108,7 @@
 
 - (void)cleanup
 {
-    [self destorySurface];
+    [self destoryVBOs];
 
     [self destoryBuffers];
     
@@ -162,54 +160,13 @@
 
 #pragma mark
 
-- (void)setupSurface
-{
-    if (_surface == NULL) {
-        _surface = new Cone(3.0, 1.0);
-        
-        // Get vertice from surface.
-        //
-        int vBufSize = _surface->GetVertexCount() * _surface->GetVertexSize();
-        GLfloat * vbuf = new GLfloat[vBufSize];
-        _surface->GenerateVertices(vbuf);
-        
-        // Create the VBO for the vertice.
-        //
-        glGenBuffers(1, &_vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
-        delete [] vbuf;
-        
-        // Get indice from surface
-        //
-        _indexCount = _surface->GetLineIndexCount();
-        unsigned short * ibuf = new unsigned short[_indexCount];
-        _surface->GenerateLineIndices(ibuf);
-        
-        // Create the VBO for the indice
-        //
-        glGenBuffers(1, &_indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexCount * sizeof(GLushort), ibuf, GL_STATIC_DRAW);
-        delete [] ibuf;
-    }
-}
-
-- (void)destorySurface
-{
-    if (_surface != NULL) {
-        delete _surface;
-        _surface = NULL;
-    }
-}
-
 -(void)setupProjection
 {
     // Generate a perspective matrix with a 60 degree FOV
     //
     float aspect = self.frame.size.width / self.frame.size.height;
     ksMatrixLoadIdentity(&_projectionMatrix);
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 1.0f, 20.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 5.0f, 10.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
@@ -221,7 +178,7 @@
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
     
     ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
     
@@ -229,53 +186,70 @@
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void) drawColorCube
+- (ISurface *)createSurface
 {
-    GLfloat vertices[] = {
-        -0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 1.0,     // red
-        -0.5f, 0.5f, 0.5f, 1.0, 1.0, 0.0, 1.0,      // yellow
-        0.5f, 0.5f, 0.5f, 0.0, 0.0, 1.0, 1.0,       // blue
-        0.5f, -0.5f, 0.5f, 1.0, 1.0, 1.0, 1.0,      // white
-        
-        0.5f, -0.5f, -0.5f, 1.0, 1.0, 0.0, 1.0,     // yellow
-        0.5f, 0.5f, -0.5f, 1.0, 0.0, 0.0, 1.0,      // red
-        -0.5f, 0.5f, -0.5f, 1.0, 1.0, 1.0, 1.0,     // white
-        -0.5f, -0.5f, -0.5f, 0.0, 0.0, 1.0, 1.0,    // blue
-    };
+    ISurface * surface = NULL;
+    //    surface = new Cone(3, 1);
+    surface = new Sphere(1.4f);
+    //    surface = new Torus(1.4f, 0.3f);
+    //    surface = new TrefoilKnot(1.8f);
+    //    surface = new KleinBottle(0.2f);
+    //    surface = new MobiusStrip(1);
     
-    GLubyte indices[] = {
-        // Front face
-        0, 3, 2, 0, 2, 1,
-        
-        // Back face
-        7, 5, 4, 7, 6, 5,
-        
-        // Left face
-        0, 1, 6, 0, 6, 7,
-        
-        // Right face
-        3, 4, 5, 3, 5, 2,
-        
-        // Up face
-        1, 2, 5, 1, 5, 6,
-        
-        // Down face
-        0, 7, 4, 0, 4, 3
-    };
+    return surface;
+}
+
+- (void)setupVBOs
+{
+    ISurface * surface = [self createSurface];
     
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices);
-    glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), vertices + 3);
-    glEnableVertexAttribArray(_positionSlot);
-    glEnableVertexAttribArray(_colorSlot);
-    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(GLubyte), GL_UNSIGNED_BYTE, indices);
-    glDisableVertexAttribArray(_colorSlot);
+    // Get vertice from surface.
+    //
+    int vBufSize = surface->GetVertexCount() * surface->GetVertexSize();
+    GLfloat * vbuf = new GLfloat[vBufSize];
+    surface->GenerateVertices(vbuf);
+    
+    // Get indice from surface
+    //
+    _indexCount = surface->GetLineIndexCount();
+    unsigned short * ibuf = new unsigned short[_indexCount];
+    surface->GenerateLineIndices(ibuf);
+    
+    // Create the VBO for the vertice.
+    //
+    glGenBuffers(1, &_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
+    
+    // Create the VBO for the indice
+    //
+    glGenBuffers(1, &_indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexCount * sizeof(GLushort), ibuf, GL_STATIC_DRAW);
+    
+    delete [] vbuf;
+    delete [] ibuf;
+    delete surface;
+}
+
+- (void)destoryVBOs
+{
+    if (_indexBuffer != 0) {
+        glDeleteBuffers(1, &_indexBuffer);
+        _indexBuffer = 0;
+    }
+    
+    if (_vertexBuffer) {
+        glDeleteBuffers(1, &_vertexBuffer);
+        _vertexBuffer = 0;
+    }
 }
 
 - (void)updateSurfaceTransform
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -5.5);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
     
     ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
     
@@ -285,9 +259,13 @@
 
 - (void)drawSurface
 {
-    int stride = sizeof(vec3);
+    glEnableVertexAttribArray(_positionSlot);
+    
+    glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
+    
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     glDrawElements(GL_LINES, _indexCount, GL_UNSIGNED_SHORT, 0);
 }
@@ -300,12 +278,6 @@
     // Setup viewport
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
-
-    
-    // Draw color cube
-    //
-    //[self updateColorCubeTransform];
-    //[self drawColorCube];
     
     [self updateSurfaceTransform];
     [self drawSurface];
@@ -321,6 +293,8 @@
         [self setupContext];
         [self setupProgram];
         [self setupProjection];
+        
+        [self setupVBOs];
     }
 
     return self;
@@ -334,10 +308,10 @@
     [self destoryBuffers];
     
     [self setupBuffers];
-
-    [self setupSurface];
     
     [self render];
+    
+    [self toggleDisplayLink];
 }
 
 #pragma mark - Transform properties
@@ -357,7 +331,7 @@
 
 - (void)displayLinkCallback:(CADisplayLink*)displayLink
 {
-    _rotateColorCube += displayLink.duration * 90;
+    _rotateColorCube += displayLink.duration * 45;
     
     [self render];
 }

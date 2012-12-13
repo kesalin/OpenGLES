@@ -108,7 +108,6 @@
 				2194533B167952F1009B9493 /* Utils */,
 				2194532D167952E7009B9493 /* AppDelegate.h */,
 				2194532E167952E7009B9493 /* AppDelegate.m */,
-				21945330167952E7009B9493 /* MainStoryboard.storyboard */,
 				21945333167952E7009B9493 /* ViewController.h */,
 				21945334167952E7009B9493 /* ViewController.m */,
 				E3A5437616799DB2007156C0 /* OpenGLView.h */,
@@ -121,6 +120,7 @@
 		21945325167952E7009B9493 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21945330167952E7009B9493 /* MainStoryboard.storyboard */,
 				21945326167952E7009B9493 /* Tutorial06-Info.plist */,
 				21945327167952E7009B9493 /* InfoPlist.strings */,
 				2194532A167952E7009B9493 /* main.m */,
