@@ -1,8 +1,8 @@
 //
 //  OpenGLView.h
-//  Tutorial05
+//  Tutorial06
 //
-//  Created by kesalin@gmail.com on 12-11-24.
+//  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
@@ -12,7 +12,8 @@
 #include <OpenGLES/ES2/glext.h>
 #import "GLESMath.h"
 
-@interface OpenGLView : UIView {
+@interface OpenGLView : UIView 
+{
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
@@ -30,6 +31,5 @@
 
 - (void)render;
 - (void)cleanup;
-- (void)toggleDisplayLink;
 
 @end

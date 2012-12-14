@@ -1,14 +1,15 @@
 //
 //  OpenGLView.m
-//  Tutorial05
+//  Tutorial06
 //
-//  Created by kesalin@gmail.com on 12-11-24.
+//  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #import "OpenGLView.h"
 #import "GLESUtils.h"
 #import "ParametricEquations.h"
+#import "Quaternion.h"
 
 // Declare private members inside anonymous category
 @interface OpenGLView()
@@ -23,6 +24,11 @@
     
     int _triangleIndexCount;
     GLuint _triangleIndexBuffer;
+    
+    ivec2 _fingerStart;
+    Quaternion _orientation;
+    Quaternion _previousOrientation;
+    KSMatrix4 _rotationMatrix;
 }
 
 - (void)setupLayer;
@@ -33,10 +39,11 @@
 - (void)setupProgram;
 - (void)setupProjection;
 
-- (void)setupVBOs;
+- (void)setupVBOs:(int)surfaceType;
 - (void)destoryVBOs;
 
-- (ISurface *)createSurface;
+- (ISurface *)createSurface:(int)surfaceType;
+- (vec3) mapToSphere:(ivec2) touchpoint;
 
 @end
 
@@ -110,7 +117,7 @@
 }
 
 - (void)cleanup
-{
+{   
     [self destoryVBOs];
 
     [self destoryBuffers];
@@ -189,22 +196,42 @@
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (ISurface *)createSurface
+const int SurfaceSphere = 0;
+const int SurfaceCone = 1;
+const int SurfaceTorus = 2;
+const int SurfaceTrefoilKnot = 3;
+const int SurfaceKleinBottle = 4;
+const int SurfaceMobiusStrip = 5;
+
+- (ISurface *)createSurface:(int)type
 {
     ISurface * surface = NULL;
-    //    surface = new Cone(3, 1);
-    surface = new Sphere(1.4f);
-    //    surface = new Torus(1.4f, 0.3f);
-    //    surface = new TrefoilKnot(1.8f);
-    //    surface = new KleinBottle(0.2f);
-    //    surface = new MobiusStrip(1);
+    
+    if (type == SurfaceCone) {
+        surface = new Cone(3, 1);
+    }
+    else if (type == SurfaceTorus) {
+        surface = new Torus(1.4f, 0.3f);
+    }
+    else if (type == SurfaceTrefoilKnot) {
+        surface = new TrefoilKnot(1.8f);
+    }
+    else if (type == SurfaceKleinBottle) {
+        surface = new KleinBottle(0.2f);
+    }
+    else if (type == SurfaceMobiusStrip) {
+        surface = new MobiusStrip(1);
+    }
+    else {
+        surface = new Sphere(1.4f);
+    }
     
     return surface;
 }
 
-- (void)setupVBOs
+- (void)setupVBOs:(int)surfaceType
 {
-    ISurface * surface = [self createSurface];
+    ISurface * surface = [self createSurface:surfaceType];
     
     // Get vertice from surface.
     //
@@ -272,7 +299,7 @@
     
     ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
     
-    ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
+    ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
@@ -280,10 +307,9 @@
 
 - (void)drawSurface
 {
-    glEnableVertexAttribArray(_positionSlot);
-    
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+    glEnableVertexAttribArray(_positionSlot);
     
     // Draw the red triangles.
     //
@@ -324,7 +350,7 @@
         [self setupProgram];
         [self setupProjection];
         
-        [self setupVBOs];
+        ksMatrixLoadIdentity(&_rotationMatrix);
     }
 
     return self;
@@ -339,29 +365,7 @@
     
     [self setupBuffers];
     
-    [self render];
-    
-    [self toggleDisplayLink];
-}
-
-#pragma mark - Transform properties
-
-- (void)toggleDisplayLink
-{
-    if (_displayLink == nil) {
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkCallback:)];
-        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    }
-    else {
-        [_displayLink invalidate];
-        [_displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        _displayLink = nil;
-    }
-}
-
-- (void)displayLinkCallback:(CADisplayLink*)displayLink
-{
-    _rotateColorCube += displayLink.duration * 45;
+    [self setupVBOs:SurfaceSphere];
     
     [self render];
 }
@@ -370,21 +374,66 @@
 
 #pragma mark - Touch events
 
-//- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
-//{
-//    UITouch* touch = [touches anyObject];
-//    CGPoint location  = [touch locationInView: self];
-//}
-//
-//- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event
-//{
-//    UITouch* touch = [touches anyObject];
-//    CGPoint location  = [touch locationInView: self];
-//}
-//
-//- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event
-//{
-//}
+- (void) touchesBegan: (NSSet*) touches withEvent: (UIEvent*) event
+{
+    UITouch* touch = [touches anyObject];
+    CGPoint location  = [touch locationInView: self];
+    
+    _fingerStart = ivec2(location.x, location.y);
+    _previousOrientation = _orientation;
+}
+
+- (void) touchesEnded: (NSSet*) touches withEvent: (UIEvent*) event
+{
+    UITouch* touch = [touches anyObject];
+    CGPoint location  = [touch locationInView: self];
+    ivec2 touchPoint = ivec2(location.x, location.y);
+    
+    vec3 start = [self mapToSphere:_fingerStart];
+    vec3 end = [self mapToSphere:touchPoint];
+    Quaternion delta = Quaternion::CreateFromVectors(start, end);
+    _orientation = delta.Rotated(_previousOrientation);
+    _orientation.ToMatrix4(&_rotationMatrix);
+
+    [self render];
+}
+
+- (void) touchesMoved: (NSSet*) touches withEvent: (UIEvent*) event
+{
+    UITouch* touch = [touches anyObject];
+    CGPoint location  = [touch locationInView: self];
+    ivec2 touchPoint = ivec2(location.x, location.y);
+    
+    vec3 start = [self mapToSphere:_fingerStart];
+    vec3 end = [self mapToSphere:touchPoint];
+    Quaternion delta = Quaternion::CreateFromVectors(start, end);
+    _orientation = delta.Rotated(_previousOrientation);
+    _orientation.ToMatrix4(&_rotationMatrix);
+    
+    [self render];
+}
+
+- (vec3) mapToSphere:(ivec2) touchpoint
+{
+    ivec2 centerPoint = ivec2(self.frame.size.width/2, self.frame.size.height/2);
+    float radius = self.frame.size.width/3;
+    float safeRadius = radius - 1;
+    
+    vec2 p = touchpoint - centerPoint;
+    
+    // Flip the Y axis because pixel coords increase towards the bottom.
+    p.y = -p.y;
+    
+    if (p.Length() > safeRadius) {
+        float theta = atan2(p.y, p.x);
+        p.x = safeRadius * cos(theta);
+        p.y = safeRadius * sin(theta);
+    }
+    
+    float z = sqrt(radius * radius - p.LengthSquared());
+    vec3 mapped = vec3(p.x, p.y, z);
+    return mapped / radius;
+}
 
 #pragma mark
 

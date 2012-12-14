@@ -26,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21671C4D167B50EA00F026A3 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		2194531A167952E7009B9493 /* Tutorial06.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial06.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2194531E167952E7009B9493 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21945320167952E7009B9493 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -137,6 +138,7 @@
 				2194533F167953E5009B9493 /* GLESUtils.h */,
 				21945340167953E5009B9493 /* GLESUtils.m */,
 				21945341167953E5009B9493 /* Vector.h */,
+				21671C4D167B50EA00F026A3 /* Quaternion.h */,
 			);
 			name = Utils;
 			path = ..;
