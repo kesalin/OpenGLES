@@ -128,4 +128,11 @@
     self.openGLView.diffuseB = value;
 }
 
+- (void)segmentSelectionChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int index = [segment selectedSegmentIndex];
+    
+    [self.openGLView setCurrentSurface:index];
+}
 @end

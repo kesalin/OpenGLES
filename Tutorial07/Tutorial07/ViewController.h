@@ -30,4 +30,6 @@
 - (IBAction)diffuseGSliderValueChanged:(id)sender;
 - (IBAction)diffuseBSliderValueChanged:(id)sender;
 
+- (IBAction)segmentSelectionChanged:(id)sender;
+
 @end

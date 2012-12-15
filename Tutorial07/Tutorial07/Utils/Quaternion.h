@@ -27,6 +27,7 @@ struct Quaternion
     float Dot(const Quaternion& q) const;
     void ToMatrix4(KSMatrix4 * m) const;
     Vector4<float> ToVector() const;
+    void ToIdentity();
     
     Quaternion operator-(const Quaternion& q) const;
     Quaternion operator+(const Quaternion& q) const;
@@ -45,6 +46,12 @@ inline Quaternion::Quaternion() : x(0), y(0), z(0), w(1)
 
 inline Quaternion::Quaternion(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
 {}
+
+inline void Quaternion::ToIdentity()
+{
+    x = y = z = 0;
+    w = 1.0;
+}
 
 // Ken Shoemake's famous method.
 inline Quaternion Quaternion::Slerp(float t, const Quaternion& v1) const
