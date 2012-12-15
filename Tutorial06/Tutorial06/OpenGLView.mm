@@ -67,6 +67,9 @@
 
 - (ISurface *)createSurface:(int)surfaceType;
 - (vec3) mapToSphere:(ivec2) touchpoint;
+- (void)updateSurfaceTransform;
+- (void)resetRotation;
+- (void)drawSurface;
 
 @end
 
@@ -202,7 +205,7 @@
     //
     float aspect = self.frame.size.width / self.frame.size.height;
     ksMatrixLoadIdentity(&_projectionMatrix);
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 5.0f, 10.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 12.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
@@ -224,22 +227,22 @@ const int SurfaceMaxCount = 6;
     ISurface * surface = NULL;
     
     if (type == SurfaceCone) {
-        surface = new Cone(3, 1);
+        surface = new Cone(4, 1);
     }
     else if (type == SurfaceTorus) {
-        surface = new Torus(1.4f, 0.3f);
+        surface = new Torus(2.0f, 0.3f);
     }
     else if (type == SurfaceTrefoilKnot) {
-        surface = new TrefoilKnot(1.8f);
+        surface = new TrefoilKnot(2.4f);
     }
     else if (type == SurfaceKleinBottle) {
-        surface = new KleinBottle(0.2f);
+        surface = new KleinBottle(0.25f);
     }
     else if (type == SurfaceMobiusStrip) {
-        surface = new MobiusStrip(1);
+        surface = new MobiusStrip(1.4);
     }
     else {
-        surface = new Sphere(1.4f);
+        surface = new Sphere(2.0f);
     }
     
     return surface;
@@ -250,9 +253,7 @@ const int SurfaceMaxCount = 6;
     index = index % [_vboArray count];
     _currentVBO = [_vboArray objectAtIndex:index];
     
-    ksMatrixLoadIdentity(&_rotationMatrix);
-    _previousOrientation.ToIdentity();
-    _orientation.ToIdentity();
+    [self resetRotation];
     
     [self render];
 }
@@ -338,6 +339,13 @@ const int SurfaceMaxCount = 6;
     _currentVBO = nil;
 }
 
+- (void)resetRotation
+{
+    ksMatrixLoadIdentity(&_rotationMatrix);
+    _previousOrientation.ToIdentity();
+    _orientation.ToIdentity();
+}
+
 - (void)updateSurfaceTransform
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
@@ -398,7 +406,7 @@ const int SurfaceMaxCount = 6;
         [self setupProgram];
         [self setupProjection];
         
-        ksMatrixLoadIdentity(&_rotationMatrix);
+        [self resetRotation];
         
         _vboArray = [[NSMutableArray alloc] init];
     }
