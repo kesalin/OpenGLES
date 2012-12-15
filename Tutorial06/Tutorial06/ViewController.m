@@ -62,4 +62,12 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+- (IBAction)segmentSelectionChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int index = [segment selectedSegmentIndex];
+    
+    [self.openGLView setCurrentSurface:index];
+}
+
 @end

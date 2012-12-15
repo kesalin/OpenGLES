@@ -11,19 +11,41 @@
 #import "ParametricEquations.h"
 #import "Quaternion.h"
 
-// Declare private members inside anonymous category
+//
+// DrawableVBO implementation
+//
+@implementation DrawableVBO
+
+@synthesize vertexBuffer, lineIndexBuffer, triangleIndexBuffer;
+@synthesize vertexSize, lineIndexCount, triangleIndexCount;
+
+- (void) cleanup
+{
+    if (vertexBuffer != 0) {
+        glDeleteBuffers(1, &vertexBuffer);
+        vertexBuffer = 0;
+    }
+    
+    if (lineIndexBuffer != 0) {
+        glDeleteBuffers(1, &lineIndexBuffer);
+        lineIndexBuffer = 0;
+    }
+    
+    if (triangleIndexBuffer) {
+        glDeleteBuffers(1, &triangleIndexBuffer);
+        triangleIndexBuffer = 0;
+    }
+}
+
+@end
+
+//
+// OpenGLView anonymous category
+//
 @interface OpenGLView()
 {
-    float _rotateColorCube;
-    
-    CADisplayLink * _displayLink;
-    
-    GLuint _vertexBuffer;
-    GLuint _lineIndexBuffer;
-    int _lineIndexCount;
-    
-    int _triangleIndexCount;
-    GLuint _triangleIndexBuffer;
+    NSMutableArray * _vboArray; 
+    DrawableVBO * _currentVBO;
     
     ivec2 _fingerStart;
     Quaternion _orientation;
@@ -39,7 +61,8 @@
 - (void)setupProgram;
 - (void)setupProjection;
 
-- (void)setupVBOs:(int)surfaceType;
+- (DrawableVBO *)createVBO:(int)surfaceType;
+- (void)setupVBOs;
 - (void)destoryVBOs;
 
 - (ISurface *)createSurface:(int)surfaceType;
@@ -47,6 +70,9 @@
 
 @end
 
+//
+// OpenGLView implementation
+//
 @implementation OpenGLView
 
 #pragma mark- Initilize GL
@@ -184,24 +210,14 @@
     glEnable(GL_CULL_FACE);
 }
 
-- (void) updateColorCubeTransform
-{
-    ksMatrixLoadIdentity(&_modelViewMatrix);
-    
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
-    
-    ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
-    
-    // Load the model-view matrix
-    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
-}
-
 const int SurfaceSphere = 0;
 const int SurfaceCone = 1;
 const int SurfaceTorus = 2;
 const int SurfaceTrefoilKnot = 3;
 const int SurfaceKleinBottle = 4;
 const int SurfaceMobiusStrip = 5;
+
+const int SurfaceMaxCount = 6;
 
 - (ISurface *)createSurface:(int)type
 {
@@ -229,68 +245,97 @@ const int SurfaceMobiusStrip = 5;
     return surface;
 }
 
-- (void)setupVBOs:(int)surfaceType
+- (void)setCurrentSurface:(int)index
+{
+    index = index % [_vboArray count];
+    _currentVBO = [_vboArray objectAtIndex:index];
+    
+    ksMatrixLoadIdentity(&_rotationMatrix);
+    _previousOrientation.ToIdentity();
+    _orientation.ToIdentity();
+    
+    [self render];
+}
+
+- (DrawableVBO *)createVBO:(int)surfaceType
 {
     ISurface * surface = [self createSurface:surfaceType];
     
     // Get vertice from surface.
     //
-    int vBufSize = surface->GetVertexCount() * surface->GetVertexSize();
+    int vertexSize = surface->GetVertexSize();
+    int vBufSize = surface->GetVertexCount() * vertexSize;
     GLfloat * vbuf = new GLfloat[vBufSize];
     surface->GenerateVertices(vbuf);
     
     // Get triangle indice from surface
     //
-    _triangleIndexCount = surface->GetTriangleIndexCount();
-    unsigned short * triangleBuf = new unsigned short[_triangleIndexCount];
+    int triangleIndexCount = surface->GetTriangleIndexCount();
+    unsigned short * triangleBuf = new unsigned short[triangleIndexCount];
     surface->GenerateTriangleIndices(triangleBuf);
     
     // Get line indice from surface
     //
-    _lineIndexCount = surface->GetLineIndexCount();
-    unsigned short * lineBuf = new unsigned short[_lineIndexCount];
+    int lineIndexCount = surface->GetLineIndexCount();
+    unsigned short * lineBuf = new unsigned short[lineIndexCount];
     surface->GenerateLineIndices(lineBuf);
     
     // Create the VBO for the vertice.
     //
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
     
     // Create the VBO for the line indice
     //
-    glGenBuffers(1, &_lineIndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lineIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _lineIndexCount * sizeof(GLushort), lineBuf, GL_STATIC_DRAW);
+    GLuint lineIndexBuffer;
+    glGenBuffers(1, &lineIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, lineIndexCount * sizeof(GLushort), lineBuf, GL_STATIC_DRAW);
     
     // Create the VBO for the triangle indice
     //
-    glGenBuffers(1, &_triangleIndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexCount * sizeof(GLushort), triangleBuf, GL_STATIC_DRAW);
+    GLuint triangleIndexBuffer;
+    glGenBuffers(1, &triangleIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), triangleBuf, GL_STATIC_DRAW);
     
     delete [] vbuf;
     delete [] lineBuf;
     delete [] triangleBuf;
     delete surface;
+    
+    DrawableVBO * vbo = [[DrawableVBO alloc] init];
+    vbo.vertexBuffer = vertexBuffer;
+    vbo.lineIndexBuffer = lineIndexBuffer;
+    vbo.triangleIndexBuffer = triangleIndexBuffer;
+    vbo.vertexSize = vertexSize;
+    vbo.lineIndexCount = lineIndexCount;
+    vbo.triangleIndexCount = triangleIndexCount;
+    
+    return vbo;
+}
+
+- (void)setupVBOs
+{
+    for (int i = 0; i < SurfaceMaxCount; i++) {
+        DrawableVBO * vbo = [self createVBO:i];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+    }
+    
+    [self setCurrentSurface:0];
 }
 
 - (void)destoryVBOs
 {
-    if (_triangleIndexBuffer != 0) {
-        glDeleteBuffers(1, &_triangleIndexBuffer);
-        _triangleIndexBuffer = 0;
+    for (DrawableVBO * vbo in _vboArray) {
+        [vbo cleanup];
     }
+    _vboArray = nil;
     
-    if (_lineIndexBuffer != 0) {
-        glDeleteBuffers(1, &_lineIndexBuffer);
-        _lineIndexBuffer = 0;
-    }
-    
-    if (_vertexBuffer) {
-        glDeleteBuffers(1, &_vertexBuffer);
-        _vertexBuffer = 0;
-    }
+    _currentVBO = nil;
 }
 
 - (void)updateSurfaceTransform
@@ -307,21 +352,24 @@ const int SurfaceMobiusStrip = 5;
 
 - (void)drawSurface
 {
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+    if (_currentVBO == nil)
+        return;
+    
+    glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, [_currentVBO vertexSize] * sizeof(GLfloat), 0);
     glEnableVertexAttribArray(_positionSlot);
     
     // Draw the red triangles.
     //
     glVertexAttrib4f(_colorSlot, 1.0, 0.0, 0.0, 1.0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _triangleIndexBuffer);
-    glDrawElements(GL_TRIANGLES, _triangleIndexCount, GL_UNSIGNED_SHORT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
+    glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
     
     // Draw the black lines.
     //
     glVertexAttrib4f(_colorSlot, 0.0, 0.0, 0.0, 1.0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lineIndexBuffer);
-    glDrawElements(GL_LINES, _lineIndexCount, GL_UNSIGNED_SHORT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO lineIndexBuffer]);
+    glDrawElements(GL_LINES, [_currentVBO lineIndexCount], GL_UNSIGNED_SHORT, 0);
     
     glDisableVertexAttribArray(_positionSlot);
 }
@@ -351,6 +399,8 @@ const int SurfaceMobiusStrip = 5;
         [self setupProjection];
         
         ksMatrixLoadIdentity(&_rotationMatrix);
+        
+        _vboArray = [[NSMutableArray alloc] init];
     }
 
     return self;
@@ -365,7 +415,7 @@ const int SurfaceMobiusStrip = 5;
     
     [self setupBuffers];
     
-    [self setupVBOs:SurfaceSphere];
+    [self setupVBOs];
     
     [self render];
 }

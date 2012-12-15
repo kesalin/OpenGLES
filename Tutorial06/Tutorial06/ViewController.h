@@ -16,4 +16,6 @@
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
 
+- (IBAction)segmentSelectionChanged:(id)sender;
+
 @end
