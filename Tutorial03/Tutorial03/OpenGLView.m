@@ -213,6 +213,9 @@
 
 - (void)render
 {
+    if (_context == nil)
+        return;
+
     glClearColor(0, 1.0, 0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 

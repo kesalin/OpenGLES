@@ -325,6 +325,9 @@
 
 - (void)render
 {
+    if (_context == nil)
+        return;
+    
     KSVec4 colorRed = {1, 0, 0, 1};
     KSVec4 colorWhite = {1, 1, 1, 1};
 
