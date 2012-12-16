@@ -92,6 +92,7 @@ const LightMode CurrentLightMode = PerPixelToon;
 @synthesize diffuseR = _diffuseR;
 @synthesize diffuseG = _diffuseG;
 @synthesize diffuseB = _diffuseB;
+@synthesize enablePolygonOffset = _enablePolygonOffset;
 
 #pragma mark- Initilize GL
 
@@ -314,7 +315,7 @@ const int SurfaceMaxCount = 6;
         -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
     };
     
-    const GLushort indices[] = {
+    const GLushort triangleIndices[] = {
         // Front face
         3, 2, 1, 3, 1, 0,
         
@@ -334,6 +335,12 @@ const int SurfaceMaxCount = 6;
         0, 7, 3, 3, 7, 4
     };
     
+    const GLushort lineIndices[] = {
+        0, 1, 1, 2, 2, 3, 3, 0,
+        4, 5, 5, 6, 6, 7, 7, 4,
+        0, 7, 1, 6, 2, 5, 3, 4
+    };
+    
     // Create the VBO for the vertice.
     //
     int vertexSize = 6;
@@ -342,17 +349,27 @@ const int SurfaceMaxCount = 6;
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, 8 * vertexSize * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
     
+    // Create the VBO for the line indice
+    //
+    int lineIndexCount = sizeof(lineIndices)/sizeof(lineIndices[0]);
+    GLuint lineIndexBuffer; 
+    glGenBuffers(1, &lineIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, lineIndexCount * sizeof(GLushort), lineIndices, GL_STATIC_DRAW);
+    
     // Create the VBO for the triangle indice
     //
-    int triangleIndexCount = sizeof(indices)/sizeof(indices[0]);
+    int triangleIndexCount = sizeof(triangleIndices)/sizeof(triangleIndices[0]);
     GLuint triangleIndexBuffer; 
     glGenBuffers(1, &triangleIndexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), triangleIndices, GL_STATIC_DRAW);
     
     DrawableVBO * vbo = [[DrawableVBO alloc] init];
     vbo.vertexBuffer = vertexBuffer;
+    vbo.lineIndexBuffer = lineIndexBuffer;
     vbo.triangleIndexBuffer = triangleIndexBuffer;
+    vbo.lineIndexCount = lineIndexCount;
     vbo.vertexSize = vertexSize;
     vbo.triangleIndexCount = triangleIndexCount;
     
@@ -372,6 +389,12 @@ const int SurfaceMaxCount = 6;
     GLfloat * vbuf = new GLfloat[vBufSize];
     surface->GenerateVertices(vbuf);
     
+    // Get line indice from surface
+    //
+    int lineIndexCount = surface->GetLineIndexCount();
+    unsigned short * lineBuf = new unsigned short[lineIndexCount];
+    surface->GenerateLineIndices(lineBuf);
+    
     // Get triangle indice from surface
     //
     int triangleIndexCount = surface->GetTriangleIndexCount();
@@ -384,6 +407,13 @@ const int SurfaceMaxCount = 6;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
+    
+    // Create the VBO for the line indice
+    //
+    GLuint lineIndexBuffer;
+    glGenBuffers(1, &lineIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lineIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, lineIndexCount * sizeof(GLushort), lineBuf, GL_STATIC_DRAW);
     
     // Create the VBO for the triangle indice
     //
@@ -398,8 +428,10 @@ const int SurfaceMaxCount = 6;
     
     DrawableVBO * vbo = [[DrawableVBO alloc] init];
     vbo.vertexBuffer = vertexBuffer;
+    vbo.lineIndexBuffer = lineIndexBuffer;
     vbo.triangleIndexBuffer = triangleIndexBuffer;
     vbo.vertexSize = vertexSize;
+    vbo.lineIndexCount = lineIndexCount;
     vbo.triangleIndexCount = triangleIndexCount;
     
     return vbo;
@@ -468,7 +500,7 @@ const int SurfaceMaxCount = 6;
     // Initialize various state.
     //
     glEnableVertexAttribArray(_positionSlot);
-    glEnableVertexAttribArray(_normalSlot);
+    //glEnableVertexAttribArray(_normalSlot);
     
     _lightX = 0.0;
     _lightY = 0.0;
@@ -496,6 +528,10 @@ const int SurfaceMaxCount = 6;
     KSMatrix3 normalMatrix3;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    glUniform3f(_lightPositionSlot, _lightX, _lightY, _lightZ);
+    
+    glVertexAttrib3f(_diffuseSlot, _diffuseR, _diffuseG, _diffuseB);
 }
 
 - (void)drawSurface
@@ -509,15 +545,39 @@ const int SurfaceMaxCount = 6;
     glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
-    
-    glUniform3f(_lightPositionSlot, _lightX, _lightY, _lightZ);
-    
-    glVertexAttrib3f(_diffuseSlot, _diffuseR, _diffuseG, _diffuseB);
-    
-    // Draw the triangles.
-    //
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
-    glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+
+    if (_enablePolygonOffset) {
+        // Draw the triangles
+        //
+        const float polygonOffsetFactor = 4.0f;
+        const float polygonOffsetUnits = 8.0f;
+        
+        // set the depth func to <= as polygons are coplanar
+        glDepthFunc(GL_LEQUAL);
+        
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glPolygonOffset(polygonOffsetFactor, polygonOffsetUnits);
+        
+        glEnableVertexAttribArray(_normalSlot);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
+        glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+        
+        glDisable(GL_POLYGON_OFFSET_FILL);
+
+        // Draw the black lines
+        //
+        glDisableVertexAttribArray(_normalSlot);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO lineIndexBuffer]);
+        glDrawElements(GL_LINES, [_currentVBO lineIndexCount], GL_UNSIGNED_SHORT, 0);
+        
+    }
+    else {
+        // Draw the triangles.
+        //
+        glEnableVertexAttribArray(_normalSlot);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
+        glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+    }
 }
 
 - (void)render
@@ -700,6 +760,17 @@ const int SurfaceMaxCount = 6;
 -(GLfloat)diffuseB
 {
     return _diffuseB;
+}
+
+-(void)setEnablePolygonOffset:(Boolean)enablePolygonOffset
+{
+    _enablePolygonOffset = enablePolygonOffset;
+    [self render];
+}
+
+-(Boolean)enablePolygonOffset
+{
+    return _enablePolygonOffset;
 }
 
 @end

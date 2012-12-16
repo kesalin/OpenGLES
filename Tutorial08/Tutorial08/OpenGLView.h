@@ -62,6 +62,7 @@
     GLfloat _diffuseR;
     GLfloat _diffuseG;
     GLfloat _diffuseB;
+    Boolean _enablePolygonOffset;
 }
 
 - (void)render;
@@ -74,5 +75,7 @@
 @property (nonatomic, assign) GLfloat diffuseR;
 @property (nonatomic, assign) GLfloat diffuseG;
 @property (nonatomic, assign) GLfloat diffuseB;
+
+@property (nonatomic, assign) Boolean enablePolygonOffset;
 
 @end

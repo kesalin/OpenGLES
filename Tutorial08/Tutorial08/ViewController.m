@@ -136,4 +136,21 @@
     [self.openGLView setCurrentSurface:index];
 }
 
+- (IBAction)polygonButtonClicked:(id)sender
+{
+    UIButton * button = (UIButton *)sender;
+    NSString * text = button.titleLabel.text;
+    
+    if ([text compare:@"Polygon"] == NSOrderedSame) {
+        [button setTitle: @"Off" forState: UIControlStateNormal];
+        
+        self.openGLView.enablePolygonOffset = true;
+    }
+    else {
+        [button setTitle: @"Polygon" forState: UIControlStateNormal];
+        
+        self.openGLView.enablePolygonOffset = false;
+    }
+}
+
 @end

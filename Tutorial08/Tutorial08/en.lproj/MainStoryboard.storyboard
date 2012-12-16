@@ -29,8 +29,8 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Diffuse Color" lineBreakMode="tailTruncation" minimumFontSize="10" id="IjU-AP-Nr6">
-                                        <rect key="frame" x="167" y="4" width="124" height="21"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Diffuse Color" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="IjU-AP-Nr6">
+                                        <rect key="frame" x="207" y="4" width="103" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -135,6 +135,21 @@
                                             <action selector="segmentSelectionChanged:" destination="2" eventType="valueChanged" id="BmK-tM-ok3"/>
                                         </connections>
                                     </segmentedControl>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="N3J-PO-yJ7">
+                                        <rect key="frame" x="125" y="4" width="70" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Polygon">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="polygonButtonClicked:" destination="2" eventType="touchUpInside" id="vpb-5r-Mnl"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.83903203940000004" green="0.91288630660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -167,6 +182,7 @@
                 <relationship kind="action" name="lightXSliderValueChanged:"/>
                 <relationship kind="action" name="lightYSliderValueChanged:"/>
                 <relationship kind="action" name="lightZSliderValueChanged:"/>
+                <relationship kind="action" name="polygonButtonClicked:"/>
                 <relationship kind="action" name="segmentSelectionChanged:"/>
                 <relationship kind="outlet" name="diffuseBSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="diffuseGSlider" candidateClass="UISlider"/>

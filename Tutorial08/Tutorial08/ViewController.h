@@ -28,5 +28,6 @@
 - (IBAction)diffuseBSliderValueChanged:(id)sender;
 
 - (IBAction)segmentSelectionChanged:(id)sender;
+- (IBAction)polygonButtonClicked:(id)sender;
 
 @end
