@@ -33,3 +33,9 @@ Contact kesalin at kesalin@gmail.com or l_zhaohui@163.com.
 This is my technology blog: http://blog.csdn.net/kesalin/.
 
 This version is modified and maintained by kesalin@gmail.com.
+
+-----------------------------------------------------------------------
+Screeshots:
+
+Tutorial01:
+https://github.com/kesalin/OpenGLES/blob/master/Tutorial01/Tutorial01-Intro.png
