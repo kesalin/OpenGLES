@@ -27,6 +27,7 @@
 		216B4D89167E110D00E3B53C /* Background.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D86167E0AF800E3B53C /* Background.obj */; };
 		216B4D8A167E110D00E3B53C /* Rincewinds_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D87167E0AF800E3B53C /* Rincewinds_Hat.obj */; };
 		216B4D8B167E110D00E3B53C /* Wizards_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D88167E0AF800E3B53C /* Wizards_Hat.obj */; };
+		21CC2E86167E12A3003C2B23 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21CC2E85167E12A3003C2B23 /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		216B4D86167E0AF800E3B53C /* Background.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Background.obj; path = Model/Background.obj; sourceTree = "<group>"; };
 		216B4D87167E0AF800E3B53C /* Rincewinds_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Rincewinds_Hat.obj; path = Model/Rincewinds_Hat.obj; sourceTree = "<group>"; };
 		216B4D88167E0AF800E3B53C /* Wizards_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Wizards_Hat.obj; path = Model/Wizards_Hat.obj; sourceTree = "<group>"; };
+		21CC2E85167E12A3003C2B23 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 		216B4D41167DE93500E3B53C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21CC2E85167E12A3003C2B23 /* icon.png */,
 				216B4D4C167DE93600E3B53C /* MainStoryboard.storyboard */,
 				216B4D42167DE93600E3B53C /* Tutorial09-Info.plist */,
 				216B4D43167DE93600E3B53C /* InfoPlist.strings */,
@@ -241,6 +244,7 @@
 				216B4D68167DEA6000E3B53C /* VertexShader.glsl in Resources */,
 				216B4D45167DE93600E3B53C /* InfoPlist.strings in Resources */,
 				216B4D4E167DE93600E3B53C /* MainStoryboard.storyboard in Resources */,
+				21CC2E86167E12A3003C2B23 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +373,7 @@
 				216B4D56167DE93600E3B53C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
