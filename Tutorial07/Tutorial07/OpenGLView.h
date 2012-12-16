@@ -1,6 +1,6 @@
 //
 //  OpenGLView.h
-//  Tutorial06
+//  Tutorial07
 //
 //  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
