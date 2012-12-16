@@ -55,5 +55,5 @@ https://github.com/kesalin/OpenGLES/blob/master/Tutorial06/Tutorial06-VBO%26Surf
 Tutorial07: Per-Vertex Light
 https://github.com/kesalin/OpenGLES/blob/master/Tutorial07/Tutorial07-PerVertexLight.png
 
-Tutorial08: Per-Pixel Light & Toon Shader & Polygon Offset.
+Tutorial08: Per-Pixel Light & Toon Shader & Polygon Offset
 https://github.com/kesalin/OpenGLES/blob/master/Tutorial08/Tutorial08-ToonShader.png
