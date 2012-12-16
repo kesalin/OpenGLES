@@ -17,6 +17,7 @@
 		2185C9321660E857006CB696 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2185C9311660E857006CB696 /* QuartzCore.framework */; };
 		2185C9341660E8D4006CB696 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2185C9331660E8D4006CB696 /* MainWindow.xib */; };
 		2185C93D1660F536006CB696 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2185C93C1660F536006CB696 /* OpenGLView.m */; };
+		21C124EC167D9B4800E80909 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21C124EB167D9B4800E80909 /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		2185C9331660E8D4006CB696 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		2185C93B1660F536006CB696 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		2185C93C1660F536006CB696 /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
+		21C124EB167D9B4800E80909 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 		2185C91F1660E734006CB696 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21C124EB167D9B4800E80909 /* icon.png */,
 				2185C9201660E734006CB696 /* Tutorial01-Info.plist */,
 				2185C9211660E734006CB696 /* InfoPlist.strings */,
 				2185C9241660E734006CB696 /* main.m */,
@@ -158,6 +161,7 @@
 			files = (
 				2185C9231660E734006CB696 /* InfoPlist.strings in Resources */,
 				2185C9341660E8D4006CB696 /* MainWindow.xib in Resources */,
+				21C124EC167D9B4800E80909 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +278,7 @@
 				2185C92E1660E734006CB696 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21C124E5167D982900E80909 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21C124E4167D982900E80909 /* icon.png */; };
 		21CFA832167C65630076854B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CFA831167C65630076854B /* UIKit.framework */; };
 		21CFA834167C65630076854B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CFA833167C65630076854B /* Foundation.framework */; };
 		21CFA836167C65630076854B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CFA835167C65630076854B /* CoreGraphics.framework */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21C124E4167D982900E80909 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 		21CFA82D167C65630076854B /* Tutorial07.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial07.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CFA831167C65630076854B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21CFA833167C65630076854B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -121,6 +123,7 @@
 		21CFA838167C65630076854B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21C124E4167D982900E80909 /* icon.png */,
 				21CFA843167C65630076854B /* MainStoryboard.storyboard */,
 				21CFA839167C65630076854B /* Tutorial07-Info.plist */,
 				21CFA83A167C65630076854B /* InfoPlist.strings */,
@@ -217,6 +220,7 @@
 				21CFA867167C66890076854B /* VertexShader.glsl in Resources */,
 				21CFA83C167C65630076854B /* InfoPlist.strings in Resources */,
 				21CFA845167C65630076854B /* MainStoryboard.storyboard in Resources */,
+				21C124E5167D982900E80909 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +349,7 @@
 				21CFA84D167C65630076854B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

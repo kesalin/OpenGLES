@@ -20,6 +20,7 @@
 		2171BC7E1661B64A007B4825 /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2171BC7D1661B64A007B4825 /* GLESUtils.m */; };
 		2171BC811661C260007B4825 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2171BC7F1661BB4D007B4825 /* VertexShader.glsl */; };
 		2171BC821661C260007B4825 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2171BC801661BB65007B4825 /* FragmentShader.glsl */; };
+		21C124F4167D9B7900E80909 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21C124F3167D9B7900E80909 /* icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		2171BC7D1661B64A007B4825 /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
 		2171BC7F1661BB4D007B4825 /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		2171BC801661BB65007B4825 /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		21C124F3167D9B7900E80909 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		2171BC5F1661B25A007B4825 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21C124F3167D9B7900E80909 /* icon.png */,
 				2171BC731661B297007B4825 /* MainWindow.xib */,
 				2171BC7F1661BB4D007B4825 /* VertexShader.glsl */,
 				2171BC801661BB65007B4825 /* FragmentShader.glsl */,
@@ -171,6 +174,7 @@
 				2171BC821661C260007B4825 /* FragmentShader.glsl in Resources */,
 				2171BC631661B25A007B4825 /* InfoPlist.strings in Resources */,
 				2171BC741661B297007B4825 /* MainWindow.xib in Resources */,
+				21C124F4167D9B7900E80909 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +292,7 @@
 				2171BC6E1661B25A007B4825 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
