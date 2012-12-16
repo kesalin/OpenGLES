@@ -36,6 +36,7 @@
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
+    GLuint _depthRenderBuffer;
     GLuint _frameBuffer;
     
     GLuint _programHandle;

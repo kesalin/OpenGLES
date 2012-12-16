@@ -56,6 +56,7 @@
 - (void)setupLayer;
 - (void)setupContext;
 - (void)setupBuffers;
+- (void)destoryBuffer:(GLuint *)buffer;
 - (void)destoryBuffers;
 
 - (void)setupProgram;
@@ -124,32 +125,53 @@
 
 - (void)setupBuffers
 {
+    // Setup color render buffer
+    //
     glGenRenderbuffers(1, &_colorRenderBuffer);
-    // Set as current renderbuffer
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
-    // Allocate color renderbuffer
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
     
+    // Setup depth render buffer
+    //
+    int width, height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    
+    // Create a depth buffer that has the same size as the color buffer.
+    glGenRenderbuffers(1, &_depthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    
+    // Setup frame buffer
+    //
     glGenFramebuffers(1, &_frameBuffer);
-    // Set as current framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     
-    // Attach _colorRenderBuffer to _frameBuffer
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
+    // Attach color render buffer and depth render buffer to frameBuffer
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                               GL_RENDERBUFFER, _colorRenderBuffer);
+    
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, _depthRenderBuffer);
+    
+    // Set color render buffer as current render buffer
+    //
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+}
+
+- (void)destoryBuffer:(GLuint *)buffer
+{
+    if (buffer && *buffer != 0) {
+        glDeleteRenderbuffers(1, buffer);
+        *buffer = 0;
+    }
 }
 
 - (void)destoryBuffers
 {
-    if (_colorRenderBuffer != 0) {
-        glDeleteRenderbuffers(1, &_colorRenderBuffer);
-        _colorRenderBuffer = 0;
-    }
-    
-    if (_frameBuffer != 0) {
-        glDeleteFramebuffers(1, &_frameBuffer);
-        _frameBuffer = 0;
-    }
+    [self destoryBuffer: &_depthRenderBuffer];
+    [self destoryBuffer: &_colorRenderBuffer];
+    [self destoryBuffer: &_frameBuffer];
 }
 
 - (void)cleanup
