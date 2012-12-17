@@ -1,0 +1,285 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		217EB46D167F5A0200EBF8D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EB46C167F5A0200EBF8D5 /* Foundation.framework */; };
+		217EB470167F5A0200EBF8D5 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 217EB46F167F5A0200EBF8D5 /* main.mm */; };
+		217EB474167F5A0200EBF8D5 /* OBJLoaderForiOS.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB473167F5A0200EBF8D5 /* OBJLoaderForiOS.1 */; };
+		217EB47F167F5A5800EBF8D5 /* OBJLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 217EB47C167F5A5800EBF8D5 /* OBJLoader.cpp */; };
+		217EB487167F5B3600EBF8D5 /* Background.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB481167F5B2D00EBF8D5 /* Background.obj */; };
+		217EB488167F5B3600EBF8D5 /* cube.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB482167F5B2D00EBF8D5 /* cube.obj */; };
+		217EB489167F5B3600EBF8D5 /* humanoid_quad.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB483167F5B2D00EBF8D5 /* humanoid_quad.obj */; };
+		217EB48A167F5B3600EBF8D5 /* Rincewinds_Hat.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB484167F5B2D00EBF8D5 /* Rincewinds_Hat.obj */; };
+		217EB48B167F5B3600EBF8D5 /* teapot.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB485167F5B2D00EBF8D5 /* teapot.obj */; };
+		217EB48C167F5B3600EBF8D5 /* Wizards_Hat.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 217EB486167F5B2D00EBF8D5 /* Wizards_Hat.obj */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		217EB466167F5A0200EBF8D5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				217EB487167F5B3600EBF8D5 /* Background.obj in CopyFiles */,
+				217EB488167F5B3600EBF8D5 /* cube.obj in CopyFiles */,
+				217EB489167F5B3600EBF8D5 /* humanoid_quad.obj in CopyFiles */,
+				217EB48A167F5B3600EBF8D5 /* Rincewinds_Hat.obj in CopyFiles */,
+				217EB48B167F5B3600EBF8D5 /* teapot.obj in CopyFiles */,
+				217EB48C167F5B3600EBF8D5 /* Wizards_Hat.obj in CopyFiles */,
+				217EB474167F5A0200EBF8D5 /* OBJLoaderForiOS.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		217EB468167F5A0200EBF8D5 /* OBJLoaderForiOS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OBJLoaderForiOS; sourceTree = BUILT_PRODUCTS_DIR; };
+		217EB46C167F5A0200EBF8D5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		217EB46F167F5A0200EBF8D5 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		217EB472167F5A0200EBF8D5 /* OBJLoaderForiOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OBJLoaderForiOS-Prefix.pch"; sourceTree = "<group>"; };
+		217EB473167F5A0200EBF8D5 /* OBJLoaderForiOS.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OBJLoaderForiOS.1; sourceTree = "<group>"; };
+		217EB47B167F5A5800EBF8D5 /* ISurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISurface.h; path = OBJLoader/ISurface.h; sourceTree = "<group>"; };
+		217EB47C167F5A5800EBF8D5 /* OBJLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OBJLoader.cpp; path = OBJLoader/OBJLoader.cpp; sourceTree = "<group>"; };
+		217EB47D167F5A5800EBF8D5 /* OBJLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OBJLoader.h; path = OBJLoader/OBJLoader.h; sourceTree = "<group>"; };
+		217EB47E167F5A5800EBF8D5 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = OBJLoader/Vector.h; sourceTree = "<group>"; };
+		217EB481167F5B2D00EBF8D5 /* Background.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Background.obj; path = Model/Background.obj; sourceTree = "<group>"; };
+		217EB482167F5B2D00EBF8D5 /* cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = cube.obj; path = Model/cube.obj; sourceTree = "<group>"; };
+		217EB483167F5B2D00EBF8D5 /* humanoid_quad.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = humanoid_quad.obj; path = Model/humanoid_quad.obj; sourceTree = "<group>"; };
+		217EB484167F5B2D00EBF8D5 /* Rincewinds_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Rincewinds_Hat.obj; path = Model/Rincewinds_Hat.obj; sourceTree = "<group>"; };
+		217EB485167F5B2D00EBF8D5 /* teapot.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = teapot.obj; path = Model/teapot.obj; sourceTree = "<group>"; };
+		217EB486167F5B2D00EBF8D5 /* Wizards_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Wizards_Hat.obj; path = Model/Wizards_Hat.obj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		217EB465167F5A0200EBF8D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				217EB46D167F5A0200EBF8D5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		217EB45D167F5A0200EBF8D5 = {
+			isa = PBXGroup;
+			children = (
+				217EB46E167F5A0200EBF8D5 /* OBJLoaderForiOS */,
+				217EB46B167F5A0200EBF8D5 /* Frameworks */,
+				217EB469167F5A0200EBF8D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		217EB469167F5A0200EBF8D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				217EB468167F5A0200EBF8D5 /* OBJLoaderForiOS */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		217EB46B167F5A0200EBF8D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				217EB46C167F5A0200EBF8D5 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		217EB46E167F5A0200EBF8D5 /* OBJLoaderForiOS */ = {
+			isa = PBXGroup;
+			children = (
+				217EB480167F5AE800EBF8D5 /* Model */,
+				217EB47A167F5A4800EBF8D5 /* OBJLoader */,
+				217EB46F167F5A0200EBF8D5 /* main.mm */,
+				217EB473167F5A0200EBF8D5 /* OBJLoaderForiOS.1 */,
+				217EB471167F5A0200EBF8D5 /* Supporting Files */,
+			);
+			path = OBJLoaderForiOS;
+			sourceTree = "<group>";
+		};
+		217EB471167F5A0200EBF8D5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				217EB472167F5A0200EBF8D5 /* OBJLoaderForiOS-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		217EB47A167F5A4800EBF8D5 /* OBJLoader */ = {
+			isa = PBXGroup;
+			children = (
+				217EB47B167F5A5800EBF8D5 /* ISurface.h */,
+				217EB47C167F5A5800EBF8D5 /* OBJLoader.cpp */,
+				217EB47D167F5A5800EBF8D5 /* OBJLoader.h */,
+				217EB47E167F5A5800EBF8D5 /* Vector.h */,
+			);
+			name = OBJLoader;
+			sourceTree = "<group>";
+		};
+		217EB480167F5AE800EBF8D5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				217EB481167F5B2D00EBF8D5 /* Background.obj */,
+				217EB482167F5B2D00EBF8D5 /* cube.obj */,
+				217EB483167F5B2D00EBF8D5 /* humanoid_quad.obj */,
+				217EB484167F5B2D00EBF8D5 /* Rincewinds_Hat.obj */,
+				217EB485167F5B2D00EBF8D5 /* teapot.obj */,
+				217EB486167F5B2D00EBF8D5 /* Wizards_Hat.obj */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		217EB467167F5A0200EBF8D5 /* OBJLoaderForiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 217EB477167F5A0200EBF8D5 /* Build configuration list for PBXNativeTarget "OBJLoaderForiOS" */;
+			buildPhases = (
+				217EB464167F5A0200EBF8D5 /* Sources */,
+				217EB465167F5A0200EBF8D5 /* Frameworks */,
+				217EB466167F5A0200EBF8D5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OBJLoaderForiOS;
+			productName = OBJLoaderForiOS;
+			productReference = 217EB468167F5A0200EBF8D5 /* OBJLoaderForiOS */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		217EB45F167F5A0200EBF8D5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "http://blog.csdn.net/kesalin/";
+			};
+			buildConfigurationList = 217EB462167F5A0200EBF8D5 /* Build configuration list for PBXProject "OBJLoaderForiOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 217EB45D167F5A0200EBF8D5;
+			productRefGroup = 217EB469167F5A0200EBF8D5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				217EB467167F5A0200EBF8D5 /* OBJLoaderForiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		217EB464167F5A0200EBF8D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				217EB470167F5A0200EBF8D5 /* main.mm in Sources */,
+				217EB47F167F5A5800EBF8D5 /* OBJLoader.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		217EB475167F5A0200EBF8D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		217EB476167F5A0200EBF8D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		217EB478167F5A0200EBF8D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OBJLoaderForiOS/OBJLoaderForiOS-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		217EB479167F5A0200EBF8D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OBJLoaderForiOS/OBJLoaderForiOS-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		217EB462167F5A0200EBF8D5 /* Build configuration list for PBXProject "OBJLoaderForiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				217EB475167F5A0200EBF8D5 /* Debug */,
+				217EB476167F5A0200EBF8D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		217EB477167F5A0200EBF8D5 /* Build configuration list for PBXNativeTarget "OBJLoaderForiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				217EB478167F5A0200EBF8D5 /* Debug */,
+				217EB479167F5A0200EBF8D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 217EB45F167F5A0200EBF8D5 /* Project object */;
+}
