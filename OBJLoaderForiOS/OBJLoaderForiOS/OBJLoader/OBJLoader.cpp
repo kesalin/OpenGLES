@@ -499,6 +499,8 @@ void OBJLoader::GenerateVertices(float * outVertices)
             }
         }
     }
+    
+    PrintArray(outVertices, indexCount * GetVertexSize(), GetVertexSize(), "Out Vertex");
 
 //    // modify normal and texture cord
 //    //
