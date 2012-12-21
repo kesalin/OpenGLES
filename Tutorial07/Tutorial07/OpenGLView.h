@@ -62,6 +62,8 @@
     GLfloat _diffuseR;
     GLfloat _diffuseG;
     GLfloat _diffuseB;
+    
+    GLfloat _shininess;
 }
 
 - (void)render;
@@ -74,5 +76,6 @@
 @property (nonatomic, assign) GLfloat diffuseR;
 @property (nonatomic, assign) GLfloat diffuseG;
 @property (nonatomic, assign) GLfloat diffuseB;
+@property (nonatomic, assign) GLfloat shininess;
 
 @end

@@ -85,6 +85,7 @@
 @synthesize diffuseR = _diffuseR;
 @synthesize diffuseG = _diffuseG;
 @synthesize diffuseB = _diffuseB;
+@synthesize shininess = _shininess;
 
 #pragma mark- Initilize GL
 
@@ -438,7 +439,6 @@ const int SurfaceMaxCount = 6;
     //
     glUniform3f(_ambientSlot, 0.04f, 0.04f, 0.04f);
     glUniform3f(_specularSlot, 0.5, 0.5, 0.5);
-    glUniform1f(_shininessSlot, 50);
                  
     // Initialize various state.
     //
@@ -452,6 +452,7 @@ const int SurfaceMaxCount = 6;
     _diffuseR = 0.0;
     _diffuseG = 0.5;
     _diffuseB = 1.0;
+    _shininess = 10;
 }
 
 - (void)updateSurfaceTransform
@@ -486,7 +487,7 @@ const int SurfaceMaxCount = 6;
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
     
     glUniform3f(_lightPositionSlot, _lightX, _lightY, _lightZ);
-    
+    glUniform1f(_shininessSlot, _shininess);
     glVertexAttrib3f(_diffuseSlot, _diffuseR, _diffuseG, _diffuseB);
     
     // Draw the triangles.
@@ -675,6 +676,17 @@ const int SurfaceMaxCount = 6;
 -(GLfloat)diffuseB
 {
     return _diffuseB;
+}
+
+-(void)setShininess:(GLfloat)shininess
+{
+    _shininess = shininess;
+    [self render];
+}
+
+-(GLfloat)shininess
+{
+    return _shininess;
 }
 
 @end

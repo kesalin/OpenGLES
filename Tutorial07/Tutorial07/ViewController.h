@@ -22,6 +22,7 @@
 @property (nonatomic, strong) IBOutlet UISlider * diffuseRSlider;
 @property (nonatomic, strong) IBOutlet UISlider * diffuseGSlider;
 @property (nonatomic, strong) IBOutlet UISlider * diffuseBSlider;
+@property (nonatomic, strong) IBOutlet UISlider * shininessSlider;
 
 - (IBAction)lightXSliderValueChanged:(id)sender;
 - (IBAction)lightYSliderValueChanged:(id)sender;
@@ -29,6 +30,7 @@
 - (IBAction)diffuseRSliderValueChanged:(id)sender;
 - (IBAction)diffuseGSliderValueChanged:(id)sender;
 - (IBAction)diffuseBSliderValueChanged:(id)sender;
+- (IBAction)shininessSliderValueChanged:(id)sender;
 
 - (IBAction)segmentSelectionChanged:(id)sender;
 

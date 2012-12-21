@@ -13,6 +13,7 @@
 @synthesize openGLView;
 @synthesize lightXSlider, lightYSlider, lightZSlider;
 @synthesize diffuseRSlider, diffuseGSlider, diffuseBSlider;  
+@synthesize shininessSlider;
 
 - (void)didReceiveMemoryWarning
 {
@@ -33,6 +34,7 @@
     self.diffuseRSlider.value = self.openGLView.diffuseR;
     self.diffuseGSlider.value = self.openGLView.diffuseG;
     self.diffuseBSlider.value = self.openGLView.diffuseB;
+    self.shininessSlider.value = self.openGLView.shininess;
 }
 
 - (void)viewDidUnload
@@ -126,6 +128,14 @@
     float value = [slider value];
     
     self.openGLView.diffuseB = value;
+}
+
+- (void)shininessSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    self.openGLView.shininess = value;
 }
 
 - (void)segmentSelectionChanged:(id)sender
