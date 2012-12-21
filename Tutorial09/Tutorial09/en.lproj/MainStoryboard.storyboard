@@ -14,21 +14,21 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="HIk-xo-Zpo" customClass="OpenGLView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="340"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="359"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="ULJ-bO-25a">
-                                <rect key="frame" x="0.0" y="340" width="320" height="120"/>
+                                <rect key="frame" x="0.0" y="358" width="320" height="102"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="qlC-4a-DGR">
-                                        <rect key="frame" x="20" y="57" width="280" height="44"/>
+                                        <rect key="frame" x="26" y="29" width="280" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <segments>
                                             <segment title="Cube"/>
-                                            <segment title="Ninja"/>
                                             <segment title="Hat"/>
+                                            <segment title="Ninja"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentSelectionChanged:" destination="2" eventType="valueChanged" id="IN0-I8-5F4"/>
