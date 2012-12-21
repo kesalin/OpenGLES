@@ -26,7 +26,8 @@ m_vertexCount(0)
     ifstream objFile(m_modelFilepath.c_str());
     while (objFile) {
         char c = objFile.get();
-        if (c == 'f') {
+        char space = objFile.get();
+        if (c == 'f' && space == ' ') {
             objFile >> *p >> *(p + 1) >> *(p + 2);
             
             // index base on 1
@@ -72,7 +73,8 @@ int ModelSurface::GetVertexCount()
     std::ifstream objFile(m_modelFilepath.c_str());
     while (objFile) {
         char c = objFile.get();
-        if (c == 'v')
+        char space = objFile.get();
+        if (c == 'v' && space == ' ')
             m_vertexCount++;
         objFile.ignore(MaxLineSize, '\n');
     }
@@ -86,7 +88,8 @@ int ModelSurface::GetFaceCount()
         std::ifstream objFile(m_modelFilepath.c_str());
         while (objFile) {
             char c = objFile.get();
-            if (c == 'f')
+            char space = objFile.get();
+            if (c == 'f' && space == ' ')
                 m_faceCount++;
             objFile.ignore(MaxLineSize, '\n');
         }
@@ -108,7 +111,8 @@ void ModelSurface::GenerateVertices(float * vertices) const
     ifstream objFile(m_modelFilepath.c_str());
     while (objFile) {
         char c = objFile.get();
-        if (c == 'v') {
+        char space = objFile.get();
+        if (c == 'v' && space == ' ') {
             objFile >> *p >> *(p + 1) >> *(p + 2);
             
             if ((m_vertexFlags & VertexFlagsNormals) != 0) {

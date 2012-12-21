@@ -24,8 +24,6 @@
 		216B4D74167DEB6A00E3B53C /* ModelSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 216B4D73167DEB6A00E3B53C /* ModelSurface.cpp */; };
 		216B4D79167DFC8D00E3B53C /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 216B4D78167DFC8D00E3B53C /* OpenGLView.mm */; };
 		216B4D7F167E015300E3B53C /* Ninja.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D7D167E014C00E3B53C /* Ninja.obj */; };
-		216B4D89167E110D00E3B53C /* Background.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D86167E0AF800E3B53C /* Background.obj */; };
-		216B4D8A167E110D00E3B53C /* Rincewinds_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D87167E0AF800E3B53C /* Rincewinds_Hat.obj */; };
 		216B4D8B167E110D00E3B53C /* Wizards_Hat.obj in Resources */ = {isa = PBXBuildFile; fileRef = 216B4D88167E0AF800E3B53C /* Wizards_Hat.obj */; };
 		21CC2E86167E12A3003C2B23 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21CC2E85167E12A3003C2B23 /* icon.png */; };
 /* End PBXBuildFile section */
@@ -60,8 +58,6 @@
 		216B4D77167DFC8D00E3B53C /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		216B4D78167DFC8D00E3B53C /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 		216B4D7D167E014C00E3B53C /* Ninja.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Ninja.obj; path = Model/Ninja.obj; sourceTree = "<group>"; };
-		216B4D86167E0AF800E3B53C /* Background.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Background.obj; path = Model/Background.obj; sourceTree = "<group>"; };
-		216B4D87167E0AF800E3B53C /* Rincewinds_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Rincewinds_Hat.obj; path = Model/Rincewinds_Hat.obj; sourceTree = "<group>"; };
 		216B4D88167E0AF800E3B53C /* Wizards_Hat.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = Wizards_Hat.obj; path = Model/Wizards_Hat.obj; sourceTree = "<group>"; };
 		21CC2E85167E12A3003C2B23 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -119,11 +115,11 @@
 				216B4D5C167DE9B700E3B53C /* Shader */,
 				216B4D5B167DE9AF00E3B53C /* Utils */,
 				216B4D49167DE93600E3B53C /* AppDelegate.h */,
-				216B4D4A167DE93600E3B53C /* AppDelegate.m */,
 				216B4D4F167DE93600E3B53C /* ViewController.h */,
 				216B4D50167DE93600E3B53C /* ViewController.m */,
 				216B4D77167DFC8D00E3B53C /* OpenGLView.h */,
 				216B4D78167DFC8D00E3B53C /* OpenGLView.mm */,
+				216B4D4A167DE93600E3B53C /* AppDelegate.m */,
 				216B4D41167DE93500E3B53C /* Supporting Files */,
 			);
 			path = Tutorial09;
@@ -177,8 +173,6 @@
 		216B4D76167DF4B600E3B53C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				216B4D86167E0AF800E3B53C /* Background.obj */,
-				216B4D87167E0AF800E3B53C /* Rincewinds_Hat.obj */,
 				216B4D88167E0AF800E3B53C /* Wizards_Hat.obj */,
 				216B4D7D167E014C00E3B53C /* Ninja.obj */,
 			);
@@ -236,8 +230,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				216B4D89167E110D00E3B53C /* Background.obj in Resources */,
-				216B4D8A167E110D00E3B53C /* Rincewinds_Hat.obj in Resources */,
 				216B4D8B167E110D00E3B53C /* Wizards_Hat.obj in Resources */,
 				216B4D7F167E015300E3B53C /* Ninja.obj in Resources */,
 				216B4D67167DEA6000E3B53C /* FragmentShader.glsl in Resources */,

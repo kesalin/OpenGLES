@@ -296,12 +296,14 @@
 }
 
 const int SurfaceCube = 0;
-const int SurfaceMaxCount = 6;
+const int SurfaceMaxCount = 3;
 
 - (ISurface *)createSurface:(int)type
 {
     NSArray * modelList = [NSArray arrayWithObjects:
-                           @"Ninja", @"Background", @"Rincewinds_Hat", @"Wizards_Hat", nil];
+                           @"Ninja", 
+                           @"Wizards_Hat",
+                           nil];
     
     type = type % [modelList count];
     
@@ -366,10 +368,11 @@ const int SurfaceMaxCount = 6;
         _vboArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < SurfaceMaxCount; i++) {
             DrawableVBO * vbo = nil;
-            if (i == SurfaceMaxCount - 1) {
+            if (i == SurfaceCube) {
                 vbo = [self createVBOsForCube];
             }
-            else {
+            else
+            {
                 vbo =  [self createVBO:i];
             }
 
@@ -403,7 +406,7 @@ const int SurfaceMaxCount = 6;
     //
     ksMatrixLoadIdentity(&_projectionMatrix);
     float aspect = width / height;
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 10.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 12.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
@@ -445,7 +448,7 @@ const int SurfaceMaxCount = 6;
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
     
     ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     

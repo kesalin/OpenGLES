@@ -26,12 +26,9 @@
                                         <rect key="frame" x="20" y="57" width="280" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <segments>
-                                            <segment title="1"/>
-                                            <segment title="2"/>
-                                            <segment title="3"/>
-                                            <segment title="4"/>
-                                            <segment title="5"/>
-                                            <segment title="6"/>
+                                            <segment title="Cube"/>
+                                            <segment title="Ninja"/>
+                                            <segment title="Hat"/>
                                         </segments>
                                         <connections>
                                             <action selector="segmentSelectionChanged:" destination="2" eventType="valueChanged" id="IN0-I8-5F4"/>
