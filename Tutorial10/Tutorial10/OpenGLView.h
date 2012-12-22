@@ -1,6 +1,6 @@
 //
 //  OpenGLView.h
-//  Tutorial07
+//  Tutorial10
 //
 //  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
@@ -43,14 +43,22 @@
     GLuint _positionSlot;
     GLuint _modelViewSlot;
     GLuint _projectionSlot;
+    
+    // For light
+    //
     GLuint _normalMatrixSlot;
     GLuint _lightPositionSlot;
-    
     GLint _normalSlot;
     GLint _ambientSlot;
     GLint _diffuseSlot;
     GLint _specularSlot;
     GLint _shininessSlot;
+    
+    // For texture
+    //
+    GLuint _boxTexture;
+    GLint _textureCoordSlot;
+    GLint _samplerSlot;
     
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
@@ -59,6 +67,5 @@
 - (void)render;
 - (void)cleanup;
 - (void)setCurrentSurface:(int)index;
-
 
 @end

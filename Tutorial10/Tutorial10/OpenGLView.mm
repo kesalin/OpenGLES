@@ -1,6 +1,6 @@
 //
 //  OpenGLView.m
-//  Tutorial07
+//  Tutorial10
 //
 //  Created by kesalin@gmail.com on 12-12-24.
 //  Copyright (c) 2012 年 http://blog.csdn.net/kesalin/. All rights reserved.
@@ -9,6 +9,7 @@
 #import "OpenGLView.h"
 #import "GLESUtils.h"
 #import "Quaternion.h"
+#import "TextureManager.h"
 
 //
 // DrawableVBO implementation
@@ -166,6 +167,8 @@
 
 - (void)cleanup
 {   
+    [[TextureManager instance] cleanup];
+
     [self destoryVBOs];
 
     [self destoryBuffers];
@@ -212,6 +215,9 @@
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
+    
+    _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
+    _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
 }
 
 #pragma mark - Surface
@@ -229,44 +235,64 @@
 - (DrawableVBO *)createVBOsForCube
 {
     const GLfloat vertices[] = {
-        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350,
-        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350,
-        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350,
-        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350,
+        -1.5f, -1.5f, 1.5f, 0, 0, 1, 0, 1,
+        -1.5f, 1.5f, 1.5f, 0, 0, 1, 0, 0,
+        1.5f, 1.5f, 1.5f, 0, 0, 1, 1, 0,
+        1.5f, -1.5f, 1.5f, 0, 0, 1, 1, 1,
         
-        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350,
-        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350,
-        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350,
-        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
+        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 0, 1,
+        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 0, 0,
+        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 1, 0,
+        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 1, 1,
+        
+        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1,
+        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
+        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 1, 0,
+        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 1, 1,
+        
+        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 0, 1,
+        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 0, 0,
+        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
+        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1,
+        
+        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 0, 1,
+        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
+        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
+        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 1, 1,
+        
+        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1,
+        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 0, 0,
+        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 1, 0,
+        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1
     };
     
     const GLushort indices[] = {
         // Front face
-        3, 2, 1, 3, 1, 0,
+        0, 1, 3, 1, 2, 3,
         
         // Back face
         7, 5, 4, 7, 6, 5,
         
         // Left face
-        0, 1, 7, 7, 1, 6,
+        8, 9, 10, 8, 10, 11,
         
         // Right face
-        3, 4, 5, 3, 5, 2,
+        12, 13, 14, 12, 14, 15,
         
         // Up face
-        1, 2, 5, 1, 5, 6,
+        16, 17, 18, 16, 18, 19,
         
         // Down face
-        0, 7, 3, 3, 7, 4
+        20, 21, 22, 20, 22, 23
     };
     
     // Create the VBO for the vertice.
     //
-    int vertexSize = 6;
+    int vertexSize = 8;
     GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, 8 * vertexSize * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
     // Create the VBO for the triangle indice
     //
@@ -342,9 +368,37 @@
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_normalSlot);
     
-    glUniform3f(_lightPositionSlot, 0.0, 0.0, 1.0);
+    glUniform3f(_lightPositionSlot, 0.0, 0.0, 5.0);
     
-    glVertexAttrib3f(_diffuseSlot, 0.5, 0.5, 0.5);
+    glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
+}
+
+- (void)setupTexture
+{
+    // Load image data from resource file.
+    //
+    [[TextureManager instance] loadPNG:@"box_256"];
+    
+    TextureLoader * loader = [[TextureManager instance] textureAtIndex:0];
+    void* pixels = [loader imageData];
+    CGSize size = [loader imageSize];
+    
+    // Set the active sampler to stage 0.
+    // Not really necessary since the uniform defaults to zero anyway, but good practice.
+    //
+	glActiveTexture(GL_TEXTURE0);
+    glUniform1i(_samplerSlot, 0);
+	
+    // Load the texture.
+    //
+    glGenTextures(1, &_boxTexture);
+    glBindTexture(GL_TEXTURE_2D, _boxTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glEnableVertexAttribArray(_textureCoordSlot);
 }
 
 - (void)resetRotation
@@ -380,10 +434,13 @@
     
     int stride = [_currentVBO vertexSize] * sizeof(GLfloat);
     const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
-
+    const GLvoid* texCoordOffset = (const GLvoid*)(6 * sizeof(GLfloat));
+    
     glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
+    
+    glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
     
     // Draw the triangles.
     //
@@ -421,6 +478,8 @@
         [self setupProjection];
         
         [self setupLight];
+        
+        [self setupTexture];
         
         [self resetRotation];
     }

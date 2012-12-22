@@ -1,6 +1,7 @@
 uniform mat4 projection;
 uniform mat4 modelView;
 attribute vec4 vPosition;
+attribute vec2 vTextureCoord;
 
 uniform mat3 normalMatrix;
 uniform vec3 vLightPosition;
@@ -12,6 +13,7 @@ attribute vec3 vNormal;
 attribute vec3 vDiffuseMaterial;
 
 varying vec4 vDestinationColor;
+varying vec2 vTextureCoordOut;
 
 void main(void)
 {
@@ -29,5 +31,5 @@ void main(void)
     vec3 color = vAmbientMaterial + df * vDiffuseMaterial + sf * vSpecularMaterial;
     vDestinationColor = vec4(color, 1);
     
-    //vDestinationColor = vec4(1.0, 0.0, 0.0, 1.0);
+    vTextureCoordOut = vTextureCoord;
 }
