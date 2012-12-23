@@ -75,6 +75,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <segments>
                                             <segment title="Wooden"/>
+                                            <segment title="PVR"/>
                                             <segment title="Flower"/>
                                         </segments>
                                         <connections>

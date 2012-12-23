@@ -28,8 +28,10 @@ typedef enum TextureFormat {
 - (void)loadPVR:(NSString *)filepath;
 - (void)unload;
 
-- (int)bitsPerComponent;
+- (unsigned short)bitsPerComponent;
 - (TextureFormat)textureFormat;
 - (CGSize)imageSize;
 - (void *)imageData;
+- (unsigned short)mipCount;
+- (Boolean)isPVR;
 @end

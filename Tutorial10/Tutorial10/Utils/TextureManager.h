@@ -14,6 +14,7 @@
 +(TextureManager *)instance;
 
 -(void)loadImage:(NSString *)filepath;
+-(void)loadPVR:(NSString *)filepath;
 -(void)cleanup;
 -(NSUInteger)textureCount;
 -(TextureLoader *)textureAtIndex:(NSUInteger)index;

@@ -47,6 +47,14 @@ static TextureManager * _instance = nil;
     [_array addObject:loader];
 }
 
+-(void)loadPVR:(NSString *)filepath
+{
+    TextureLoader * loader = [[TextureLoader alloc] init];
+    [loader loadPVR:filepath];
+    
+    [_array addObject:loader];
+}
+
 -(void)cleanup
 {
     for (TextureManager * loader in _array) {

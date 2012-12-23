@@ -381,9 +381,8 @@
     glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
 }
 
-- (void)setTexture:(NSUInteger)index
-{    
-    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
+- (void)setImageTexture:(TextureLoader *)loader
+{
     void* pixels = [loader imageData];
     CGSize size = [loader imageSize];
     
@@ -402,7 +401,7 @@
         case TextureFormatRGBA:
             format = GL_RGBA;
             break;
-
+            
         default:
             NSLog(@"ERROR: invalid texture format! %d", tf);
             break;
@@ -428,6 +427,96 @@
     glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
     
     glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+- (void)setPVRTexture:(TextureLoader *)loader
+{
+    unsigned char* data = (unsigned char*) [loader imageData];
+    CGSize size = [loader imageSize];
+    int width = size.width;
+    int height = size.height;
+    
+    int bitsPerPixel;
+    GLenum format;
+    bool compressed = true;
+    switch ([loader textureFormat]) {
+        case TextureFormatPvrtcRgba2:
+            bitsPerPixel = 2;
+            format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+            break;
+        case TextureFormatPvrtcRgb2:
+            bitsPerPixel = 2;
+            format = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+            break;
+        case TextureFormatPvrtcRgba4:
+            bitsPerPixel = 4;
+            format = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+            break;
+        case TextureFormatPvrtcRgb4:
+            bitsPerPixel = 4;
+            format = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+            break;
+        default:
+            compressed = false;
+            break;
+    }
+    
+    if (compressed) {
+        for (int level = 0; level < [loader mipCount]; ++level) {
+            GLsizei size = MAX(32, width * height * bitsPerPixel / 8);
+            glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, size, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            
+            data += size;
+            width >>= 1;
+            height >>= 1;
+        }
+    }
+    else {
+        GLenum type;
+        switch ([loader textureFormat]) {
+            case TextureFormatRGBA:
+                NSAssert([loader bitsPerComponent] == 4,
+                         @"Invalid bitsPerComponent for RGBA format PVR");
+                format = GL_RGBA;
+                type = GL_UNSIGNED_SHORT_4_4_4_4;
+                bitsPerPixel = 16;
+                break;
+            case TextureFormat565:
+                format = GL_RGB;
+                type = GL_UNSIGNED_SHORT_5_6_5;
+                bitsPerPixel = 16;
+                break;
+            case TextureFormat5551:
+                format = GL_RGBA;
+                type = GL_UNSIGNED_SHORT_5_5_5_1;
+                bitsPerPixel = 16;
+                break;
+            default:
+                break;
+        }
+
+        for (int level = 0; level < [loader mipCount]; ++level) {
+            GLsizei size = width * height * bitsPerPixel / 8;
+            glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, type, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            
+            data += size;
+            width >>= 1;
+            height >>= 1;
+        }
+    }
+}
+
+- (void)setTexture:(NSUInteger)index
+{    
+    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
+    if ([loader isPVR]) {
+        [self setPVRTexture:loader];
+    }
+    else {
+        [self setImageTexture:loader];
+    }
 }
 
 - (void)setTextureParameter
@@ -458,8 +547,9 @@
     // Load image data from resource file.
     //
     [[TextureManager instance] loadImage:@"wooden.png"];
+    [[TextureManager instance] loadPVR:@"wooden.pvr"];
     [[TextureManager instance] loadImage:@"flower.jpg"];
-    
+
     _textureIndex = 0;
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
