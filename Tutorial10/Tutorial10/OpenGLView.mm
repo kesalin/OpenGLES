@@ -64,7 +64,7 @@
 - (void)setupLight;
 
 - (void)setTexture:(NSUInteger)index;
-- (void)updateTextureParameter;
+- (void)setTextureParameter;
 - (void)setupTexture;
 
 - (void)setupVBOs;
@@ -428,11 +428,14 @@
     glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
     
     glGenerateMipmap(GL_TEXTURE_2D);
-    glEnableVertexAttribArray(_textureCoordSlot);
 }
 
-- (void)updateTextureParameter
+- (void)setTextureParameter
 {
+    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
+    //
+    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
@@ -450,6 +453,8 @@
     glGenTextures(1, &_texture);
     glBindTexture(GL_TEXTURE_2D, _texture);
     
+    glEnableVertexAttribArray(_textureCoordSlot);
+    
     // Load image data from resource file.
     //
     [[TextureManager instance] loadImage:@"wooden.png"];
@@ -459,8 +464,9 @@
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
     
+    [self setTextureParameter];
+    
     [self setTexture:_textureIndex];
-    [self updateTextureParameter];
 }
 
 - (void)resetRotation
@@ -651,7 +657,7 @@
         _wrapMode = GL_MIRRORED_REPEAT;
     }
     
-    [self updateTextureParameter];
+    [self setTextureParameter];
 
     [self render];
 }
@@ -677,7 +683,7 @@
         _filterMode = GL_NEAREST_MIPMAP_NEAREST;
     }
     
-    [self updateTextureParameter];
+    [self setTextureParameter];
 
     [self render];
 }
