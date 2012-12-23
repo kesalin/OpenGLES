@@ -56,13 +56,20 @@
     
     // For texture
     //
-    GLuint _boxTexture;
+    GLuint _texture;
     GLint _textureCoordSlot;
     GLint _samplerSlot;
+    GLint _wrapMode;
+    GLint _filterMode;
+    NSUInteger _textureIndex;
     
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
 }
+
+@property (nonatomic, assign) GLint wrapMode;
+@property (nonatomic, assign) GLint filterMode;
+@property (nonatomic, assign) NSUInteger textureIndex;
 
 - (void)render;
 - (void)cleanup;

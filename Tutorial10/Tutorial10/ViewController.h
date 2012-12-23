@@ -11,9 +11,12 @@
 
 @interface ViewController : UIViewController
 {
-    
 }
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
+
+-(IBAction)textureSegmentSelectionChanged:(id)sender;
+-(IBAction)wrapSegmentSelectionChanged:(id)sender;
+-(IBAction)filterSegmentSelectionChanged:(id)sender;
 
 @end

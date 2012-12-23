@@ -39,10 +39,10 @@ static TextureManager * _instance = nil;
     return self;
 }
 
-- (void)loadPNG:(NSString *)filepath
+- (void)loadImage:(NSString *)filepath
 {
     TextureLoader * loader = [[TextureLoader alloc] init];
-    [loader loadPNG:filepath];
+    [loader loadImage:filepath];
     
     [_array addObject:loader];
 }

@@ -63,6 +63,10 @@
 - (void)setupProjection;
 - (void)setupLight;
 
+- (void)setTexture:(NSUInteger)index;
+- (void)updateTextureParameter;
+- (void)setupTexture;
+
 - (void)setupVBOs;
 - (void)destoryVBOs;
 
@@ -76,6 +80,10 @@
 // OpenGLView implementation
 //
 @implementation OpenGLView
+
+@synthesize textureIndex = _textureIndex;
+@synthesize wrapMode = _wrapMode;
+@synthesize filterMode = _filterMode;
 
 #pragma mark- Initilize GL
 
@@ -255,10 +263,10 @@
         1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
         1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1,
         
-        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 0, 1,
-        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
-        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
-        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 1, 1,
+        -1.5f, 1.5f, 1.5f, 0, 1, 0, 0, 2,
+        -1.5f, 1.5f, -1.5f, 0, 1, 0, 0, 0,
+        1.5f, 1.5f, -1.5f, 0, 1, 0, 2, 0,
+        1.5f, 1.5f, 1.5f, 0, 1, 0, 2, 2,
         
         -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1,
         -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 0, 0,
@@ -373,32 +381,86 @@
     glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
 }
 
-- (void)setupTexture
-{
-    // Load image data from resource file.
-    //
-    [[TextureManager instance] loadPNG:@"box_256"];
-    
-    TextureLoader * loader = [[TextureManager instance] textureAtIndex:0];
+- (void)setTexture:(NSUInteger)index
+{    
+    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
     void* pixels = [loader imageData];
     CGSize size = [loader imageSize];
     
+    GLenum format;
+    TextureFormat tf = [loader textureFormat];
+    switch (tf) {
+        case TextureFormatGray:
+            format = GL_LUMINANCE;
+            break;
+        case TextureFormatGrayAlpha:
+            format = GL_LUMINANCE_ALPHA;
+            break;
+        case TextureFormatRGB:
+            format = GL_RGB;
+            break;
+        case TextureFormatRGBA:
+            format = GL_RGBA;
+            break;
+
+        default:
+            NSLog(@"ERROR: invalid texture format! %d", tf);
+            break;
+    }
+    
+    GLenum type;
+    int bitsPerComponent = [loader bitsPerComponent];
+    switch (bitsPerComponent) {
+        case 8:
+            type = GL_UNSIGNED_BYTE;
+            break;
+        case 4:
+            if (format == GL_RGBA) {
+                type = GL_UNSIGNED_SHORT_4_4_4_4;
+                break;
+            }
+            // fall through
+        default:
+            NSLog(@"ERROR: invalid texture format! %d, bitsPerComponent %d", tf, bitsPerComponent);
+            break;
+    }
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
+    
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glEnableVertexAttribArray(_textureCoordSlot);
+}
+
+- (void)updateTextureParameter
+{
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
+}
+
+- (void)setupTexture
+{
     // Set the active sampler to stage 0.
     // Not really necessary since the uniform defaults to zero anyway, but good practice.
     //
 	glActiveTexture(GL_TEXTURE0);
     glUniform1i(_samplerSlot, 0);
 	
-    // Load the texture.
-    //
-    glGenTextures(1, &_boxTexture);
-    glBindTexture(GL_TEXTURE_2D, _boxTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glEnableVertexAttribArray(_textureCoordSlot);
+    // Load image data from resource file.
+    //
+    [[TextureManager instance] loadImage:@"wooden.png"];
+    [[TextureManager instance] loadImage:@"flower.jpg"];
+    
+    _textureIndex = 0;
+    _wrapMode = GL_REPEAT;
+    _filterMode = GL_LINEAR;
+    
+    [self setTexture:_textureIndex];
+    [self updateTextureParameter];
 }
 
 - (void)resetRotation
@@ -562,6 +624,62 @@
     float z = sqrt(radius * radius - p.LengthSquared());
     vec3 mapped = vec3(p.x, p.y, z);
     return mapped / radius;
+}
+
+#pragma mark - Properties
+
+-(void)setTextureIndex:(NSUInteger)textureIndex
+{
+    if (_textureIndex != textureIndex) {
+        _textureIndex = textureIndex % [[TextureManager instance] textureCount];
+        
+        [self setTexture:_textureIndex];
+
+        [self render];
+    }
+}
+
+-(void)setWrapMode:(GLint)wrapMode
+{
+    if (wrapMode == 0) {
+        _wrapMode = GL_REPEAT;
+    }
+    else if (wrapMode == 1) {
+        _wrapMode = GL_CLAMP_TO_EDGE;
+    }
+    else {
+        _wrapMode = GL_MIRRORED_REPEAT;
+    }
+    
+    [self updateTextureParameter];
+
+    [self render];
+}
+
+-(void)setFilterMode:(GLint)filterMode
+{
+    if (filterMode == 0) {
+        _filterMode = GL_LINEAR;
+    }
+    else if (filterMode == 1) {
+        _filterMode = GL_NEAREST;
+    }
+    else if (filterMode == 2){
+        _filterMode = GL_LINEAR_MIPMAP_NEAREST;
+    }
+    else if (filterMode == 3){
+        _filterMode = GL_NEAREST_MIPMAP_LINEAR;
+    }
+    else if (filterMode == 4){
+        _filterMode = GL_LINEAR_MIPMAP_LINEAR;
+    }
+    else {
+        _filterMode = GL_NEAREST_MIPMAP_NEAREST;
+    }
+    
+    [self updateTextureParameter];
+
+    [self render];
 }
 
 @end

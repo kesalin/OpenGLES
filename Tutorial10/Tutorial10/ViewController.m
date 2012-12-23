@@ -62,4 +62,30 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#pragma mark - Events
+
+-(IBAction)textureSegmentSelectionChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int value = [segment selectedSegmentIndex];
+    
+    self.openGLView.textureIndex = value;
+}
+
+- (IBAction)wrapSegmentSelectionChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int value = [segment selectedSegmentIndex];
+    
+    self.openGLView.wrapMode = value;
+}
+
+-(IBAction)filterSegmentSelectionChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    int value = [segment selectedSegmentIndex];
+    
+    self.openGLView.filterMode = value;
+}
+
 @end

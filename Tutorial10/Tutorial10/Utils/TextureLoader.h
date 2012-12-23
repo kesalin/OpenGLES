@@ -9,13 +9,27 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
+typedef enum TextureFormat {
+    TextureFormatGray,
+    TextureFormatGrayAlpha,
+    TextureFormatRGB,
+    TextureFormatRGBA,
+    TextureFormatPvrtcRgb2,
+    TextureFormatPvrtcRgba2,
+    TextureFormatPvrtcRgb4,
+    TextureFormatPvrtcRgba4,
+    TextureFormat565,
+    TextureFormat5551,
+} TextureFormat;
 
 @interface TextureLoader : NSObject
 
-- (void)loadPNG:(NSString *)filepath;
+- (void)loadImage:(NSString *)filepath;
 - (void)loadPVR:(NSString *)filepath;
 - (void)unload;
+
+- (int)bitsPerComponent;
+- (TextureFormat)textureFormat;
 - (CGSize)imageSize;
 - (void *)imageData;
-
 @end

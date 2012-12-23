@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2194C74516871C3F00600663 /* flower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74316871C2C00600663 /* flower.jpg */; };
+		2194C74916871ED200600663 /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74816871EC300600663 /* wooden.png */; };
 		219B99C916858C6E00A0E13C /* TextureLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 219B99C816858C6E00A0E13C /* TextureLoader.m */; };
-		219B99D11685925400A0E13C /* box_256.png in Resources */ = {isa = PBXBuildFile; fileRef = 219B99D01685924C00A0E13C /* box_256.png */; };
 		219B99D41685B16300A0E13C /* TextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 219B99D31685B16300A0E13C /* TextureManager.m */; };
 		21B77C361684A679006B1D9B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C351684A679006B1D9B /* UIKit.framework */; };
 		21B77C381684A679006B1D9B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C371684A679006B1D9B /* Foundation.framework */; };
@@ -29,9 +30,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2194C74316871C2C00600663 /* flower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = flower.jpg; path = Texture/flower.jpg; sourceTree = "<group>"; };
+		2194C74816871EC300600663 /* wooden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wooden.png; path = Texture/wooden.png; sourceTree = "<group>"; };
 		219B99C716858C6E00A0E13C /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = Utils/TextureLoader.h; sourceTree = "<group>"; };
 		219B99C816858C6E00A0E13C /* TextureLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureLoader.m; path = Utils/TextureLoader.m; sourceTree = "<group>"; };
-		219B99D01685924C00A0E13C /* box_256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = box_256.png; path = Texture/box_256.png; sourceTree = "<group>"; };
 		219B99D21685B16300A0E13C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureManager.h; path = Utils/TextureManager.h; sourceTree = "<group>"; };
 		219B99D31685B16300A0E13C /* TextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureManager.m; path = Utils/TextureManager.m; sourceTree = "<group>"; };
 		21B77C311684A679006B1D9B /* Tutorial10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial10.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,7 +83,8 @@
 		219B99CF1685923A00A0E13C /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				219B99D01685924C00A0E13C /* box_256.png */,
+				2194C74816871EC300600663 /* wooden.png */,
+				2194C74316871C2C00600663 /* flower.jpg */,
 			);
 			name = Texture;
 			sourceTree = "<group>";
@@ -222,7 +225,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				219B99D11685925400A0E13C /* box_256.png in Resources */,
+				2194C74916871ED200600663 /* wooden.png in Resources */,
+				2194C74516871C3F00600663 /* flower.jpg in Resources */,
 				21B77C641684A760006B1D9B /* FragmentShader.glsl in Resources */,
 				21B77C651684A760006B1D9B /* VertexShader.glsl in Resources */,
 				21B77C531684A6B0006B1D9B /* icon.png in Resources */,

@@ -13,7 +13,7 @@
 
 +(TextureManager *)instance;
 
--(void)loadPNG:(NSString *)filepath;
+-(void)loadImage:(NSString *)filepath;
 -(void)cleanup;
 -(NSUInteger)textureCount;
 -(TextureLoader *)textureAtIndex:(NSUInteger)index;
