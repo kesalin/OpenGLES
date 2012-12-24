@@ -1,4 +1,4 @@
-OpenGLES for iPhone
+OpenGL ES 2.0 for iPhone
 ======================================================================
 
 OpenGL ES iPhone tutorial.
@@ -57,3 +57,9 @@ https://github.com/kesalin/OpenGLES/blob/master/Tutorial07/Tutorial07-PerVertexL
 
 Tutorial08: Per-Pixel Light & Toon Shader & Polygon Offset
 https://github.com/kesalin/OpenGLES/blob/master/Tutorial08/Tutorial08-ToonShader.png
+
+Tutorial09: Load OBJ Model
+https://github.com/kesalin/OpenGLES/blob/master/Tutorial09/Tutorial09-LoadObjModel.png
+
+Tutorial10: Texture
+https://github.com/kesalin/OpenGLES/blob/master/Tutorial10/Tutorial10-Texture.png
