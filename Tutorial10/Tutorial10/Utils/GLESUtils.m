@@ -116,4 +116,18 @@
     return programHandle;
 }
 
++(void)printExtensions
+{
+    NSMutableString * infos = [NSMutableString string];
+    [infos appendFormat:@"\n>>>>>> Supported OpenGL ES 2.0 Extentions <<<<<<\n"];
+ 
+    char * extenstions = (char *)glGetString(GL_EXTENSIONS);
+    char ** exts = &extenstions;
+    while (*exts) {
+        [infos appendFormat:@"%s\n", strsep(exts, " ")];
+    }
+    
+    NSLog(@"%@", infos);
+}
+
 @end

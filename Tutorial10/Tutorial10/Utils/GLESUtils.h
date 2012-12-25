@@ -26,4 +26,6 @@
 //
 +(GLuint)loadProgram:(NSString *)vertexShaderFilepath withFragmentShaderFilepath:(NSString *)fragmentShaderFilepath;
 
++(void)printExtensions;
+
 @end

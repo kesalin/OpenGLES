@@ -640,6 +640,8 @@
         [self setupTexture];
         
         [self resetRotation];
+        
+        [GLESUtils printExtensions];
     }
 
     return self;
