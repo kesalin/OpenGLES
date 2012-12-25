@@ -2,7 +2,7 @@
 //  GLESMath.h
 //
 //  Created by kesalin@gmail.com on 12-11-26.
-//  Copyright (c) 2012 Äê http://blog.csdn.net/kesalin/. All rights reserved.
+//  Copyright (c) 2012. http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #ifndef __GLESMATH_H__
@@ -44,6 +44,8 @@ typedef KSVec_t KSVec4[4];
 extern "C" {
 #endif
 
+unsigned int ksNextPot(unsigned int n);
+    
 void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src);
 
 void ksMatrix4ToMatrix3(KSMatrix3 * target, const KSMatrix4 * src);

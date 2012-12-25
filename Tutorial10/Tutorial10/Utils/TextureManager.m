@@ -42,7 +42,7 @@ static TextureManager * _instance = nil;
 - (void)loadImage:(NSString *)filepath
 {
     TextureLoader * loader = [[TextureLoader alloc] init];
-    [loader loadImage:filepath];
+    [loader loadImage:filepath isPOT:NO];
     
     [_array addObject:loader];
 }
@@ -50,7 +50,7 @@ static TextureManager * _instance = nil;
 -(void)loadPVR:(NSString *)filepath
 {
     TextureLoader * loader = [[TextureLoader alloc] init];
-    [loader loadPVR:filepath];
+    [loader loadPVR:filepath isPOT:NO];
     
     [_array addObject:loader];
 }

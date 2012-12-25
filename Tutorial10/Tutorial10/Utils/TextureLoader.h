@@ -24,13 +24,14 @@ typedef enum TextureFormat {
 
 @interface TextureLoader : NSObject
 
-- (void)loadImage:(NSString *)filepath;
-- (void)loadPVR:(NSString *)filepath;
+- (void)loadImage:(NSString *)filepath isPOT:(Boolean)isPOT;
+- (void)loadPVR:(NSString *)filepath isPOT:(Boolean)isPOT;
 - (void)unload;
 
 - (unsigned short)bitsPerComponent;
 - (TextureFormat)textureFormat;
 - (CGSize)imageSize;
+- (CGSize)originalSize;
 - (void *)imageData;
 - (unsigned short)mipCount;
 - (Boolean)isPVR;

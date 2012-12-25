@@ -8,6 +8,7 @@
 
 #import "TextureLoader.h"
 #import "PVRTTexture.h"
+#import "GLESMath.h"
 
 // Anonymous category of TextureLoader
 //
@@ -17,6 +18,7 @@
     TextureFormat _format;
     unsigned short _bitsPerComponent;
     CGSize _imageSize;
+    CGSize _originalSize;
     NSData* _imageData;
     unsigned short _mipCount;
 }
@@ -27,7 +29,7 @@
 //
 @implementation TextureLoader
 
-- (void)loadImage:(NSString *)filepath
+- (void)loadImage:(NSString *)filepath isPOT:(Boolean)isPOT
 {
     [self unload];
 
@@ -36,12 +38,21 @@
 
     UIImage* uiImage = [UIImage imageWithContentsOfFile:fullPath];
     CGImageRef cgImage = uiImage.CGImage;
-    _imageSize.width = CGImageGetWidth(cgImage);
-    _imageSize.height = CGImageGetHeight(cgImage);
+
+    _originalSize.width = CGImageGetWidth(cgImage);
+    _originalSize.height = CGImageGetHeight(cgImage);
+    if (isPOT) {
+        _imageSize.width = ksNextPot(_originalSize.width);
+        _imageSize.height = ksNextPot(_originalSize.height);
+    }
+    else {
+        _imageSize = _originalSize;
+    }
+
     _bitsPerComponent = 8;
     _format = TextureFormatRGBA;
     _mipCount = 1;
-    
+
     int bpp = _bitsPerComponent / 2;
     int byteCount = _imageSize.width * _imageSize.height * bpp;
     unsigned char* data = (unsigned char*) calloc(byteCount, 1);
@@ -64,7 +75,7 @@
     _hasPvrHeader = FALSE;
 }
 
-- (void)loadPVR:(NSString *)filepath
+- (void)loadPVR:(NSString *)filepath isPOT:(Boolean)isPOT;
 {
     NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
     NSString* fullPath = [resourcePath stringByAppendingPathComponent:filepath];
@@ -73,8 +84,17 @@
     _hasPvrHeader = TRUE;
 
     PVR_Texture_Header* header = (PVR_Texture_Header*) [_imageData bytes];
-    _imageSize.width = header->dwWidth;
-    _imageSize.height = header->dwHeight;
+
+    _originalSize.width = header->dwWidth;
+    _originalSize.height = header->dwHeight;
+    if (isPOT) {
+        _imageSize.width = ksNextPot(_originalSize.width);
+        _imageSize.height = ksNextPot(_originalSize.height);
+    }
+    else {
+        _imageSize = _originalSize;
+    }
+    
     _mipCount = header->dwMipMapCount;
     
     bool hasAlpha = header->dwAlphaBitMask ? true : false;
@@ -136,6 +156,11 @@
 - (TextureFormat)textureFormat
 {
     return _format;
+}
+
+- (CGSize)originalSize
+{
+    return _originalSize;
 }
 
 - (CGSize)imageSize
