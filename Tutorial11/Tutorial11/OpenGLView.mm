@@ -229,7 +229,7 @@
     
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
     _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
-    _blendModeSlot = glGetAttribLocation(_programHandle, "BlendMode");
+    _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
 }
 
 #pragma mark - Surface
@@ -389,7 +389,7 @@
     _diffuse.a = 0.5;
 
     _shininess = 10;
-    _blendMode = 0.0;
+    _blendMode = 0;
 }
 
 - (void)setTexture:(NSUInteger)index level:(GLuint)level
@@ -510,7 +510,7 @@
     
     // Update light
     //
-    glVertexAttrib1f(_blendModeSlot, 0.0);
+    glUniform1i(_blendModeSlot, _blendMode);
     glVertexAttrib3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
     glVertexAttrib4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
     glVertexAttrib4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
@@ -678,7 +678,7 @@
     [self render];
 }
 
--(void)setBlendMode:(GLfloat)blendMode
+-(void)setBlendMode:(int)blendMode
 {
     _blendMode = blendMode;
     [self render];

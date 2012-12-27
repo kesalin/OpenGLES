@@ -2,7 +2,6 @@ uniform mat4 projection;
 uniform mat4 modelView;
 attribute vec4 vPosition;
 attribute vec2 vTextureCoord;
-attribute float BlendMode;
 
 uniform mat3 normalMatrix;
 attribute vec3 vLightPosition;
@@ -15,7 +14,6 @@ attribute vec3 vDiffuseMaterial;
 
 varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
-varying float BlendModeOut;
 
 void main(void)
 {
@@ -34,5 +32,4 @@ void main(void)
     vDestinationColor = vec4(color, 1);
     
     vTextureCoordOut = vTextureCoord;
-    BlendModeOut = BlendMode;
 }

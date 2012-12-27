@@ -172,7 +172,7 @@
 - (void)blendModeSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
-    float value = [slider value];
+    int value = [slider value];
     
     self.openGLView.blendMode = value;
 }
