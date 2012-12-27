@@ -13,4 +13,24 @@
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
 
+@property (nonatomic, strong) IBOutlet UISlider * lightXSlider;
+@property (nonatomic, strong) IBOutlet UISlider * lightYSlider;
+@property (nonatomic, strong) IBOutlet UISlider * lightZSlider;
+@property (nonatomic, strong) IBOutlet UISlider * diffuseRSlider;
+@property (nonatomic, strong) IBOutlet UISlider * diffuseGSlider;
+@property (nonatomic, strong) IBOutlet UISlider * diffuseBSlider;
+@property (nonatomic, strong) IBOutlet UISlider * diffuseASlider;
+@property (nonatomic, strong) IBOutlet UISlider * shininessSlider;
+@property (nonatomic, strong) IBOutlet UISlider * blendModeSlider;
+
+- (IBAction)lightXSliderValueChanged:(id)sender;
+- (IBAction)lightYSliderValueChanged:(id)sender;
+- (IBAction)lightZSliderValueChanged:(id)sender;
+- (IBAction)diffuseRSliderValueChanged:(id)sender;
+- (IBAction)diffuseGSliderValueChanged:(id)sender;
+- (IBAction)diffuseBSliderValueChanged:(id)sender;
+- (IBAction)diffuseASliderValueChanged:(id)sender;
+- (IBAction)shininessSliderValueChanged:(id)sender;
+- (IBAction)blendModeSliderValueChanged:(id)sender;
+
 @end

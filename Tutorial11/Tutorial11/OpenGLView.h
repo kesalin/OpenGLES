@@ -60,19 +60,30 @@
     GLuint _flowerTexture;
     
     GLint _textureCoordSlot;
-    GLint _sampler0Slot;
-    GLint _sampler1Slot;
+    GLint _samplerSlot;
+    GLint _blendModeSlot;
+
     GLint _wrapMode;
     GLint _filterMode;
     NSUInteger _textureIndex;
     
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
+    
+    GLfloat _shininess;
+    
+    KSVec3 _lightPosition;
+    KSColor _ambient;
+    KSColor _specular;
+    KSColor _diffuse;
 }
 
-@property (nonatomic, assign) GLint wrapMode;
-@property (nonatomic, assign) GLint filterMode;
-@property (nonatomic, assign) NSUInteger textureIndex;
+@property (nonatomic, assign) KSVec3 lightPosition;
+@property (nonatomic, assign) KSColor ambient;
+@property (nonatomic, assign) KSColor specular;
+@property (nonatomic, assign) KSColor diffuse;
+@property (nonatomic, assign) GLfloat shininess;
+@property (nonatomic, assign) GLfloat blendMode;
 
 - (void)render;
 - (void)cleanup;

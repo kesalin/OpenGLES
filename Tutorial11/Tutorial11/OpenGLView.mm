@@ -80,9 +80,12 @@
 //
 @implementation OpenGLView
 
-@synthesize textureIndex = _textureIndex;
-@synthesize wrapMode = _wrapMode;
-@synthesize filterMode = _filterMode;
+@synthesize lightPosition = _lightPosition;
+@synthesize diffuse = _diffuse;
+@synthesize shininess = _shininess;
+@synthesize ambient = _ambient;
+@synthesize specular = _specular;
+@synthesize blendMode = _blendMode;
 
 #pragma mark- Initilize GL
 
@@ -214,18 +217,19 @@
     _projectionSlot = glGetUniformLocation(_programHandle, "projection");
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
-    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
-    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
-    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
-    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
+
+    _lightPositionSlot = glGetAttribLocation(_programHandle, "vLightPosition");
+    _ambientSlot = glGetAttribLocation(_programHandle, "vAmbientMaterial");
+    _specularSlot = glGetAttribLocation(_programHandle, "vSpecularMaterial");
+    _shininessSlot = glGetAttribLocation(_programHandle, "shininess");
     
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
     
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
-    _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
-    _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
+    _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
+    _blendModeSlot = glGetAttribLocation(_programHandle, "BlendMode");
 }
 
 #pragma mark - Surface
@@ -359,32 +363,38 @@
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
-    // Note: Disable depth test and cull face for texture blending.
-    //
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 }
 
 - (void)setupLight
 {
-    // Set up some default material parameters.
-    //
-    glUniform4f(_ambientSlot, 0.04f, 0.04f, 0.04f, 0.5);
-    glUniform4f(_specularSlot, 0.5, 0.5, 0.5, 0.5);
-    glUniform1f(_shininessSlot, 50);
-                 
     // Initialize various state.
     //
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_normalSlot);
     
-    glUniform3f(_lightPositionSlot, 0.0, 0.0, 5.0);
+    // Set up some default material parameters.
+    //
+    _lightPosition.x = _lightPosition.y = 0.0;
+    _lightPosition.z = 1.0;
     
-    glVertexAttrib4f(_diffuseSlot, 0.8, 0.8, 0.8, 0.5);
+    _ambient.r = _ambient.g = _ambient.b = 0.04f;
+    _ambient.a = 0.5f;
+
+    _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
+    
+    _diffuse.r = 0.0;
+    _diffuse.g = 0.5;
+    _diffuse.b = 1.0;
+    _diffuse.a = 0.5;
+
+    _shininess = 10;
+    _blendMode = 0.0;
 }
 
-- (void)setImageTexture:(TextureLoader *)loader level:(GLuint)level
+- (void)setTexture:(NSUInteger)index level:(GLuint)level
 {
+    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
     void* pixels = [loader imageData];
     CGSize size = [loader imageSize];
     
@@ -445,19 +455,23 @@
 
 - (void)setupTexture
 {
+    glEnableVertexAttribArray(_textureCoordSlot);
+    
     // Load image data from resource file.
     //
-    TextureLoader * woodenLoader = [[TextureManager instance] loadImage:@"wooden.png"];
-    TextureLoader * flowerLoader = [[TextureManager instance] loadImage:@"flower.jpg"];
-    
+    [[TextureManager instance] loadImage:@"wooden.png"];
+    [[TextureManager instance] loadImage:@"flower.jpg"];
+    [[TextureManager instance] loadImage:@"cs.png"];
+
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
+    _textureIndex = 0;
     
     // Set the active sampler to stage 0.
     //
     GLuint level = 0;
 	glActiveTexture(GL_TEXTURE0);
-    glUniform1i(_sampler0Slot, level);
+    glUniform1i(_samplerSlot, level);
 	
     // Wooden Texture
     //
@@ -466,28 +480,7 @@
 
     [self setTextureParameter];
     
-    [self setImageTexture:woodenLoader level:level];
-    
-    // Set the active sampler to stage 1.
-    //
-    level = 1;
-	glActiveTexture(GL_TEXTURE1);
-    glUniform1i(_sampler1Slot, level);
-    
-    // Flower Texture
-    //
-    glGenTextures(1, &_flowerTexture);
-    glBindTexture(GL_TEXTURE_2D, _flowerTexture);
-    
-    [self setTextureParameter];
-    
-    [self setImageTexture:flowerLoader level:level];
-    
-    // Setup blend state
-    //
-    glEnableVertexAttribArray(_textureCoordSlot);
-    glEnable(GL_BLEND);
-    //glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+    [self setTexture:_textureIndex level:level];
 }
 
 - (void)resetRotation
@@ -514,6 +507,18 @@
     KSMatrix3 normalMatrix3;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    // Update light
+    //
+    glVertexAttrib1f(_blendModeSlot, 0.0);
+    glVertexAttrib3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
+    glVertexAttrib4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
+    glVertexAttrib4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
+    glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
+    glVertexAttrib1f(_shininessSlot, _shininess);
+    
+    // Update texture
+    
 }
 
 - (void)drawSurface
@@ -653,48 +658,29 @@
     return mapped / radius;
 }
 
-#pragma mark - Properties
+#pragma mark light Properties
 
--(void)setWrapMode:(GLint)wrapMode
+- (void)setLightPosition:(KSVec3)lightPosition
 {
-    if (wrapMode == 0) {
-        _wrapMode = GL_REPEAT;
-    }
-    else if (wrapMode == 1) {
-        _wrapMode = GL_CLAMP_TO_EDGE;
-    }
-    else {
-        _wrapMode = GL_MIRRORED_REPEAT;
-    }
-    
-    [self setTextureParameter];
-
+    _lightPosition = lightPosition;
     [self render];
 }
 
--(void)setFilterMode:(GLint)filterMode
+-(void)setShininess:(GLfloat)shininess
 {
-    if (filterMode == 0) {
-        _filterMode = GL_LINEAR;
-    }
-    else if (filterMode == 1) {
-        _filterMode = GL_NEAREST;
-    }
-    else if (filterMode == 2){
-        _filterMode = GL_LINEAR_MIPMAP_NEAREST;
-    }
-    else if (filterMode == 3){
-        _filterMode = GL_NEAREST_MIPMAP_LINEAR;
-    }
-    else if (filterMode == 4){
-        _filterMode = GL_LINEAR_MIPMAP_LINEAR;
-    }
-    else {
-        _filterMode = GL_NEAREST_MIPMAP_NEAREST;
-    }
-    
-    [self setTextureParameter];
+    _shininess = shininess;
+    [self render];
+}
 
+-(void)setDiffuse:(KSColor)diffuse
+{
+    _diffuse = diffuse;
+    [self render];
+}
+
+-(void)setBlendMode:(GLfloat)blendMode
+{
+    _blendMode = blendMode;
     [self render];
 }
 

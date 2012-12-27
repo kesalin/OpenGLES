@@ -14,20 +14,171 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="4WM-VP-QK7" customClass="OpenGLView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="340"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="280"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="UKc-Fy-hfg">
-                                <rect key="frame" x="0.0" y="340" width="320" height="120"/>
+                                <rect key="frame" x="0.0" y="280" width="320" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Light Position" lineBreakMode="tailTruncation" minimumFontSize="10" id="VMd-fX-z0V">
+                                        <rect key="frame" x="11" y="0.0" width="107" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Diffuse Color" lineBreakMode="tailTruncation" minimumFontSize="10" id="yWb-0C-3td">
+                                        <rect key="frame" x="167" y="0.0" width="124" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="x:" lineBreakMode="tailTruncation" minimumFontSize="10" id="dGZ-um-k1X">
+                                        <rect key="frame" x="11" y="25" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="y:" lineBreakMode="tailTruncation" minimumFontSize="10" id="5Gc-to-GWE">
+                                        <rect key="frame" x="11" y="54" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="z:" lineBreakMode="tailTruncation" minimumFontSize="10" id="ASm-wu-VRn">
+                                        <rect key="frame" x="11" y="83" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="R:" lineBreakMode="tailTruncation" minimumFontSize="10" id="OMU-Wx-sG1">
+                                        <rect key="frame" x="167" y="25" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="G:" lineBreakMode="tailTruncation" minimumFontSize="10" id="Pym-Kj-ohj">
+                                        <rect key="frame" x="167" y="54" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B:" lineBreakMode="tailTruncation" minimumFontSize="10" id="tVD-6Q-rEU">
+                                        <rect key="frame" x="167" y="83" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="-10" maxValue="10" id="q5j-Fh-NnS">
+                                        <rect key="frame" x="33" y="26" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="lightXSliderValueChanged:" destination="2" eventType="valueChanged" id="FTP-PJ-ehc"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="-10" maxValue="10" id="D1d-yr-fGh">
+                                        <rect key="frame" x="33" y="56" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="lightYSliderValueChanged:" destination="2" eventType="valueChanged" id="42H-gd-4oi"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="-1" maxValue="10" id="HfH-kh-9gv">
+                                        <rect key="frame" x="33" y="84" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="lightZSliderValueChanged:" destination="2" eventType="valueChanged" id="cEW-NF-ef0"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="35G-yo-vlZ">
+                                        <rect key="frame" x="194" y="25" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="diffuseRSliderValueChanged:" destination="2" eventType="valueChanged" id="HLp-ar-SyR"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="5Az-Te-PTl">
+                                        <rect key="frame" x="194" y="56" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="diffuseGSliderValueChanged:" destination="2" eventType="valueChanged" id="OHx-FU-iEl"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="qSz-6T-a2Y">
+                                        <rect key="frame" x="194" y="84" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="diffuseBSliderValueChanged:" destination="2" eventType="valueChanged" id="Ogv-eO-SsP"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A:" lineBreakMode="tailTruncation" minimumFontSize="10" id="kvp-q8-lJm">
+                                        <rect key="frame" x="167" y="111" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="oIe-er-SBt">
+                                        <rect key="frame" x="194" y="112" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="diffuseASliderValueChanged:" destination="2" eventType="valueChanged" id="2VW-XI-sZP"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="S:" lineBreakMode="tailTruncation" minimumFontSize="10" id="AlJ-9F-BJp">
+                                        <rect key="frame" x="11" y="112" width="21" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="20" id="N1B-bh-0N8">
+                                        <rect key="frame" x="33" y="112" width="118" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="shininessSliderValueChanged:" destination="2" eventType="valueChanged" id="15l-WG-oOI"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="16" id="S1j-7d-eAQ">
+                                        <rect key="frame" x="62" y="142" width="171" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="blendModeSliderValueChanged:" destination="2" eventType="valueChanged" id="lem-IF-5Rv"/>
+                                        </connections>
+                                    </slider>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blend" lineBreakMode="tailTruncation" minimumFontSize="10" id="Dlq-PT-1eO">
+                                        <rect key="frame" x="11" y="142" width="45" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" red="0.83903203940000004" green="0.91288630660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="blendModeSlider" destination="S1j-7d-eAQ" id="R5z-ud-Diw"/>
+                        <outlet property="diffuseASlider" destination="oIe-er-SBt" id="YtQ-ez-zhX"/>
+                        <outlet property="diffuseBSlider" destination="qSz-6T-a2Y" id="upT-Nn-qY7"/>
+                        <outlet property="diffuseGSlider" destination="5Az-Te-PTl" id="5wr-fh-2r7"/>
+                        <outlet property="diffuseRSlider" destination="35G-yo-vlZ" id="9jS-ME-6I1"/>
+                        <outlet property="lightXSlider" destination="q5j-Fh-NnS" id="QYy-ph-o8g"/>
+                        <outlet property="lightYSlider" destination="D1d-yr-fGh" id="jAr-Qj-qn4"/>
+                        <outlet property="lightZSlider" destination="HfH-kh-9gv" id="JLz-tO-QMK"/>
                         <outlet property="openGLView" destination="4WM-VP-QK7" id="up9-d3-xEg"/>
+                        <outlet property="shininessSlider" destination="N1B-bh-0N8" id="L4o-04-25r"/>
                     </connections>
                 </viewController>
             </objects>
@@ -40,7 +191,25 @@
         <class className="ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
             <relationships>
+                <relationship kind="action" name="blendModeSliderValueChanged:"/>
+                <relationship kind="action" name="diffuseASliderValueChanged:"/>
+                <relationship kind="action" name="diffuseBSliderValueChanged:"/>
+                <relationship kind="action" name="diffuseGSliderValueChanged:"/>
+                <relationship kind="action" name="diffuseRSliderValueChanged:"/>
+                <relationship kind="action" name="lightXSliderValueChanged:"/>
+                <relationship kind="action" name="lightYSliderValueChanged:"/>
+                <relationship kind="action" name="lightZSliderValueChanged:"/>
+                <relationship kind="action" name="shininessSliderValueChanged:"/>
+                <relationship kind="outlet" name="blendModeSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="diffuseASlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="diffuseBSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="diffuseGSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="diffuseRSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="lightXSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="lightYSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="lightZSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="openGLView" candidateClass="OpenGLView"/>
+                <relationship kind="outlet" name="shininessSlider" candidateClass="UISlider"/>
             </relationships>
         </class>
     </classes>

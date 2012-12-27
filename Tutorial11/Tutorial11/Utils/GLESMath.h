@@ -35,10 +35,25 @@ typedef struct
 	GLfloat   m[4][4];
 } KSMatrix4;
 
-typedef GLfloat KSVec_t;
-typedef KSVec_t KSVec2[2];
-typedef KSVec_t KSVec3[3];
-typedef KSVec_t KSVec4[4];
+typedef struct KSVec3 {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+} KSVec3;
+
+typedef struct KSVec4 {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+    GLfloat w;
+} KSVec4;
+
+typedef struct {
+    GLfloat r;
+    GLfloat g;
+    GLfloat b;
+    GLfloat a;
+} KSColor;
 
 #ifdef __cplusplus
 extern "C" {
