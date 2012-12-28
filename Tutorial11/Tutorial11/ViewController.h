@@ -33,5 +33,6 @@
 - (IBAction)diffuseASliderValueChanged:(id)sender;
 - (IBAction)shininessSliderValueChanged:(id)sender;
 - (IBAction)blendModeSliderValueChanged:(id)sender;
+- (IBAction)texSegmentValueChanged:(id)sender;
 
 @end

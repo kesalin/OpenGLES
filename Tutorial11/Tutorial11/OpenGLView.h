@@ -76,7 +76,7 @@
     KSColor _ambient;
     KSColor _specular;
     KSColor _diffuse;
-    int _blendMode;
+    NSUInteger _blendMode;
 }
 
 @property (nonatomic, assign) KSVec3 lightPosition;
@@ -84,7 +84,8 @@
 @property (nonatomic, assign) KSColor specular;
 @property (nonatomic, assign) KSColor diffuse;
 @property (nonatomic, assign) GLfloat shininess;
-@property (nonatomic, assign) int blendMode;
+@property (nonatomic, assign) NSUInteger blendMode;
+@property (nonatomic, assign) NSUInteger textureIndex;
 
 - (void)render;
 - (void)cleanup;

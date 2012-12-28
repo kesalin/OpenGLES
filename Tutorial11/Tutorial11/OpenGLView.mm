@@ -70,7 +70,7 @@
 - (void)destoryVBOs;
 
 - (vec3)mapToSphere:(ivec2) touchpoint;
-- (void)updateSurfaceTransform;
+- (void)updateSurface;
 - (void)resetRotation;
 
 @end
@@ -86,6 +86,7 @@
 @synthesize ambient = _ambient;
 @synthesize specular = _specular;
 @synthesize blendMode = _blendMode;
+@synthesize textureIndex = _textureIndex;
 
 #pragma mark- Initilize GL
 
@@ -479,8 +480,6 @@
     glBindTexture(GL_TEXTURE_2D, _woodenTexture);
 
     [self setTextureParameter];
-    
-    [self setTexture:_textureIndex level:level];
 }
 
 - (void)resetRotation
@@ -490,7 +489,7 @@
     _orientation.ToIdentity();
 }
 
-- (void)updateSurfaceTransform
+- (void)updateSurface
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
@@ -518,7 +517,8 @@
     glVertexAttrib1f(_shininessSlot, _shininess);
     
     // Update texture
-    
+    //
+    [self setTexture:_textureIndex level:0];
 }
 
 - (void)drawSurface
@@ -554,7 +554,7 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    [self updateSurfaceTransform];
+    [self updateSurface];
     [self drawSurface];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
@@ -678,7 +678,13 @@
     [self render];
 }
 
--(void)setBlendMode:(int)blendMode
+-(void)setTextureIndex:(NSUInteger)textureIndex
+{
+    _textureIndex = textureIndex;
+    [self render];
+}
+
+-(void)setBlendMode:(NSUInteger)blendMode
 {
     _blendMode = blendMode;
     [self render];

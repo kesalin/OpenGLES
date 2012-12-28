@@ -183,10 +183,19 @@
 {
     UISlider * slider = (UISlider *)sender;
     int value = [slider value];
-    
+    [slider setValue:value];
+
     self.openGLView.blendMode = value;
 
     [self updateBlendModeLabel];
+}
+
+- (IBAction)texSegmentValueChanged:(id)sender
+{
+    UISegmentedControl * seg = (UISegmentedControl *)sender;
+    NSUInteger value = [seg selectedSegmentIndex];
+    
+    self.openGLView.textureIndex = value;
 }
 
 @end
