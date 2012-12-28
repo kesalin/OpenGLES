@@ -70,7 +70,7 @@
 - (void)destoryVBOs;
 
 - (vec3)mapToSphere:(ivec2) touchpoint;
-- (void)updateSurfaceTransform;
+- (void)updateSurface;
 - (void)resetRotation;
 
 @end
@@ -86,6 +86,7 @@
 @synthesize ambient = _ambient;
 @synthesize specular = _specular;
 @synthesize blendMode = _blendMode;
+@synthesize textureIndex = _textureIndex;
 
 #pragma mark- Initilize GL
 
@@ -228,7 +229,8 @@
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
     
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
-    _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
+    _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
+    _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
     _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
 }
 
@@ -363,6 +365,8 @@
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
+    // Initialize states
+    //
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -392,7 +396,7 @@
     _blendMode = 0;
 }
 
-- (void)setTexture:(NSUInteger)index level:(GLuint)level
+- (void)setTexture:(NSUInteger)index
 {
     TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
     void* pixels = [loader imageData];
@@ -436,7 +440,7 @@
             break;
     }
     
-    glTexImage2D(GL_TEXTURE_2D, level, format, size.width, size.height, 0, format, type, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
     
     glGenerateMipmap(GL_TEXTURE_2D);
 }
@@ -454,9 +458,7 @@
 }
 
 - (void)setupTexture
-{
-    glEnableVertexAttribArray(_textureCoordSlot);
-    
+{    
     // Load image data from resource file.
     //
     [[TextureManager instance] loadImage:@"wooden.png"];
@@ -465,22 +467,20 @@
 
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
-    _textureIndex = 0;
+    _textureIndex = 1;
     
-    // Set the active sampler to stage 0.
+    glGenTextures(1, &_texture0);
+    glGenTextures(1, &_texture1);
+    
+    glEnableVertexAttribArray(_textureCoordSlot);
+    
+    // Load texture for stage 0
     //
-    GLuint level = 0;
 	glActiveTexture(GL_TEXTURE0);
-    glUniform1i(_samplerSlot, level);
-	
-    // Wooden Texture
-    //
-    glGenTextures(1, &_woodenTexture);
-    glBindTexture(GL_TEXTURE_2D, _woodenTexture);
-
+    glUniform1i(_sampler0Slot, 0);
+    glBindTexture(GL_TEXTURE_2D, _texture0);
     [self setTextureParameter];
-    
-    [self setTexture:_textureIndex level:level];
+    [self setTexture:0];
 }
 
 - (void)resetRotation
@@ -490,7 +490,7 @@
     _orientation.ToIdentity();
 }
 
-- (void)updateSurfaceTransform
+- (void)updateSurface
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
@@ -517,8 +517,13 @@
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
     glVertexAttrib1f(_shininessSlot, _shininess);
     
-    // Update texture
-    
+    // Update texture for stage 1
+    //
+    glActiveTexture(GL_TEXTURE1);
+    glUniform1i(_sampler1Slot, 1);
+    glBindTexture(GL_TEXTURE_2D, _texture1);
+    [self setTextureParameter];
+    [self setTexture:_textureIndex];
 }
 
 - (void)drawSurface
@@ -554,7 +559,7 @@
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    [self updateSurfaceTransform];
+    [self updateSurface];
     [self drawSurface];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
@@ -678,9 +683,15 @@
     [self render];
 }
 
--(void)setBlendMode:(int)blendMode
+-(void)setBlendMode:(NSUInteger)blendMode
 {
     _blendMode = blendMode;
+    [self render];
+}
+
+-(void)setTextureIndex:(NSUInteger)textureIndex
+{
+    _textureIndex = textureIndex + 1; // texture at index 0 used for stage 0.
     [self render];
 }
 

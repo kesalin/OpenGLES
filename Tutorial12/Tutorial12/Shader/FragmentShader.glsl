@@ -4,7 +4,8 @@ varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
 
 uniform int BlendMode;
-uniform sampler2D Sampler;
+uniform sampler2D Sampler0;
+uniform sampler2D Sampler1;
 
 // Blend the source and destination pixels.
 //
@@ -105,21 +106,28 @@ vec3 blend (vec3 src, vec3 dst, int mode)
         return src + dst - 2.0 * src * dst;
     }
     
+    if (mode == 17) {
+        // SRC_ALPHA & ONE_MINUS_SRC_ALPHA
+        return (src * 0.4 + dst * 0.6);
+    }
+    
     // MULTIPLY
     return src * dst;
 }
 
 void main()
 {
-    vec4 dst = texture2D(Sampler, vTextureCoordOut);
-    vec4 src = vDestinationColor;
+    vec4 dst = texture2D(Sampler0, vTextureCoordOut);
+    vec4 src = texture2D(Sampler1, vTextureCoordOut);
     
     // Apply blend operation
-    vec3 colour = clamp(blend(src.xyz, dst.xyz, BlendMode), 0.0, 1.0);
-
-    gl_FragColor.xyz = colour;
-    gl_FragColor.w = 1.0;
-
-    //gl_FragColor = texture2D(Sampler, vTextureCoordOut) * vDestinationColor;
-    //gl_FragColor = vDestinationColor;
+    vec3 color = clamp(blend(src.xyz, dst.xyz, BlendMode), 0.0, 1.0);
+    
+    vec4 texColor = vec4(color, 1.0);
+    vec4 finalColor = texColor;
+    
+    // Enable light
+    //finalColor = texColor * vDestinationColor;
+    
+    gl_FragColor = finalColor;
 }

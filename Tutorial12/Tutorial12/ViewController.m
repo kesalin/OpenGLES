@@ -11,6 +11,7 @@
 @implementation ViewController
 
 @synthesize openGLView;
+@synthesize blendModeSlider;
 
 - (void)didReceiveMemoryWarning
 {
@@ -24,6 +25,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.blendModeSlider.value = self.openGLView.blendMode;
 }
 
 - (void)viewDidUnload
@@ -34,6 +36,8 @@
     
     [self.openGLView cleanup];
     self.openGLView = nil;
+    
+    self.blendModeSlider = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,6 +64,25 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+}
+
+#pragma mark - Properties
+
+- (void)blendModeSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    NSUInteger value = [slider value];
+    [slider setValue:value];
+
+    self.openGLView.blendMode = value;
+}
+
+- (void)textureSegmentValueChanged:(id)sender
+{
+    UISegmentedControl * seg = (UISegmentedControl *)sender;
+    NSUInteger value = [seg selectedSegmentIndex];
+    
+    self.openGLView.textureIndex = value;
 }
 
 @end

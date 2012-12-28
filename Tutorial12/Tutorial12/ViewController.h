@@ -12,5 +12,9 @@
 @interface ViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
+@property (nonatomic, strong) IBOutlet UISlider * blendModeSlider;
+
+- (IBAction)blendModeSliderValueChanged:(id)sender;
+- (IBAction)textureSegmentValueChanged:(id)sender;
 
 @end

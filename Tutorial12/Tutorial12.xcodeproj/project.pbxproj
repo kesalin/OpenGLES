@@ -373,6 +373,7 @@
 				21B1FF26168DC71B006A1411 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
