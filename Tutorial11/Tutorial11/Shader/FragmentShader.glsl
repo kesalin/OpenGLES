@@ -1,5 +1,3 @@
-#define ADD
-
 precision mediump float;
 
 varying vec4 vDestinationColor;

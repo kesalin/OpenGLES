@@ -55,13 +55,13 @@
     KSMatrix4 _modelViewMatrix;
     KSMatrix4 _projectionMatrix;
     
-    GLfloat _lightX;
-    GLfloat _lightY;
-    GLfloat _lightZ;
+    KSVec3 _lightPosition;
+    KSColor _ambient;
+    KSColor _diffuse;
+    KSColor _specular;
     
-    GLfloat _diffuseR;
-    GLfloat _diffuseG;
-    GLfloat _diffuseB;
+    GLfloat _shininess;
+    
     Boolean _enablePolygonOffset;
 }
 
@@ -69,12 +69,11 @@
 - (void)cleanup;
 - (void)setCurrentSurface:(int)index;
 
-@property (nonatomic, assign) GLfloat lightX;
-@property (nonatomic, assign) GLfloat lightY;
-@property (nonatomic, assign) GLfloat lightZ;
-@property (nonatomic, assign) GLfloat diffuseR;
-@property (nonatomic, assign) GLfloat diffuseG;
-@property (nonatomic, assign) GLfloat diffuseB;
+@property (nonatomic, assign) KSVec3 lightPosition;
+@property (nonatomic, assign) KSColor ambient;
+@property (nonatomic, assign) KSColor diffuse;
+@property (nonatomic, assign) KSColor specular;
+@property (nonatomic, assign) GLfloat shininess;
 
 @property (nonatomic, assign) Boolean enablePolygonOffset;
 

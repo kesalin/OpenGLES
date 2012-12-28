@@ -96,6 +96,8 @@
 
 #pragma mark Action selector
 
+// light position
+//
 - (void)lightXSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;

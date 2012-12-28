@@ -13,6 +13,9 @@
 @synthesize openGLView;
 @synthesize lightXSlider, lightYSlider, lightZSlider;
 @synthesize diffuseRSlider, diffuseGSlider, diffuseBSlider;
+@synthesize ambientRSlider, ambientGSlider, ambientBSlider;
+@synthesize specularRSlider, specularGSlider, specularBSlider;
+@synthesize shininessSlider;
 
 - (void)didReceiveMemoryWarning
 {
@@ -27,12 +30,19 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.lightXSlider.value = self.openGLView.lightX;
-    self.lightYSlider.value = self.openGLView.lightY;
-    self.lightZSlider.value = self.openGLView.lightZ;
-    self.diffuseRSlider.value = self.openGLView.diffuseR;
-    self.diffuseGSlider.value = self.openGLView.diffuseG;
-    self.diffuseBSlider.value = self.openGLView.diffuseB;
+    self.lightXSlider.value = self.openGLView.lightPosition.x;
+    self.lightYSlider.value = self.openGLView.lightPosition.y;
+    self.lightZSlider.value = self.openGLView.lightPosition.z;
+    self.diffuseRSlider.value = self.openGLView.diffuse.r;
+    self.diffuseGSlider.value = self.openGLView.diffuse.g;
+    self.diffuseBSlider.value = self.openGLView.diffuse.b;
+    self.ambientRSlider.value = self.openGLView.ambient.r;
+    self.ambientGSlider.value = self.openGLView.ambient.g;
+    self.ambientBSlider.value = self.openGLView.ambient.b;
+    self.specularRSlider.value = self.openGLView.specular.r;
+    self.specularGSlider.value = self.openGLView.specular.g;
+    self.specularBSlider.value = self.openGLView.specular.b;
+    self.shininessSlider.value = self.openGLView.shininess;
 }
 
 - (void)viewDidUnload
@@ -50,6 +60,12 @@
     self.diffuseRSlider = nil;
     self.diffuseGSlider = nil;
     self.diffuseBSlider = nil;
+    self.ambientRSlider = nil;
+    self.ambientGSlider = nil;
+    self.ambientBSlider = nil;
+    self.specularRSlider = nil;
+    self.specularGSlider = nil;
+    self.specularBSlider = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,7 +101,9 @@
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.lightX = value;
+    KSVec3 pos = self.openGLView.lightPosition;
+    pos.x = value;
+    self.openGLView.lightPosition = pos;
 }
 
 - (void)lightYSliderValueChanged:(id)sender
@@ -93,7 +111,9 @@
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.lightY = value;
+    KSVec3 pos = self.openGLView.lightPosition;
+    pos.y = value;
+    self.openGLView.lightPosition = pos;
 }
 
 - (void)lightZSliderValueChanged:(id)sender
@@ -101,15 +121,21 @@
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.lightZ = value;
+    KSVec3 pos = self.openGLView.lightPosition;
+    pos.z = value;
+    self.openGLView.lightPosition = pos;
 }
 
+// diffuse
+//
 - (void)diffuseRSliderValueChanged:(id)sender
 {
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.diffuseR = value;
+    KSColor color = self.openGLView.diffuse;
+    color.r = value;
+    self.openGLView.diffuse = color;
 }
 
 - (void)diffuseGSliderValueChanged:(id)sender
@@ -117,7 +143,9 @@
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.diffuseG = value;
+    KSColor color = self.openGLView.diffuse;
+    color.g = value;
+    self.openGLView.diffuse = color;
 }
 
 - (void)diffuseBSliderValueChanged:(id)sender
@@ -125,7 +153,83 @@
     UISlider * slider = (UISlider *)sender;
     float value = [slider value];
     
-    self.openGLView.diffuseB = value;
+    KSColor color = self.openGLView.diffuse;
+    color.b = value;
+    self.openGLView.diffuse = color;
+}
+
+// ambient
+//
+- (void)ambientRSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.ambient;
+    color.r = value;
+    self.openGLView.ambient = color;
+}
+
+- (void)ambientGSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.ambient;
+    color.g = value;
+    self.openGLView.ambient = color;
+}
+
+- (void)ambientBSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.ambient;
+    color.b = value;
+    self.openGLView.ambient = color;
+}
+
+// specular
+//
+- (void)specularRSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.specular;
+    color.r = value;
+    self.openGLView.specular = color;
+}
+
+- (void)specularGSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.specular;
+    color.g = value;
+    self.openGLView.specular = color;
+}
+
+- (void)specularBSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    KSColor color = self.openGLView.specular;
+    color.b = value;
+    self.openGLView.specular = color;
+}
+
+// shininess
+//
+- (void)shininessSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+    
+    self.openGLView.shininess = value;
 }
 
 - (void)segmentSelectionChanged:(id)sender

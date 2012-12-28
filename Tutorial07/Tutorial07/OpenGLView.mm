@@ -225,8 +225,8 @@
 
 #pragma mark - Surface
 
-const int SurfaceCube = 1;
 const int SurfaceSphere = 0;
+const int SurfaceCube = 1;
 const int SurfaceTorus = 2;
 const int SurfaceTrefoilKnot = 3;
 const int SurfaceKleinBottle = 4;
@@ -611,7 +611,6 @@ const int SurfaceMaxCount = 6;
 }
 
 #pragma mark Properties
-
 
 -(void)setAmbient:(KSColor)ambient
 {
