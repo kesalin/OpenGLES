@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="10K549" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="2">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.0" toolsVersion="1938" systemVersion="11G63" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="2">
     <dependencies>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="933"/>
@@ -149,7 +149,7 @@
                                         </connections>
                                     </slider>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="16" id="S1j-7d-eAQ">
-                                        <rect key="frame" x="62" y="142" width="171" height="23"/>
+                                        <rect key="frame" x="62" y="142" width="128" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="blendModeSliderValueChanged:" destination="2" eventType="valueChanged" id="lem-IF-5Rv"/>
@@ -162,6 +162,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blend Mode" lineBreakMode="tailTruncation" minimumFontSize="10" id="VFC-Vz-SAT">
+                                        <rect key="frame" x="196" y="143" width="114" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.83903203940000004" green="0.91288630660000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -169,6 +176,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="blendModeLabel" destination="VFC-Vz-SAT" id="dT1-Ay-5pg"/>
                         <outlet property="blendModeSlider" destination="S1j-7d-eAQ" id="R5z-ud-Diw"/>
                         <outlet property="diffuseASlider" destination="oIe-er-SBt" id="YtQ-ez-zhX"/>
                         <outlet property="diffuseBSlider" destination="qSz-6T-a2Y" id="upT-Nn-qY7"/>
@@ -200,6 +208,7 @@
                 <relationship kind="action" name="lightYSliderValueChanged:"/>
                 <relationship kind="action" name="lightZSliderValueChanged:"/>
                 <relationship kind="action" name="shininessSliderValueChanged:"/>
+                <relationship kind="outlet" name="blendModeLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="blendModeSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="diffuseASlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="diffuseBSlider" candidateClass="UISlider"/>

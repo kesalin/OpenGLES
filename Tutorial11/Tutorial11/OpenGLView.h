@@ -89,5 +89,6 @@
 - (void)render;
 - (void)cleanup;
 - (void)setCurrentSurface:(int)index;
+- (NSString *)currentBlendModeName;
 
 @end

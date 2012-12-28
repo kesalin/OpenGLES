@@ -22,6 +22,7 @@
 @property (nonatomic, strong) IBOutlet UISlider * diffuseASlider;
 @property (nonatomic, strong) IBOutlet UISlider * shininessSlider;
 @property (nonatomic, strong) IBOutlet UISlider * blendModeSlider;
+@property (nonatomic, strong) IBOutlet UILabel * blendModeLabel;
 
 - (IBAction)lightXSliderValueChanged:(id)sender;
 - (IBAction)lightYSliderValueChanged:(id)sender;

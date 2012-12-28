@@ -16,6 +16,7 @@
 @synthesize diffuseRSlider, diffuseGSlider, diffuseBSlider, diffuseASlider;  
 @synthesize shininessSlider;
 @synthesize blendModeSlider;
+@synthesize blendModeLabel;
 
 - (void)didReceiveMemoryWarning
 {
@@ -24,6 +25,12 @@
 }
 
 #pragma mark - View lifecycle
+
+- (void)updateBlendModeLabel
+{
+    NSString * modeName = [self.openGLView currentBlendModeName];
+    self.blendModeLabel.text = modeName;
+}
 
 - (void)viewDidLoad
 {
@@ -39,6 +46,8 @@
     self.diffuseASlider.value = self.openGLView.diffuse.a;
     self.shininessSlider.value = self.openGLView.shininess;
     self.blendModeSlider.value = self.openGLView.blendMode;
+    
+    [self updateBlendModeLabel];
 }
 
 - (void)viewDidUnload
@@ -59,6 +68,7 @@
     self.diffuseASlider = nil;
     self.shininessSlider = nil;
     self.blendModeSlider = nil;
+    self.blendModeLabel = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -175,6 +185,8 @@
     int value = [slider value];
     
     self.openGLView.blendMode = value;
+
+    [self updateBlendModeLabel];
 }
 
 @end
