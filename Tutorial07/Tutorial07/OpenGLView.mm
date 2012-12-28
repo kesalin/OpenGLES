@@ -69,7 +69,7 @@
 
 - (ISurface *)createSurface:(int)surfaceType;
 - (vec3)mapToSphere:(ivec2) touchpoint;
-- (void)updateSurfaceTransform;
+- (void)updateSurface;
 - (void)resetRotation;
 
 @end
@@ -79,12 +79,10 @@
 //
 @implementation OpenGLView
 
-@synthesize lightX = _lightX;
-@synthesize lightY = _lightY;
-@synthesize lightZ = _lightZ;
-@synthesize diffuseR = _diffuseR;
-@synthesize diffuseG = _diffuseG;
-@synthesize diffuseB = _diffuseB;
+@synthesize lightPosition = _lightPosition;
+@synthesize ambient = _ambient;
+@synthesize diffuse = _diffuse;
+@synthesize specular = _specular;
 @synthesize shininess = _shininess;
 
 #pragma mark- Initilize GL
@@ -227,8 +225,8 @@
 
 #pragma mark - Surface
 
-const int SurfaceCube = 0;
-const int SurfaceSphere = 1;
+const int SurfaceCube = 1;
+const int SurfaceSphere = 0;
 const int SurfaceTorus = 2;
 const int SurfaceTrefoilKnot = 3;
 const int SurfaceKleinBottle = 4;
@@ -253,7 +251,7 @@ const int SurfaceMaxCount = 6;
         surface = new MobiusStrip(1.4);
     }
     else {
-        surface = new Sphere(2.0f);
+        surface = new Sphere(3.0f);
     }
     
     return surface;
@@ -387,7 +385,7 @@ const int SurfaceMaxCount = 6;
         _vboArray = [[NSMutableArray alloc] init];
         for (int i = 0; i < SurfaceMaxCount; i++) {
             DrawableVBO * vbo = nil;
-            if (i == 0 ) {
+            if (i == SurfaceCube) {
                 vbo = [self createVBOsForCube];
             }
             else {
@@ -434,28 +432,26 @@ const int SurfaceMaxCount = 6;
 }
 
 - (void)setupLight
-{
-    // Set up some default material parameters.
-    //
-    glUniform3f(_ambientSlot, 0.04f, 0.04f, 0.04f);
-    glUniform3f(_specularSlot, 0.5, 0.5, 0.5);
-                 
+{                 
     // Initialize various state.
     //
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_normalSlot);
     
-    _lightX = 0.0;
-    _lightY = 0.0;
-    _lightZ = 1;
+    // Set up some default material parameters.
+    //
+    _lightPosition.x = _lightPosition.y = _lightPosition.z = 1.0;
     
-    _diffuseR = 0.0;
-    _diffuseG = 0.5;
-    _diffuseB = 1.0;
+    _ambient.r = _ambient.g = _ambient.b = 0.04;
+    _specular.r = _specular.g = _specular.b = 0.5;
+    _diffuse.r = 0.0;
+    _diffuse.g = 0.5;
+    _diffuse.b = 1.0;
+
     _shininess = 10;
 }
 
-- (void)updateSurfaceTransform
+- (void)updateSurface
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
@@ -472,6 +468,14 @@ const int SurfaceMaxCount = 6;
     KSMatrix3 normalMatrix3;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    // Update light
+    //
+    glUniform3f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b);
+    glUniform3f(_specularSlot, _specular.r, _specular.g, _specular.b);
+    glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
+    glVertexAttrib3f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b);
+    glUniform1f(_shininessSlot, _shininess);
 }
 
 - (void)drawSurface
@@ -484,11 +488,7 @@ const int SurfaceMaxCount = 6;
 
     glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
-    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
-    
-    glUniform3f(_lightPositionSlot, _lightX, _lightY, _lightZ);
-    glUniform1f(_shininessSlot, _shininess);
-    glVertexAttrib3f(_diffuseSlot, _diffuseR, _diffuseG, _diffuseB);
+    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);    
     
     // Draw the triangles.
     //
@@ -508,7 +508,7 @@ const int SurfaceMaxCount = 6;
     //
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
-    [self updateSurfaceTransform];
+    [self updateSurface];
     [self drawSurface];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
@@ -612,81 +612,35 @@ const int SurfaceMaxCount = 6;
 
 #pragma mark Properties
 
-- (void)setLightX:(GLfloat)lightX
+
+-(void)setAmbient:(KSColor)ambient
 {
-    _lightX = lightX;
+    _ambient = ambient;
     [self render];
 }
 
--(GLfloat)lightX
+-(void)setSpecular:(KSColor)specular
 {
-    return _lightX;
-}
-
-- (void)setLightY:(GLfloat)lightY
-{
-    _lightY = lightY;
+    _specular = specular;
     [self render];
 }
 
--(GLfloat)lightY
+- (void)setLightPosition:(KSVec3)lightPosition
 {
-    return _lightY;
-}
-
-- (void)setLightZ:(GLfloat)lightZ
-{
-    _lightZ = lightZ;
+    _lightPosition = lightPosition;
     [self render];
 }
 
--(GLfloat)lightZ
+-(void)setDiffuse:(KSColor)diffuse
 {
-    return _lightZ;
-}
-
--(void)setDiffuseR:(GLfloat)diffuseR
-{
-    _diffuseR = diffuseR;
+    _diffuse = diffuse;
     [self render];
-}
-
--(GLfloat)diffuseR
-{
-    return _diffuseR;
-}
-
--(void)setDiffuseG:(GLfloat)diffuseG
-{
-    _diffuseG = diffuseG;
-    [self render];
-}
-
--(GLfloat)diffuseG
-{
-    return _diffuseG;
-}
-
--(void)setDiffuseB:(GLfloat)diffuseB
-{
-    _diffuseB = diffuseB;
-    [self render];
-}
-
--(GLfloat)diffuseB
-{
-    return _diffuseB;
 }
 
 -(void)setShininess:(GLfloat)shininess
 {
     _shininess = shininess;
     [self render];
-}
-
--(GLfloat)shininess
-{
-    return _shininess;
 }
 
 @end
