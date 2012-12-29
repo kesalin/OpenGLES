@@ -162,8 +162,8 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blend Mode" textAlignment="right" lineBreakMode="tailTruncation" minimumFontSize="10" id="VFC-Vz-SAT">
-                                        <rect key="frame" x="11" y="169" width="138" height="21"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Blend Mode" lineBreakMode="tailTruncation" minimumFontSize="10" id="VFC-Vz-SAT">
+                                        <rect key="frame" x="20" y="169" width="129" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

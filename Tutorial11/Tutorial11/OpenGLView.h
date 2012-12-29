@@ -44,6 +44,9 @@
     GLuint _modelViewSlot;
     GLuint _projectionSlot;
     
+    KSMatrix4 _modelViewMatrix;
+    KSMatrix4 _projectionMatrix;
+    
     // For light
     //
     GLuint _normalMatrixSlot;
@@ -54,11 +57,15 @@
     GLint _specularSlot;
     GLint _shininessSlot;
     
+    KSVec3 _lightPosition;
+    KSColor _ambient;
+    KSColor _specular;
+    KSColor _diffuse;
+    GLfloat _shininess;
+    
     // For texture
     //
     GLuint _woodenTexture;
-    GLuint _flowerTexture;
-    
     GLint _textureCoordSlot;
     GLint _samplerSlot;
     GLint _blendModeSlot;
@@ -66,16 +73,6 @@
     GLint _wrapMode;
     GLint _filterMode;
     NSUInteger _textureIndex;
-    
-    KSMatrix4 _modelViewMatrix;
-    KSMatrix4 _projectionMatrix;
-    
-    GLfloat _shininess;
-    
-    KSVec3 _lightPosition;
-    KSColor _ambient;
-    KSColor _specular;
-    KSColor _diffuse;
     NSUInteger _blendMode;
 }
 
