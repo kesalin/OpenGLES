@@ -4,10 +4,10 @@ attribute vec4 vPosition;
 attribute vec2 vTextureCoord;
 
 uniform mat3 normalMatrix;
-attribute vec3 vLightPosition;
-attribute vec3 vAmbientMaterial;
-attribute vec3 vSpecularMaterial;
-attribute float shininess;
+uniform vec3 vLightPosition;
+uniform vec3 vAmbientMaterial;
+uniform vec3 vSpecularMaterial;
+uniform float shininess;
 
 attribute vec3 vNormal;
 attribute vec3 vDiffuseMaterial;

@@ -13,7 +13,10 @@
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openGLView;
 @property (nonatomic, strong) IBOutlet UISlider * blendModeSlider;
+@property (nonatomic, strong) IBOutlet UILabel * blendModeLabel;
+@property (nonatomic, strong) IBOutlet UISlider *alphaSlider;
 
+- (IBAction)alphaSliderValueChanged:(id)sender;
 - (IBAction)blendModeSliderValueChanged:(id)sender;
 - (IBAction)textureSegmentValueChanged:(id)sender;
 

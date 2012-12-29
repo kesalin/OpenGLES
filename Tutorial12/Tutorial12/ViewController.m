@@ -12,6 +12,8 @@
 
 @synthesize openGLView;
 @synthesize blendModeSlider;
+@synthesize blendModeLabel;
+@synthesize alphaSlider;
 
 - (void)didReceiveMemoryWarning
 {
@@ -21,11 +23,20 @@
 
 #pragma mark - View lifecycle
 
+- (void)updateBlendModeLabel
+{
+    NSString * modeName = [self.openGLView currentBlendModeName];
+    self.blendModeLabel.text = modeName;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.blendModeSlider.value = self.openGLView.blendMode;
+    self.alphaSlider.value = self.openGLView.diffuse.a;
+    
+    [self updateBlendModeLabel];
 }
 
 - (void)viewDidUnload
@@ -38,6 +49,8 @@
     self.openGLView = nil;
     
     self.blendModeSlider = nil;
+    self.blendModeLabel = nil;
+    self.alphaSlider = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -75,6 +88,8 @@
     [slider setValue:value];
 
     self.openGLView.blendMode = value;
+
+    [self updateBlendModeLabel];
 }
 
 - (void)textureSegmentValueChanged:(id)sender
@@ -83,6 +98,14 @@
     NSUInteger value = [seg selectedSegmentIndex];
     
     self.openGLView.textureIndex = value;
+}
+
+- (IBAction)alphaSliderValueChanged:(id)sender
+{
+    UISlider * slider = (UISlider *)sender;
+    float value = [slider value];
+
+    self.openGLView.alpha = value;
 }
 
 @end

@@ -3,6 +3,7 @@ precision mediump float;
 varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
 
+uniform float Alpha;
 uniform int BlendMode;
 uniform sampler2D Sampler0;
 uniform sampler2D Sampler1;
@@ -108,7 +109,7 @@ vec3 blend (vec3 src, vec3 dst, int mode)
     
     if (mode == 17) {
         // SRC_ALPHA & ONE_MINUS_SRC_ALPHA
-        return (src * 0.4 + dst * 0.6);
+        return src * Alpha + dst * (1.0 - Alpha);
     }
     
     // MULTIPLY

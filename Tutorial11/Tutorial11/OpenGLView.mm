@@ -10,6 +10,7 @@
 #import "GLESUtils.h"
 #import "Quaternion.h"
 #import "TextureManager.h"
+#import "ParametricEquations.h"
 
 //
 // DrawableVBO implementation
@@ -219,10 +220,10 @@
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
 
-    _lightPositionSlot = glGetAttribLocation(_programHandle, "vLightPosition");
-    _ambientSlot = glGetAttribLocation(_programHandle, "vAmbientMaterial");
-    _specularSlot = glGetAttribLocation(_programHandle, "vSpecularMaterial");
-    _shininessSlot = glGetAttribLocation(_programHandle, "shininess");
+    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
+    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
+    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
+    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
     
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
@@ -231,9 +232,85 @@
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
     _samplerSlot = glGetUniformLocation(_programHandle, "Sampler");
     _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
+    _alphaSlot = glGetUniformLocation(_programHandle, "Alpha");
 }
 
 #pragma mark - Surface
+
+const int SurfaceSphere = 0;
+const int SurfaceTorus = 1;
+const int SurfaceTrefoilKnot = 2;
+const int SurfaceKleinBottle = 3;
+const int SurfaceMobiusStrip = 4;
+
+- (ISurface *)createSurface:(int)type
+{
+    ISurface * surface = NULL;
+    
+    if (type == SurfaceTorus) {
+        surface = new Torus(2.0f, 0.3f);
+    }
+    else if (type == SurfaceTrefoilKnot) {
+        surface = new TrefoilKnot(2.4f);
+    }
+    else if (type == SurfaceKleinBottle) {
+        surface = new KleinBottle(0.4f);
+    }
+    else if (type == SurfaceMobiusStrip) {
+        surface = new MobiusStrip(1.4);
+    }
+    else {
+        surface = new Sphere(3.0f);
+    }
+    
+    return surface;
+}
+
+- (DrawableVBO *)createVBO:(int)surfaceType
+{
+    ISurface * surface = [self createSurface:surfaceType];
+    
+    surface->SetVertexFlags(VertexFlagsNormals | VertexFlagsTexCoords);
+    
+    // Get vertice from surface.
+    //
+    int vertexSize = surface->GetVertexSize();
+    int vBufSize = surface->GetVertexCount() * vertexSize;
+    GLfloat * vbuf = new GLfloat[vBufSize];
+    surface->GenerateVertices(vbuf);
+    
+    // Get triangle indice from surface
+    //
+    int triangleIndexCount = surface->GetTriangleIndexCount();
+    unsigned short * triangleBuf = new unsigned short[triangleIndexCount];
+    surface->GenerateTriangleIndices(triangleBuf);
+    
+    // Create the VBO for the vertice.
+    //
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
+    
+    // Create the VBO for the triangle indice
+    //
+    GLuint triangleIndexBuffer;
+    glGenBuffers(1, &triangleIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), triangleBuf, GL_STATIC_DRAW);
+    
+    delete [] vbuf;
+    delete [] triangleBuf;
+    delete surface;
+    
+    DrawableVBO * vbo = [[DrawableVBO alloc] init];
+    vbo.vertexBuffer = vertexBuffer;
+    vbo.triangleIndexBuffer = triangleIndexBuffer;
+    vbo.vertexSize = vertexSize;
+    vbo.triangleIndexCount = triangleIndexCount;
+    
+    return vbo;
+}
 
 - (void)setCurrentSurface:(int)index
 {
@@ -333,7 +410,15 @@
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:0];
+        vbo = [self createVBO:SurfaceSphere];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        vbo = [self createVBO:SurfaceKleinBottle];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        [self setCurrentSurface:0]; // Change model
     } 
 }
 
@@ -510,11 +595,12 @@
     // Update light
     //
     glUniform1i(_blendModeSlot, _blendMode);
-    glVertexAttrib3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
-    glVertexAttrib4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
-    glVertexAttrib4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
+    glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
+    glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
+    glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
-    glVertexAttrib1f(_shininessSlot, _shininess);
+    glUniform1f(_shininessSlot, _shininess);
+    glUniform1f(_alphaSlot, _diffuse.a);
     
     // Update texture
     //
@@ -710,6 +796,7 @@
                                 @"14 Pin Light",
                                 @"15 Difference",
                                 @"16 Exclusion",
+                                @"17 Src Alpha",
                                 nil];
 
     NSUInteger index = _blendMode % [nameList count];

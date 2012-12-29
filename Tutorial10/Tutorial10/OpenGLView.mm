@@ -10,6 +10,7 @@
 #import "GLESUtils.h"
 #import "Quaternion.h"
 #import "TextureManager.h"
+#import "ParametricEquations.h"
 
 //
 // DrawableVBO implementation
@@ -230,14 +231,79 @@
 
 #pragma mark - Surface
 
-- (void)setCurrentSurface:(int)index
-{
-    index = index % [_vboArray count];
-    _currentVBO = [_vboArray objectAtIndex:index];
-    
-    [self resetRotation];
+const int SurfaceSphere = 0;
+const int SurfaceTorus = 1;
+const int SurfaceTrefoilKnot = 2;
+const int SurfaceKleinBottle = 3;
+const int SurfaceMobiusStrip = 4;
 
-    [self render];
+- (ISurface *)createSurface:(int)type
+{
+    ISurface * surface = NULL;
+    
+    if (type == SurfaceTorus) {
+        surface = new Torus(2.0f, 0.3f);
+    }
+    else if (type == SurfaceTrefoilKnot) {
+        surface = new TrefoilKnot(2.4f);
+    }
+    else if (type == SurfaceKleinBottle) {
+        surface = new KleinBottle(0.3f);
+    }
+    else if (type == SurfaceMobiusStrip) {
+        surface = new MobiusStrip(1.4);
+    }
+    else {
+        surface = new Sphere(3.0f);
+    }
+    
+    return surface;
+}
+
+- (DrawableVBO *)createVBO:(int)surfaceType
+{
+    ISurface * surface = [self createSurface:surfaceType];
+    
+    surface->SetVertexFlags(VertexFlagsNormals | VertexFlagsTexCoords);
+    
+    // Get vertice from surface.
+    //
+    int vertexSize = surface->GetVertexSize();
+    int vBufSize = surface->GetVertexCount() * vertexSize;
+    GLfloat * vbuf = new GLfloat[vBufSize];
+    surface->GenerateVertices(vbuf);
+    
+    // Get triangle indice from surface
+    //
+    int triangleIndexCount = surface->GetTriangleIndexCount();
+    unsigned short * triangleBuf = new unsigned short[triangleIndexCount];
+    surface->GenerateTriangleIndices(triangleBuf);
+    
+    // Create the VBO for the vertice.
+    //
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, vBufSize * sizeof(GLfloat), vbuf, GL_STATIC_DRAW);
+    
+    // Create the VBO for the triangle indice
+    //
+    GLuint triangleIndexBuffer;
+    glGenBuffers(1, &triangleIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), triangleBuf, GL_STATIC_DRAW);
+    
+    delete [] vbuf;
+    delete [] triangleBuf;
+    delete surface;
+    
+    DrawableVBO * vbo = [[DrawableVBO alloc] init];
+    vbo.vertexBuffer = vertexBuffer;
+    vbo.triangleIndexBuffer = triangleIndexBuffer;
+    vbo.vertexSize = vertexSize;
+    vbo.triangleIndexCount = triangleIndexCount;
+    
+    return vbo;
 }
 
 - (DrawableVBO *)createVBOsForCube
@@ -319,6 +385,16 @@
     return vbo;
 }
 
+- (void)setCurrentSurface:(int)index
+{
+    index = index % [_vboArray count];
+    _currentVBO = [_vboArray objectAtIndex:index];
+    
+    [self resetRotation];
+    
+    [self render];
+}
+
 - (void)setupVBOs
 {
     if (_vboArray == nil) {
@@ -328,7 +404,15 @@
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:0];
+        vbo = [self createVBO:SurfaceSphere];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        vbo = [self createVBO:SurfaceKleinBottle];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        [self setCurrentSurface:1]; // Change model
     } 
 }
 
@@ -370,13 +454,13 @@
     glUniform3f(_ambientSlot, 0.04f, 0.04f, 0.04f);
     glUniform3f(_specularSlot, 0.5, 0.5, 0.5);
     glUniform1f(_shininessSlot, 50);
-                 
+
     // Initialize various state.
     //
     glEnableVertexAttribArray(_positionSlot);
     glEnableVertexAttribArray(_normalSlot);
     
-    glUniform3f(_lightPositionSlot, 0.0, 0.0, 5.0);
+    glUniform3f(_lightPositionSlot, 1.0, 1.0, 5.0);
     
     glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
 }

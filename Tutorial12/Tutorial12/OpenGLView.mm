@@ -87,6 +87,7 @@
 @synthesize specular = _specular;
 @synthesize blendMode = _blendMode;
 @synthesize textureIndex = _textureIndex;
+@synthesize alpha = _alpha;
 
 #pragma mark- Initilize GL
 
@@ -219,10 +220,10 @@
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
 
-    _lightPositionSlot = glGetAttribLocation(_programHandle, "vLightPosition");
-    _ambientSlot = glGetAttribLocation(_programHandle, "vAmbientMaterial");
-    _specularSlot = glGetAttribLocation(_programHandle, "vSpecularMaterial");
-    _shininessSlot = glGetAttribLocation(_programHandle, "shininess");
+    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
+    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
+    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
+    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
     
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
@@ -232,6 +233,7 @@
     _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
     _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
     _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
+    _alphaSlot = glGetUniformLocation(_programHandle, "Alpha");
 }
 
 #pragma mark - Surface
@@ -390,10 +392,11 @@
     _diffuse.r = 0.0;
     _diffuse.g = 0.5;
     _diffuse.b = 1.0;
-    _diffuse.a = 0.5;
+    _diffuse.a = 1.0;
 
     _shininess = 10;
     _blendMode = 0;
+    _alpha = 0.5;    // alpha for blend mode 17
 }
 
 - (void)setTexture:(NSUInteger)index
@@ -511,11 +514,12 @@
     // Update light
     //
     glUniform1i(_blendModeSlot, _blendMode);
-    glVertexAttrib3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
-    glVertexAttrib4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
-    glVertexAttrib4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
+    glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
+    glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
+    glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
-    glVertexAttrib1f(_shininessSlot, _shininess);
+    glUniform1f(_shininessSlot, _shininess);
+    glUniform1f(_alphaSlot, _alpha);
     
     // Update texture for stage 1
     //
@@ -683,10 +687,44 @@
     [self render];
 }
 
+-(void)setAlpha:(GLfloat)alpha
+{
+    _alpha = alpha;
+    [self render];
+}
+
 -(void)setBlendMode:(NSUInteger)blendMode
 {
     _blendMode = blendMode;
     [self render];
+}
+
+-(NSString *)currentBlendModeName
+{
+    const NSArray * nameList = [NSArray arrayWithObjects:
+                                @"0 Multiply",
+                                @"1 Add",
+                                @"2 Subtract",
+                                @"3 Darken",
+                                @"4 Color Burn",
+                                @"5 Linear Burn",
+                                @"6 Lighten",
+                                @"7 Screen",
+                                @"8 Color Dodge",
+                                @"9 Overlay",
+                                @"10 Soft Light",
+                                @"11 Hard Light",
+                                @"12 Vivid Light",
+                                @"13 Linear Light",
+                                @"14 Pin Light",
+                                @"15 Difference",
+                                @"16 Exclusion",
+                                @"17 Src Alpha",
+                                nil];
+    
+    NSUInteger index = _blendMode % [nameList count];
+    NSString * name = [nameList objectAtIndex:index];
+    return name;
 }
 
 -(void)setTextureIndex:(NSUInteger)textureIndex

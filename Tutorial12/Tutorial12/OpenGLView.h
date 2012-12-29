@@ -72,11 +72,13 @@
     GLint _sampler0Slot;
     GLint _sampler1Slot;
     GLint _blendModeSlot;
-
+    GLint _alphaSlot;
+    
     GLint _wrapMode;
     GLint _filterMode;
     NSUInteger _textureIndex;
     NSUInteger _blendMode;
+    GLfloat _alpha;
 }
 
 @property (nonatomic, assign) KSVec3 lightPosition;
@@ -86,9 +88,11 @@
 @property (nonatomic, assign) GLfloat shininess;
 @property (nonatomic, assign) NSUInteger blendMode;
 @property (nonatomic, assign) NSUInteger textureIndex;
+@property (nonatomic, assign) GLfloat alpha;
 
 - (void)render;
 - (void)cleanup;
 - (void)setCurrentSurface:(int)index;
+- (NSString *)currentBlendModeName;
 
 @end

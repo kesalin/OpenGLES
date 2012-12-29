@@ -69,6 +69,7 @@
     GLint _textureCoordSlot;
     GLint _samplerSlot;
     GLint _blendModeSlot;
+    GLint _alphaSlot;
 
     GLint _wrapMode;
     GLint _filterMode;

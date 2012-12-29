@@ -28,6 +28,7 @@
 		21B77C681684A76B006B1D9B /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 21B77C671684A76B006B1D9B /* OpenGLView.mm */; };
 		21B77C6A1684A785006B1D9B /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C691684A785006B1D9B /* OpenGLES.framework */; };
 		21B77C6C1684A78C006B1D9B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C6B1684A78C006B1D9B /* QuartzCore.framework */; };
+		21D1A2F7168F323C00410011 /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21D1A2F5168F323C00410011 /* ParametricSurface.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,9 @@
 		21B77C671684A76B006B1D9B /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 		21B77C691684A785006B1D9B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21B77C6B1684A78C006B1D9B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		21D1A2F4168F323C00410011 /* ParametricEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricEquations.h; path = Surface/ParametricEquations.h; sourceTree = "<group>"; };
+		21D1A2F5168F323C00410011 /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParametricSurface.cpp; path = Surface/ParametricSurface.cpp; sourceTree = "<group>"; };
+		21D1A2F6168F323C00410011 /* ParametricSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricSurface.h; path = Surface/ParametricSurface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,7 @@
 		21B77C3B1684A679006B1D9B /* Tutorial10 */ = {
 			isa = PBXGroup;
 			children = (
+				21D1A2F2168F322300410011 /* Surface */,
 				215CE670168743D8009A8029 /* PowerVR */,
 				219B99CF1685923A00A0E13C /* Texture */,
 				21B77C551684A703006B1D9B /* Utils */,
@@ -187,6 +192,16 @@
 				219B99D31685B16300A0E13C /* TextureManager.m */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		21D1A2F2168F322300410011 /* Surface */ = {
+			isa = PBXGroup;
+			children = (
+				21D1A2F4168F323C00410011 /* ParametricEquations.h */,
+				21D1A2F5168F323C00410011 /* ParametricSurface.cpp */,
+				21D1A2F6168F323C00410011 /* ParametricSurface.h */,
+			);
+			name = Surface;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +281,7 @@
 				21B77C681684A76B006B1D9B /* OpenGLView.mm in Sources */,
 				219B99C916858C6E00A0E13C /* TextureLoader.mm in Sources */,
 				219B99D41685B16300A0E13C /* TextureManager.m in Sources */,
+				21D1A2F7168F323C00410011 /* ParametricSurface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

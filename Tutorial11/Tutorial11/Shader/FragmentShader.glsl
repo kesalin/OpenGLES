@@ -3,13 +3,17 @@ precision mediump float;
 varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
 
+uniform float Alpha;
 uniform int BlendMode;
 uniform sampler2D Sampler;
 
 // Blend the source and destination pixels.
 //
-vec3 blend (vec3 src, vec3 dst, int mode)
+vec3 blend (vec4 srcColor, vec4 dstColor, int mode)
 {
+    vec3 src = srcColor.xyz;
+    vec3 dst = dstColor.xyz;
+
     if (mode == 1) {
         // LINEAR_DODGE
         // ADD
@@ -105,6 +109,10 @@ vec3 blend (vec3 src, vec3 dst, int mode)
         return src + dst - 2.0 * src * dst;
     }
     
+    if (mode == 17) {
+        return src * Alpha + dst * (1.0 - Alpha);
+    }
+    
     // MULTIPLY
     return src * dst;
 }
@@ -115,7 +123,7 @@ void main()
     vec4 src = vDestinationColor;
     
     // Apply blend operation
-    vec3 colour = clamp(blend(src.xyz, dst.xyz, BlendMode), 0.0, 1.0);
+    vec3 colour = clamp(blend(src, dst, BlendMode), 0.0, 1.0);
 
     gl_FragColor.xyz = colour;
     gl_FragColor.w = 1.0;
