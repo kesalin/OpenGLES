@@ -125,10 +125,8 @@ void main()
     vec3 color = clamp(blend(src.xyz, dst.xyz, BlendMode), 0.0, 1.0);
     
     vec4 texColor = vec4(color, 1.0);
-    vec4 finalColor = texColor;
-    
-    // Enable light
-    //finalColor = texColor * vDestinationColor;
+    //vec4 finalColor = texColor;                         // Disable light
+    vec4 finalColor = texColor * vDestinationColor;     // enable light
     
     gl_FragColor = finalColor;
 }

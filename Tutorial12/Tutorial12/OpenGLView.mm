@@ -299,8 +299,8 @@
 
     _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
     
-    _diffuse.r = 0.0;
-    _diffuse.g = 0.5;
+    _diffuse.r = 1.0;
+    _diffuse.g = 1.0;
     _diffuse.b = 1.0;
     _diffuse.a = 1.0;
 
