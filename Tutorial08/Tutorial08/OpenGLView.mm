@@ -12,11 +12,12 @@
 #import "Quaternion.h"
 
 enum LightMode {
-    PerVertex = 0,
-    PerPixel = 1,
-    PerPixelToon = 2
+    PerVertex,
+    PerPixel,
+    PerPixelToon,
+    PerPixelSelfShadowing
 };
-const LightMode CurrentLightMode = PerPixel;
+const LightMode CurrentLightMode = PerVertex;
 
 //
 // DrawableVBO implementation
@@ -271,7 +272,7 @@ const int SurfaceMaxCount = 6;
         surface = new TrefoilKnot(2.4f);
     }
     else if (type == SurfaceKleinBottle) {
-        surface = new KleinBottle(0.25f);
+        surface = new KleinBottle(0.3f);
     }
     else if (type == SurfaceMobiusStrip) {
         surface = new MobiusStrip(1.4);
@@ -453,7 +454,7 @@ const int SurfaceMaxCount = 6;
             vbo = nil;
         }
         
-        [self setCurrentSurface:0];
+        [self setCurrentSurface:SurfaceKleinBottle];
     } 
 }
 

@@ -62,6 +62,7 @@
 		21C1256A167DA14600E80909 /* PerPixelFragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerPixelFragment.glsl; path = Shader/PerPixelFragment.glsl; sourceTree = "<group>"; };
 		21C1256B167DA14600E80909 /* PerPixelVertex.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerPixelVertex.glsl; path = Shader/PerPixelVertex.glsl; sourceTree = "<group>"; };
 		21C1256E167DA65000E80909 /* PerPixelToonFragment.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerPixelToonFragment.glsl; path = Shader/PerPixelToonFragment.glsl; sourceTree = "<group>"; };
+		21F57E9A169031AA00EF056D /* PerPixelSelfShadowing.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerPixelSelfShadowing.glsl; path = Shader/PerPixelSelfShadowing.glsl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +143,7 @@
 		21C1253C167D9DEC00E80909 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				21F57E9A169031AA00EF056D /* PerPixelSelfShadowing.glsl */,
 				21C1256E167DA65000E80909 /* PerPixelToonFragment.glsl */,
 				21C1256A167DA14600E80909 /* PerPixelFragment.glsl */,
 				21C1256B167DA14600E80909 /* PerPixelVertex.glsl */,
@@ -361,6 +363,7 @@
 				21C12539167D9DAE00E80909 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
