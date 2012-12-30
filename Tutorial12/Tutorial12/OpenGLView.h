@@ -49,15 +49,15 @@
     
     // For texture
     //
-    GLuint _textureForStage0;
-    GLuint _textureForStage1[4];
-    
     GLint _textureCoordSlot;
     GLint _sampler0Slot;
     GLint _sampler1Slot;
     GLint _blendModeSlot;
     GLint _alphaSlot;
     
+    GLuint _textureForStage0;
+    GLuint * _textureForStage1;
+    NSUInteger _textureCount;
     NSUInteger _textureIndex;
     NSUInteger _blendMode;
     GLfloat _alpha;

@@ -594,7 +594,8 @@
                                 @"14 Pin Light",
                                 @"15 Difference",
                                 @"16 Exclusion",
-                                @"17 Src Alpha",
+                                @"17 Interpolate",
+                                @"18 Add Signed",
                                 nil];
 
     NSUInteger index = _blendMode % [nameList count];

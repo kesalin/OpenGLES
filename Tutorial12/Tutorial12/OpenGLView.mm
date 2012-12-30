@@ -270,6 +270,15 @@
 
 - (void)setupTextures
 {    
+    NSArray * textureFiles = [NSArray arrayWithObjects:
+                              @"flower.jpg",
+                              @"cs.png",
+                              @"light.png",
+                              @"detail.png",
+                              nil];
+    _textureCount = [textureFiles count];
+    _textureForStage1 = new GLuint[_textureCount];
+    
     // Load texture for stage 0
     //
 	glActiveTexture(GL_TEXTURE0);
@@ -278,16 +287,9 @@
     
     // Load texture for stage 1
     //
-    NSArray * textureFiles = [NSArray arrayWithObjects:
-                              @"flower.jpg",
-                              @"cs.png",
-                              @"light.png",
-                              @"detail.png",
-                              nil];
-    
     glActiveTexture(GL_TEXTURE1);
 
-    for (NSUInteger i = 0; i < 4 && i < textureFiles.count; i++) {
+    for (NSUInteger i = 0; i < _textureCount; i++) {
         NSString * file = [textureFiles objectAtIndex:i];
         _textureForStage1[i] = [TextureHelper createTexture:file isPVR:FALSE];
     }
@@ -302,10 +304,12 @@
 
 - (void)destoryTextures
 {
-    [TextureHelper deleteTexture:&_textureForStage0];
-    
-    for (NSUInteger i = 0; i < 4; i++) {
-        [TextureHelper deleteTexture:&_textureForStage1[i]];
+    if (_textureForStage1 != NULL) {
+        [TextureHelper deleteTexture:&_textureForStage0];
+        
+        for (NSUInteger i = 0; i < 4; i++) {
+            [TextureHelper deleteTexture:&_textureForStage1[i]];
+        }
     }
 }
 
@@ -391,8 +395,10 @@
     
     // Update texture for stage 1
     //
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, _textureForStage1[_textureIndex]);
+    if (_textureForStage1 != NULL) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, _textureForStage1[_textureIndex]);
+    }
 }
 
 - (void)drawSurface
@@ -584,7 +590,8 @@
                                 @"14 Pin Light",
                                 @"15 Difference",
                                 @"16 Exclusion",
-                                @"17 Src Alpha",
+                                @"17 Interpolate",
+                                @"18 Add Signed",
                                 nil];
     
     NSUInteger index = _blendMode % [nameList count];
@@ -594,7 +601,7 @@
 
 -(void)setTextureIndex:(NSUInteger)textureIndex
 {
-    _textureIndex = textureIndex;
+    _textureIndex = textureIndex % _textureCount;
     [self render];
 }
 

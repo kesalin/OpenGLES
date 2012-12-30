@@ -110,7 +110,13 @@ vec3 blend (vec4 srcColor, vec4 dstColor, int mode)
     }
     
     if (mode == 17) {
+        // INTERPOLATE
         return src * Alpha + dst * (1.0 - Alpha);
+    }
+    
+    if (mode == 18) {
+        // ADD SIGNED
+        return src + dst - 0.5;
     }
     
     // MULTIPLY

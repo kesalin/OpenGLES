@@ -148,7 +148,7 @@
                                             <action selector="shininessSliderValueChanged:" destination="2" eventType="valueChanged" id="15l-WG-oOI"/>
                                         </connections>
                                     </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="17" id="S1j-7d-eAQ">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="18" id="S1j-7d-eAQ">
                                         <rect key="frame" x="62" y="147" width="89" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>

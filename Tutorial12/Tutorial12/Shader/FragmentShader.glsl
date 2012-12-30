@@ -108,8 +108,12 @@ vec3 blend (vec3 src, vec3 dst, int mode)
     }
     
     if (mode == 17) {
-        // SRC_ALPHA & ONE_MINUS_SRC_ALPHA
+        // INTERPOLATE
         return src * Alpha + dst * (1.0 - Alpha);
+    }
+    
+    if (mode == 18) {
+        return src + dst - 0.5;
     }
     
     // MULTIPLY
