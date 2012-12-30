@@ -9,7 +9,7 @@
 #import "OpenGLView.h"
 #import "GLESUtils.h"
 #import "Quaternion.h"
-#import "TextureManager.h"
+#import "TextureHelper.h"
 #import "ParametricEquations.h"
 #import "DrawableVBOFactory.h"
 
@@ -36,11 +36,11 @@
 - (void)setupProgram;
 - (void)getSlotsFromProgram;
 - (void)setupProjection;
-- (void)setupLight;
+- (void)setupLights;
 
-- (void)setTexture:(NSUInteger)index;
-- (void)setTextureParameter;
-- (void)setupTexture;
+- (void)updateTextureParameter;
+- (void)setupTextures;
+- (void)destoryTextures;
 
 - (void)setupVBOs;
 - (void)destoryVBOs;
@@ -152,7 +152,7 @@
 
 - (void)cleanup
 {   
-    [[TextureManager instance] cleanup];
+    [self destoryTextures];
 
     [self destoryVBOs];
 
@@ -206,7 +206,7 @@
 {
     if (_vboArray == nil) {
         _vboArray = [[NSMutableArray alloc] init];
-        
+
         DrawableVBO * vbo = [DrawableVBOFactory createDrawableVBO:SurfaceSphere];
         [_vboArray addObject:vbo];
         vbo = nil;
@@ -233,6 +233,83 @@
     _currentVBO = nil;
 }
 
+#pragma mark - Light
+
+- (void)setupLights
+{
+    // Set up some default material parameters.
+    //
+    glUniform3f(_ambientSlot, 0.04f, 0.04f, 0.04f);
+    glUniform3f(_specularSlot, 0.5, 0.5, 0.5);
+    glUniform1f(_shininessSlot, 50);
+
+    // Initialize various state.
+    //
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_normalSlot);
+    
+    glUniform3f(_lightPositionSlot, 1.0, 1.0, 5.0);
+    
+    glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
+}
+
+#pragma mark - Texture
+
+- (void)updateTextureParameter
+{
+    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
+    //
+    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
+}
+
+- (void)setupTextures
+{
+    NSArray * textureFiles = [NSArray arrayWithObjects:
+                              @"wooden.png",
+                              @"wooden.pvr",
+                              @"flower.jpg",
+                              nil];
+    
+    _textureCount = [textureFiles count];
+    _textures = new GLuint[_textureCount];
+    
+    // Set the active sampler to stage 0.
+    // Not really necessary since the uniform defaults to zero anyway, but good practice.
+    //
+	glActiveTexture(GL_TEXTURE0);
+
+    for (int i = 0; i < _textureCount; i++) {
+        NSString * filename = [textureFiles objectAtIndex:i];
+        NSRange range = [filename rangeOfString:@".pvr" options:NSCaseInsensitiveSearch];
+        Boolean isPVR =  (NSNotFound != range.location);
+
+        _textures[i] = [TextureHelper createTexture:filename isPVR:isPVR];
+    }
+    
+    _textureIndex = 0;  // Current bind texture for stage 0.
+    _wrapMode = GL_REPEAT;
+    _filterMode = GL_LINEAR;
+    
+    glEnableVertexAttribArray(_textureCoordSlot);
+    glUniform1i(_samplerSlot, 0);
+}
+
+- (void)destoryTextures
+{
+    if (_textures != NULL) {
+        for (int i = 0; i < 3; i++) {
+            [TextureHelper deleteTexture:&_textures[_textureIndex]];
+        }
+        
+        delete [] _textures;
+        _textures = NULL;
+    }
+}
 
 #pragma mark - Draw object
 
@@ -274,202 +351,6 @@
     glEnable(GL_DEPTH_TEST);
 }
 
-- (void)setupLight
-{
-    // Set up some default material parameters.
-    //
-    glUniform3f(_ambientSlot, 0.04f, 0.04f, 0.04f);
-    glUniform3f(_specularSlot, 0.5, 0.5, 0.5);
-    glUniform1f(_shininessSlot, 50);
-
-    // Initialize various state.
-    //
-    glEnableVertexAttribArray(_positionSlot);
-    glEnableVertexAttribArray(_normalSlot);
-    
-    glUniform3f(_lightPositionSlot, 1.0, 1.0, 5.0);
-    
-    glVertexAttrib3f(_diffuseSlot, 0.8, 0.8, 0.8);
-}
-
-- (void)setImageTexture:(TextureLoader *)loader
-{
-    void* pixels = [loader imageData];
-    CGSize size = [loader imageSize];
-    
-    GLenum format;
-    TextureFormat tf = [loader textureFormat];
-    switch (tf) {
-        case TextureFormatGray:
-            format = GL_LUMINANCE;
-            break;
-        case TextureFormatGrayAlpha:
-            format = GL_LUMINANCE_ALPHA;
-            break;
-        case TextureFormatRGB:
-            format = GL_RGB;
-            break;
-        case TextureFormatRGBA:
-            format = GL_RGBA;
-            break;
-            
-        default:
-            NSLog(@"ERROR: invalid texture format! %d", tf);
-            break;
-    }
-    
-    GLenum type;
-    int bitsPerComponent = [loader bitsPerComponent];
-    switch (bitsPerComponent) {
-        case 8:
-            type = GL_UNSIGNED_BYTE;
-            break;
-        case 4:
-            if (format == GL_RGBA) {
-                type = GL_UNSIGNED_SHORT_4_4_4_4;
-                break;
-            }
-            // fall through
-        default:
-            NSLog(@"ERROR: invalid texture format! %d, bitsPerComponent %d", tf, bitsPerComponent);
-            break;
-    }
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
-    
-    glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-- (void)setPVRTexture:(TextureLoader *)loader
-{
-    unsigned char* data = (unsigned char*) [loader imageData];
-    CGSize size = [loader imageSize];
-    int width = size.width;
-    int height = size.height;
-    
-    int bitsPerPixel;
-    GLenum format;
-    bool compressed = true;
-    switch ([loader textureFormat]) {
-        case TextureFormatPvrtcRgba2:
-            bitsPerPixel = 2;
-            format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-            break;
-        case TextureFormatPvrtcRgb2:
-            bitsPerPixel = 2;
-            format = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
-            break;
-        case TextureFormatPvrtcRgba4:
-            bitsPerPixel = 4;
-            format = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
-            break;
-        case TextureFormatPvrtcRgb4:
-            bitsPerPixel = 4;
-            format = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
-            break;
-        default:
-            compressed = false;
-            break;
-    }
-    
-    if (compressed) {
-        for (int level = 0; level < [loader mipCount]; ++level) {
-            GLsizei size = MAX(32, width * height * bitsPerPixel / 8);
-            glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, size, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-            
-            data += size;
-            width >>= 1;
-            height >>= 1;
-        }
-    }
-    else {
-        GLenum type;
-        switch ([loader textureFormat]) {
-            case TextureFormatRGBA:
-                NSAssert([loader bitsPerComponent] == 4,
-                         @"Invalid bitsPerComponent for RGBA format PVR");
-                format = GL_RGBA;
-                type = GL_UNSIGNED_SHORT_4_4_4_4;
-                bitsPerPixel = 16;
-                break;
-            case TextureFormat565:
-                format = GL_RGB;
-                type = GL_UNSIGNED_SHORT_5_6_5;
-                bitsPerPixel = 16;
-                break;
-            case TextureFormat5551:
-                format = GL_RGBA;
-                type = GL_UNSIGNED_SHORT_5_5_5_1;
-                bitsPerPixel = 16;
-                break;
-            default:
-                break;
-        }
-
-        for (int level = 0; level < [loader mipCount]; ++level) {
-            GLsizei size = width * height * bitsPerPixel / 8;
-            glTexImage2D(GL_TEXTURE_2D, level, format, width, height, 0, format, type, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-            
-            data += size;
-            width >>= 1;
-            height >>= 1;
-        }
-    }
-}
-
-- (void)setTexture:(NSUInteger)index
-{    
-    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
-    if ([loader isPVR]) {
-        [self setPVRTexture:loader];
-    }
-    else {
-        [self setImageTexture:loader];
-    }
-}
-
-- (void)setTextureParameter
-{
-    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
-    //
-    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
-}
-
-- (void)setupTexture
-{
-    // Set the active sampler to stage 0.
-    // Not really necessary since the uniform defaults to zero anyway, but good practice.
-    //
-	glActiveTexture(GL_TEXTURE0);
-    glUniform1i(_samplerSlot, 0);
-	
-    glGenTextures(1, &_texture);
-    glBindTexture(GL_TEXTURE_2D, _texture);
-    
-    glEnableVertexAttribArray(_textureCoordSlot);
-    
-    // Load image data from resource file.
-    //
-    [[TextureManager instance] loadImage:@"wooden.png"];
-    [[TextureManager instance] loadPVR:@"wooden.pvr"];
-    [[TextureManager instance] loadImage:@"flower.jpg"];
-
-    _textureIndex = 0;
-    _wrapMode = GL_REPEAT;
-    _filterMode = GL_LINEAR;
-    
-    [self setTextureParameter];
-    
-    [self setTexture:_textureIndex];
-}
-
 - (void)resetRotation
 {
     ksMatrixLoadIdentity(&_rotationMatrix);
@@ -494,6 +375,14 @@
     KSMatrix3 normalMatrix3;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    // Update textures for stage 0
+    //
+    if (_textures != NULL) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _textures[_textureIndex]);
+        [self updateTextureParameter];
+    }
 }
 
 - (void)drawSurface
@@ -547,9 +436,9 @@
         
         [self setupProjection];
         
-        [self setupLight];
+        [self setupLights];
         
-        [self setupTexture];
+        [self setupTextures];
         
         [self resetRotation];
         
@@ -640,13 +529,8 @@
 
 -(void)setTextureIndex:(NSUInteger)textureIndex
 {
-    if (_textureIndex != textureIndex) {
-        _textureIndex = textureIndex % [[TextureManager instance] textureCount];
-        
-        [self setTexture:_textureIndex];
-
-        [self render];
-    }
+    _textureIndex = textureIndex % _textureCount;
+    [self render];
 }
 
 -(void)setWrapMode:(GLint)wrapMode
@@ -660,8 +544,6 @@
     else {
         _wrapMode = GL_MIRRORED_REPEAT;
     }
-    
-    [self setTextureParameter];
 
     [self render];
 }
@@ -686,8 +568,6 @@
     else {
         _filterMode = GL_NEAREST_MIPMAP_NEAREST;
     }
-    
-    [self setTextureParameter];
 
     [self render];
 }

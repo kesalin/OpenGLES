@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		215CE66F168741CC009A8029 /* wooden.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 215CE66D168741C2009A8029 /* wooden.pvr */; };
+		217239F716901F8E001B5AB0 /* TextureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 217239F616901F8E001B5AB0 /* TextureHelper.m */; };
 		217B297E168FE139005D2F2C /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 217B297D168FE139005D2F2C /* DrawableVBOFactory.mm */; };
 		2194C74516871C3F00600663 /* flower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74316871C2C00600663 /* flower.jpg */; };
 		2194C74916871ED200600663 /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74816871EC300600663 /* wooden.png */; };
 		219B99C916858C6E00A0E13C /* TextureLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 219B99C816858C6E00A0E13C /* TextureLoader.mm */; };
-		219B99D41685B16300A0E13C /* TextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 219B99D31685B16300A0E13C /* TextureManager.m */; };
 		21B77C361684A679006B1D9B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C351684A679006B1D9B /* UIKit.framework */; };
 		21B77C381684A679006B1D9B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C371684A679006B1D9B /* Foundation.framework */; };
 		21B77C3A1684A679006B1D9B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B77C391684A679006B1D9B /* CoreGraphics.framework */; };
@@ -36,14 +36,14 @@
 		215CE66D168741C2009A8029 /* wooden.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = wooden.pvr; path = Texture/wooden.pvr; sourceTree = "<group>"; };
 		215CE6711687442E009A8029 /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTGlobal.h; path = PowerVR/PVRTGlobal.h; sourceTree = "<group>"; };
 		215CE6721687442E009A8029 /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTTexture.h; path = PowerVR/PVRTTexture.h; sourceTree = "<group>"; };
+		217239F516901F8E001B5AB0 /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureHelper.h; path = Utils/TextureHelper.h; sourceTree = "<group>"; };
+		217239F616901F8E001B5AB0 /* TextureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureHelper.m; path = Utils/TextureHelper.m; sourceTree = "<group>"; };
 		217B297C168FE139005D2F2C /* DrawableVBOFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableVBOFactory.h; path = Surface/DrawableVBOFactory.h; sourceTree = "<group>"; };
 		217B297D168FE139005D2F2C /* DrawableVBOFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DrawableVBOFactory.mm; path = Surface/DrawableVBOFactory.mm; sourceTree = "<group>"; };
 		2194C74316871C2C00600663 /* flower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = flower.jpg; path = Texture/flower.jpg; sourceTree = "<group>"; };
 		2194C74816871EC300600663 /* wooden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wooden.png; path = Texture/wooden.png; sourceTree = "<group>"; };
 		219B99C716858C6E00A0E13C /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = Utils/TextureLoader.h; sourceTree = "<group>"; };
 		219B99C816858C6E00A0E13C /* TextureLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextureLoader.mm; path = Utils/TextureLoader.mm; sourceTree = "<group>"; };
-		219B99D21685B16300A0E13C /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureManager.h; path = Utils/TextureManager.h; sourceTree = "<group>"; };
-		219B99D31685B16300A0E13C /* TextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureManager.m; path = Utils/TextureManager.m; sourceTree = "<group>"; };
 		21B77C311684A679006B1D9B /* Tutorial10.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial10.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B77C351684A679006B1D9B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21B77C371684A679006B1D9B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -191,8 +191,8 @@
 				21B77C5B1684A714006B1D9B /* Vector.h */,
 				219B99C716858C6E00A0E13C /* TextureLoader.h */,
 				219B99C816858C6E00A0E13C /* TextureLoader.mm */,
-				219B99D21685B16300A0E13C /* TextureManager.h */,
-				219B99D31685B16300A0E13C /* TextureManager.m */,
+				217239F516901F8E001B5AB0 /* TextureHelper.h */,
+				217239F616901F8E001B5AB0 /* TextureHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -285,9 +285,9 @@
 				21B77C5D1684A714006B1D9B /* GLESUtils.m in Sources */,
 				21B77C681684A76B006B1D9B /* OpenGLView.mm in Sources */,
 				219B99C916858C6E00A0E13C /* TextureLoader.mm in Sources */,
-				219B99D41685B16300A0E13C /* TextureManager.m in Sources */,
 				21D1A2F7168F323C00410011 /* ParametricSurface.cpp in Sources */,
 				217B297E168FE139005D2F2C /* DrawableVBOFactory.mm in Sources */,
+				217239F716901F8E001B5AB0 /* TextureHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

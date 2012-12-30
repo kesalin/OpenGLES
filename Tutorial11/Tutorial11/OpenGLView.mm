@@ -9,7 +9,7 @@
 #import "OpenGLView.h"
 #import "GLESUtils.h"
 #import "Quaternion.h"
-#import "TextureManager.h"
+#import "TextureHelper.h"
 #import "DrawableVBOFactory.h"
 
 //
@@ -35,10 +35,11 @@
 - (void)setupProgram;
 - (void)getSlotsFromProgram;
 - (void)setupProjection;
-- (void)setupLight;
+- (void)setupLights;
 
-- (void)setTextureParameter;
-- (void)setupTexture;
+- (void)updateTextureParameter;
+- (void)setupTextures;
+- (void)destoryTextures;
 
 - (void)setupVBOs;
 - (void)destoryVBOs;
@@ -154,7 +155,7 @@
 
 - (void)cleanup
 {   
-    [[TextureManager instance] cleanup];
+    [self destoryTextures];
 
     [self destoryVBOs];
 
@@ -221,7 +222,7 @@
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:0]; // Change model
+        [self setCurrentSurface:1]; // Change model
     } 
 }
 
@@ -235,6 +236,88 @@
     _currentVBO = nil;
 }
 
+#pragma mark - Light
+
+- (void)setupLights
+{
+    // Initialize various state.
+    //
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_normalSlot);
+    
+    // Set up some default material parameters.
+    //
+    _lightPosition.x = _lightPosition.y = _lightPosition.z = 1.0;
+    
+    _ambient.r = _ambient.g = _ambient.b = 0.04f;
+    _ambient.a = 0.5f;
+
+    _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
+    
+    _diffuse.r = 0.8;
+    _diffuse.g = 0.8;
+    _diffuse.b = 1.0;
+    _diffuse.a = 1.5;
+
+    _shininess = 10;
+    _blendMode = 0;
+}
+
+#pragma mark - Texture
+
+- (void)updateTextureParameter
+{
+    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
+    //
+    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
+}
+
+- (void)setupTextures
+{
+    NSArray * textureFiles = [NSArray arrayWithObjects:
+                              @"wooden.png",
+                              @"flower.jpg",
+                              @"CS.png",
+                              nil];
+    
+    _textureCount = [textureFiles count];
+    _textures = new GLuint[_textureCount];
+    
+    // Set the active sampler to stage 0.
+    // Not really necessary since the uniform defaults to zero anyway, but good practice.
+    //
+	glActiveTexture(GL_TEXTURE0);
+    
+    for (int i = 0; i < _textureCount; i++) {
+        NSString * filename = [textureFiles objectAtIndex:i];
+
+        _textures[i] = [TextureHelper createTexture:filename isPVR:FALSE];
+    }
+    
+    _textureIndex = 0;  // Current bind texture for stage 0.
+    _wrapMode = GL_REPEAT;
+    _filterMode = GL_LINEAR;
+    
+    glEnableVertexAttribArray(_textureCoordSlot);
+    glUniform1i(_samplerSlot, 0);
+}
+
+- (void)destoryTextures
+{
+    if (_textures != NULL) {
+        for (int i = 0; i < 3; i++) {
+            [TextureHelper deleteTexture:&_textures[_textureIndex]];
+        }
+        
+        delete [] _textures;
+        _textures = NULL;
+    }
+}
 
 #pragma mark - Draw object
 
@@ -270,127 +353,12 @@
     //
     ksMatrixLoadIdentity(&_projectionMatrix);
     float aspect = width / height;
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 15.0f);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 12.0f);
     
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
     glEnable(GL_DEPTH_TEST);
-}
-
-- (void)setupLight
-{
-    // Initialize various state.
-    //
-    glEnableVertexAttribArray(_positionSlot);
-    glEnableVertexAttribArray(_normalSlot);
-    
-    // Set up some default material parameters.
-    //
-    _lightPosition.x = _lightPosition.y = 0.0;
-    _lightPosition.z = 1.0;
-    
-    _ambient.r = _ambient.g = _ambient.b = 0.04f;
-    _ambient.a = 0.5f;
-
-    _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
-    
-    _diffuse.r = 0.0;
-    _diffuse.g = 0.5;
-    _diffuse.b = 1.0;
-    _diffuse.a = 0.5;
-
-    _shininess = 10;
-    _blendMode = 0;
-}
-
-- (void)setTexture:(NSUInteger)index level:(GLuint)level
-{
-    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
-    void* pixels = [loader imageData];
-    CGSize size = [loader imageSize];
-    
-    GLenum format;
-    TextureFormat tf = [loader textureFormat];
-    switch (tf) {
-        case TextureFormatGray:
-            format = GL_LUMINANCE;
-            break;
-        case TextureFormatGrayAlpha:
-            format = GL_LUMINANCE_ALPHA;
-            break;
-        case TextureFormatRGB:
-            format = GL_RGB;
-            break;
-        case TextureFormatRGBA:
-            format = GL_RGBA;
-            break;
-            
-        default:
-            NSLog(@"ERROR: invalid texture format! %d", tf);
-            break;
-    }
-    
-    GLenum type;
-    int bitsPerComponent = [loader bitsPerComponent];
-    switch (bitsPerComponent) {
-        case 8:
-            type = GL_UNSIGNED_BYTE;
-            break;
-        case 4:
-            if (format == GL_RGBA) {
-                type = GL_UNSIGNED_SHORT_4_4_4_4;
-                break;
-            }
-            // fall through
-        default:
-            NSLog(@"ERROR: invalid texture format! %d, bitsPerComponent %d", tf, bitsPerComponent);
-            break;
-    }
-    
-    glTexImage2D(GL_TEXTURE_2D, level, format, size.width, size.height, 0, format, type, pixels);
-    
-    glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-- (void)setTextureParameter
-{
-    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
-    //
-    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
-}
-
-- (void)setupTexture
-{
-    glEnableVertexAttribArray(_textureCoordSlot);
-    
-    // Load image data from resource file.
-    //
-    [[TextureManager instance] loadImage:@"wooden.png"];
-    [[TextureManager instance] loadImage:@"flower.jpg"];
-    [[TextureManager instance] loadImage:@"cs.png"];
-
-    _wrapMode = GL_REPEAT;
-    _filterMode = GL_LINEAR;
-    _textureIndex = 0;
-    
-    // Set the active sampler to stage 0.
-    //
-    GLuint level = 0;
-	glActiveTexture(GL_TEXTURE0);
-    glUniform1i(_samplerSlot, level);
-	
-    // Wooden Texture
-    //
-    glGenTextures(1, &_woodenTexture);
-    glBindTexture(GL_TEXTURE_2D, _woodenTexture);
-
-    [self setTextureParameter];
 }
 
 - (void)resetRotation
@@ -404,7 +372,7 @@
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -9);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
     
     ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     
@@ -428,9 +396,13 @@
     glUniform1f(_shininessSlot, _shininess);
     glUniform1f(_alphaSlot, _diffuse.a);
     
-    // Update texture
+    // Update textures for stage 0
     //
-    [self setTexture:_textureIndex level:0];
+    if (_textures != NULL) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _textures[_textureIndex]);
+        [self updateTextureParameter];
+    }
 }
 
 - (void)drawSurface
@@ -483,9 +455,9 @@
         [self setupProgram];
         [self setupProjection];
         
-        [self setupLight];
+        [self setupLights];
         
-        [self setupTexture];
+        [self setupTextures];
         
         [self resetRotation];
     }
@@ -592,7 +564,7 @@
 
 -(void)setTextureIndex:(NSUInteger)textureIndex
 {
-    _textureIndex = textureIndex;
+    _textureIndex = textureIndex % _textureCount;
     [self render];
 }
 

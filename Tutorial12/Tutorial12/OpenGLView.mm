@@ -9,7 +9,7 @@
 #import "OpenGLView.h"
 #import "GLESUtils.h"
 #import "Quaternion.h"
-#import "TextureManager.h"
+#import "TextureHelper.h"
 #import "DrawableVBOFactory.h"
 
 //
@@ -35,10 +35,11 @@
 - (void)setupProgram;
 - (void)getSlotsFromProgram;
 - (void)setupProjection;
-- (void)setupLight;
 
-- (void)setTextureParameter;
-- (void)setupTexture;
+- (void)setupLights;
+
+- (void)setupTextures;
+- (void)destoryTextures;
 
 - (void)setupVBOs;
 - (void)destoryVBOs;
@@ -155,7 +156,7 @@
 
 - (void)cleanup
 {   
-    [[TextureManager instance] cleanup];
+    [self destoryTextures];
 
     [self destoryVBOs];
 
@@ -236,6 +237,77 @@
     _currentVBO = nil;
 }
 
+#pragma mark - Light
+
+- (void)setupLights
+{
+    // Initialize various state.
+    //
+    glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_normalSlot);
+    
+    // Set up some default material parameters.
+    //
+    _lightPosition.x = _lightPosition.y = 0.0;
+    _lightPosition.z = 1.0;
+    
+    _ambient.r = _ambient.g = _ambient.b = 0.04f;
+    _ambient.a = 0.5f;
+
+    _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
+    
+    _diffuse.r = 1.0;
+    _diffuse.g = 1.0;
+    _diffuse.b = 1.0;
+    _diffuse.a = 1.0;
+
+    _shininess = 10;
+    _blendMode = 0;
+    _alpha = 0.5;    // alpha for blend mode 17
+}
+
+#pragma mark - Texture
+
+- (void)setupTextures
+{    
+    // Load texture for stage 0
+    //
+	glActiveTexture(GL_TEXTURE0);
+    
+    _textureForStage0 = [TextureHelper createTexture:@"wooden.png" isPVR:FALSE];
+    
+    // Load texture for stage 1
+    //
+    NSArray * textureFiles = [NSArray arrayWithObjects:
+                              @"flower.jpg",
+                              @"cs.png",
+                              @"light.png",
+                              @"detail.png",
+                              nil];
+    
+    glActiveTexture(GL_TEXTURE1);
+
+    for (NSUInteger i = 0; i < 4 && i < textureFiles.count; i++) {
+        NSString * file = [textureFiles objectAtIndex:i];
+        _textureForStage1[i] = [TextureHelper createTexture:file isPVR:FALSE];
+    }
+
+    _textureIndex = 0;              // Current texture index for texture stage 1
+    
+    glUniform1i(_sampler0Slot, 0);  // texture stage 0
+    glUniform1i(_sampler1Slot, 1);  // texture stage 1
+    
+    glEnableVertexAttribArray(_textureCoordSlot);   // Enable texture coord
+}
+
+- (void)destoryTextures
+{
+    [TextureHelper deleteTexture:&_textureForStage0];
+    
+    for (NSUInteger i = 0; i < 4; i++) {
+        [TextureHelper deleteTexture:&_textureForStage1[i]];
+    }
+}
 
 #pragma mark - Draw object
 
@@ -282,122 +354,6 @@
     glEnable(GL_DEPTH_TEST);
 }
 
-- (void)setupLight
-{
-    // Initialize various state.
-    //
-    glEnableVertexAttribArray(_positionSlot);
-    glEnableVertexAttribArray(_normalSlot);
-    
-    // Set up some default material parameters.
-    //
-    _lightPosition.x = _lightPosition.y = 0.0;
-    _lightPosition.z = 1.0;
-    
-    _ambient.r = _ambient.g = _ambient.b = 0.04f;
-    _ambient.a = 0.5f;
-
-    _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
-    
-    _diffuse.r = 1.0;
-    _diffuse.g = 1.0;
-    _diffuse.b = 1.0;
-    _diffuse.a = 1.0;
-
-    _shininess = 10;
-    _blendMode = 0;
-    _alpha = 0.5;    // alpha for blend mode 17
-}
-
-- (void)setTexture:(NSUInteger)index
-{
-    TextureLoader * loader = [[TextureManager instance] textureAtIndex:index];
-    void* pixels = [loader imageData];
-    CGSize size = [loader imageSize];
-    
-    GLenum format;
-    TextureFormat tf = [loader textureFormat];
-    switch (tf) {
-        case TextureFormatGray:
-            format = GL_LUMINANCE;
-            break;
-        case TextureFormatGrayAlpha:
-            format = GL_LUMINANCE_ALPHA;
-            break;
-        case TextureFormatRGB:
-            format = GL_RGB;
-            break;
-        case TextureFormatRGBA:
-            format = GL_RGBA;
-            break;
-            
-        default:
-            NSLog(@"ERROR: invalid texture format! %d", tf);
-            break;
-    }
-    
-    GLenum type;
-    int bitsPerComponent = [loader bitsPerComponent];
-    switch (bitsPerComponent) {
-        case 8:
-            type = GL_UNSIGNED_BYTE;
-            break;
-        case 4:
-            if (format == GL_RGBA) {
-                type = GL_UNSIGNED_SHORT_4_4_4_4;
-                break;
-            }
-            // fall through
-        default:
-            NSLog(@"ERROR: invalid texture format! %d, bitsPerComponent %d", tf, bitsPerComponent);
-            break;
-    }
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, format, size.width, size.height, 0, format, type, pixels);
-    
-    glGenerateMipmap(GL_TEXTURE_2D);
-}
-
-- (void)setTextureParameter
-{
-    // It can be GL_NICEST or GL_FASTEST or GL_DONT_CARE. GL_DONT_CARE by default.
-    //
-    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filterMode); 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _filterMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _wrapMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _wrapMode);
-}
-
-- (void)setupTexture
-{    
-    // Load image data from resource file.
-    //
-    [[TextureManager instance] loadImage:@"wooden.png"];
-    [[TextureManager instance] loadImage:@"flower.jpg"];
-    [[TextureManager instance] loadImage:@"cs.png"];
-    [[TextureManager instance] loadImage:@"bump.png"];
-    [[TextureManager instance] loadImage:@"light.png"];
-
-    _wrapMode = GL_REPEAT;
-    _filterMode = GL_LINEAR;
-    _textureIndex = 1;
-    
-    glGenTextures(1, &_texture0);
-    glGenTextures(1, &_texture1);
-    
-    glEnableVertexAttribArray(_textureCoordSlot);
-    
-    // Load texture for stage 0
-    //
-	glActiveTexture(GL_TEXTURE0);
-    glUniform1i(_sampler0Slot, 0);
-    glBindTexture(GL_TEXTURE_2D, _texture0);
-    [self setTextureParameter];
-    [self setTexture:0];
-}
-
 - (void)resetRotation
 {
     ksMatrixLoadIdentity(&_rotationMatrix);
@@ -436,10 +392,7 @@
     // Update texture for stage 1
     //
     glActiveTexture(GL_TEXTURE1);
-    glUniform1i(_sampler1Slot, 1);
-    glBindTexture(GL_TEXTURE_2D, _texture1);
-    [self setTextureParameter];
-    [self setTexture:_textureIndex];
+    glBindTexture(GL_TEXTURE_2D, _textureForStage1[_textureIndex]);
 }
 
 - (void)drawSurface
@@ -492,9 +445,9 @@
         [self setupProgram];
         [self setupProjection];
         
-        [self setupLight];
+        [self setupLights];
         
-        [self setupTexture];
+        [self setupTextures];
         
         [self resetRotation];
     }
@@ -641,7 +594,7 @@
 
 -(void)setTextureIndex:(NSUInteger)textureIndex
 {
-    _textureIndex = textureIndex + 1; // texture at index 0 used for stage 0.
+    _textureIndex = textureIndex;
     [self render];
 }
 

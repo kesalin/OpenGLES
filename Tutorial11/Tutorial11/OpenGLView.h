@@ -49,7 +49,6 @@
     
     // For texture
     //
-    GLuint _woodenTexture;
     GLint _textureCoordSlot;
     GLint _samplerSlot;
     GLint _blendModeSlot;
@@ -57,6 +56,9 @@
 
     GLint _wrapMode;
     GLint _filterMode;
+    
+    NSUInteger _textureCount;
+    GLuint * _textures;
     NSUInteger _textureIndex;
     NSUInteger _blendMode;
 }

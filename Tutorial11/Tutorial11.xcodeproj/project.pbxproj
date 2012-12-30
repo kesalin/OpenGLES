@@ -19,7 +19,6 @@
 		21977FED168B39E900035EBF /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 21977FE3168B39E900035EBF /* GLESMath.c */; };
 		21977FEE168B39E900035EBF /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 21977FE6168B39E900035EBF /* GLESUtils.m */; };
 		21977FEF168B39E900035EBF /* TextureLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 21977FE9168B39E900035EBF /* TextureLoader.mm */; };
-		21977FF0168B39E900035EBF /* TextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21977FEB168B39E900035EBF /* TextureManager.m */; };
 		21977FF3168B39FA00035EBF /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 21977FF2168B39FA00035EBF /* OpenGLView.mm */; };
 		21977FF4168B3A0C00035EBF /* flower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 21977FDF168B39D300035EBF /* flower.jpg */; };
 		21977FF5168B3A0C00035EBF /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 21977FE0168B39D300035EBF /* wooden.png */; };
@@ -29,6 +28,7 @@
 		21977FFB168B3A2300035EBF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21977FFA168B3A2300035EBF /* QuartzCore.framework */; };
 		219A147D168C79CC0070EAF0 /* CS.png in Resources */ = {isa = PBXBuildFile; fileRef = 219A1479168C79BF0070EAF0 /* CS.png */; };
 		21D1A301168F385C00410011 /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21D1A2FF168F385C00410011 /* ParametricSurface.cpp */; };
+		21F57E891690279C00EF056D /* TextureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F57E881690279C00EF056D /* TextureHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,8 +61,6 @@
 		21977FE7168B39E900035EBF /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utils/Quaternion.h; sourceTree = "<group>"; };
 		21977FE8168B39E900035EBF /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = Utils/TextureLoader.h; sourceTree = "<group>"; };
 		21977FE9168B39E900035EBF /* TextureLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextureLoader.mm; path = Utils/TextureLoader.mm; sourceTree = "<group>"; };
-		21977FEA168B39E900035EBF /* TextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureManager.h; path = Utils/TextureManager.h; sourceTree = "<group>"; };
-		21977FEB168B39E900035EBF /* TextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureManager.m; path = Utils/TextureManager.m; sourceTree = "<group>"; };
 		21977FEC168B39E900035EBF /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utils/Vector.h; sourceTree = "<group>"; };
 		21977FF1168B39FA00035EBF /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		21977FF2168B39FA00035EBF /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
@@ -72,6 +70,8 @@
 		21D1A2FE168F385C00410011 /* ParametricEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricEquations.h; path = Surface/ParametricEquations.h; sourceTree = "<group>"; };
 		21D1A2FF168F385C00410011 /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParametricSurface.cpp; path = Surface/ParametricSurface.cpp; sourceTree = "<group>"; };
 		21D1A300168F385C00410011 /* ParametricSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricSurface.h; path = Surface/ParametricSurface.h; sourceTree = "<group>"; };
+		21F57E871690279C00EF056D /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureHelper.h; path = ../../Tutorial10/Tutorial10/Utils/TextureHelper.h; sourceTree = "<group>"; };
+		21F57E881690279C00EF056D /* TextureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureHelper.m; path = ../../Tutorial10/Tutorial10/Utils/TextureHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,12 +167,12 @@
 				21977FE4168B39E900035EBF /* GLESMath.h */,
 				21977FE5168B39E900035EBF /* GLESUtils.h */,
 				21977FE6168B39E900035EBF /* GLESUtils.m */,
+				21977FEC168B39E900035EBF /* Vector.h */,
 				21977FE7168B39E900035EBF /* Quaternion.h */,
 				21977FE8168B39E900035EBF /* TextureLoader.h */,
 				21977FE9168B39E900035EBF /* TextureLoader.mm */,
-				21977FEA168B39E900035EBF /* TextureManager.h */,
-				21977FEB168B39E900035EBF /* TextureManager.m */,
-				21977FEC168B39E900035EBF /* Vector.h */,
+				21F57E871690279C00EF056D /* TextureHelper.h */,
+				21F57E881690279C00EF056D /* TextureHelper.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -282,10 +282,10 @@
 				21977FED168B39E900035EBF /* GLESMath.c in Sources */,
 				21977FEE168B39E900035EBF /* GLESUtils.m in Sources */,
 				21977FEF168B39E900035EBF /* TextureLoader.mm in Sources */,
-				21977FF0168B39E900035EBF /* TextureManager.m in Sources */,
 				21977FF3168B39FA00035EBF /* OpenGLView.mm in Sources */,
 				21D1A301168F385C00410011 /* ParametricSurface.cpp in Sources */,
 				217B2985168FE24B005D2F2C /* DrawableVBOFactory.mm in Sources */,
+				21F57E891690279C00EF056D /* TextureHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -40,7 +40,8 @@
     
     // For texture
     //
-    GLuint _texture;
+    NSUInteger _textureCount;
+    GLuint * _textures;
     GLint _textureCoordSlot;
     GLint _samplerSlot;
     GLint _wrapMode;
