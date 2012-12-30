@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		217B29A3168FE51C005D2F2C /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 217B299F168FE51C005D2F2C /* DrawableVBOFactory.mm */; };
 		217B29A4168FE51C005D2F2C /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 217B29A1168FE51C005D2F2C /* ParametricSurface.cpp */; };
+		217B29B3168FEAF6005D2F2C /* bump.png in Resources */ = {isa = PBXBuildFile; fileRef = 217B29B1168FEAE8005D2F2C /* bump.png */; };
+		217B29B4168FEAF6005D2F2C /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = 217B29B2168FEAE8005D2F2C /* light.png */; };
 		21B1FF0B168DC71B006A1411 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B1FF0A168DC71B006A1411 /* UIKit.framework */; };
 		21B1FF0D168DC71B006A1411 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B1FF0C168DC71B006A1411 /* Foundation.framework */; };
 		21B1FF0F168DC71B006A1411 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B1FF0E168DC71B006A1411 /* CoreGraphics.framework */; };
@@ -37,6 +39,8 @@
 		217B29A0168FE51C005D2F2C /* ParametricEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricEquations.h; path = ../../Tutorial11/Tutorial11/Surface/ParametricEquations.h; sourceTree = "<group>"; };
 		217B29A1168FE51C005D2F2C /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParametricSurface.cpp; path = ../../Tutorial11/Tutorial11/Surface/ParametricSurface.cpp; sourceTree = "<group>"; };
 		217B29A2168FE51C005D2F2C /* ParametricSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricSurface.h; path = ../../Tutorial11/Tutorial11/Surface/ParametricSurface.h; sourceTree = "<group>"; };
+		217B29B1168FEAE8005D2F2C /* bump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bump.png; path = Texture/bump.png; sourceTree = "<group>"; };
+		217B29B2168FEAE8005D2F2C /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light.png; path = Texture/light.png; sourceTree = "<group>"; };
 		21B1FF06168DC71B006A1411 /* Tutorial12.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial12.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B1FF0A168DC71B006A1411 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21B1FF0C168DC71B006A1411 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -182,6 +186,8 @@
 		21B1FF2D168DC772006A1411 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
+				217B29B1168FEAE8005D2F2C /* bump.png */,
+				217B29B2168FEAE8005D2F2C /* light.png */,
 				21B1FF3D168DC794006A1411 /* CS.png */,
 				21B1FF3E168DC794006A1411 /* flower.jpg */,
 				21B1FF3F168DC794006A1411 /* wooden.png */,
@@ -257,6 +263,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				217B29B3168FEAF6005D2F2C /* bump.png in Resources */,
+				217B29B4168FEAF6005D2F2C /* light.png in Resources */,
 				21B1FF43168DC7C0006A1411 /* FragmentShader.glsl in Resources */,
 				21B1FF44168DC7C0006A1411 /* VertexShader.glsl in Resources */,
 				21B1FF40168DC7BC006A1411 /* CS.png in Resources */,

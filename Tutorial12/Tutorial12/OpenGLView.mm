@@ -377,6 +377,8 @@
     [[TextureManager instance] loadImage:@"wooden.png"];
     [[TextureManager instance] loadImage:@"flower.jpg"];
     [[TextureManager instance] loadImage:@"cs.png"];
+    [[TextureManager instance] loadImage:@"bump.png"];
+    [[TextureManager instance] loadImage:@"light.png"];
 
     _wrapMode = GL_REPEAT;
     _filterMode = GL_LINEAR;
