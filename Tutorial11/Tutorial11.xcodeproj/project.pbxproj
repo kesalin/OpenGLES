@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		217B2985168FE24B005D2F2C /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 217B2984168FE24B005D2F2C /* DrawableVBOFactory.mm */; };
 		21977FB8168B390B00035EBF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21977FB7168B390B00035EBF /* UIKit.framework */; };
 		21977FBA168B390B00035EBF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21977FB9168B390B00035EBF /* Foundation.framework */; };
 		21977FBC168B390B00035EBF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21977FBB168B390B00035EBF /* CoreGraphics.framework */; };
@@ -31,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		217B2983168FE24B005D2F2C /* DrawableVBOFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableVBOFactory.h; path = Surface/DrawableVBOFactory.h; sourceTree = "<group>"; };
+		217B2984168FE24B005D2F2C /* DrawableVBOFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DrawableVBOFactory.mm; path = Surface/DrawableVBOFactory.mm; sourceTree = "<group>"; };
 		21977FB3168B390B00035EBF /* Tutorial11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial11.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21977FB7168B390B00035EBF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21977FB9168B390B00035EBF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -196,6 +199,8 @@
 		21D1A2FC168F384A00410011 /* Surface */ = {
 			isa = PBXGroup;
 			children = (
+				217B2983168FE24B005D2F2C /* DrawableVBOFactory.h */,
+				217B2984168FE24B005D2F2C /* DrawableVBOFactory.mm */,
 				21D1A2FE168F385C00410011 /* ParametricEquations.h */,
 				21D1A2FF168F385C00410011 /* ParametricSurface.cpp */,
 				21D1A300168F385C00410011 /* ParametricSurface.h */,
@@ -280,6 +285,7 @@
 				21977FF0168B39E900035EBF /* TextureManager.m in Sources */,
 				21977FF3168B39FA00035EBF /* OpenGLView.mm in Sources */,
 				21D1A301168F385C00410011 /* ParametricSurface.cpp in Sources */,
+				217B2985168FE24B005D2F2C /* DrawableVBOFactory.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

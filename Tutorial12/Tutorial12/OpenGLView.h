@@ -8,25 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 #import "GLESMath.h"
-
-//
-// DrawableVBO interface
-//
-@interface DrawableVBO : NSObject
-
-@property (nonatomic, assign) GLuint vertexBuffer;
-@property (nonatomic, assign) GLuint lineIndexBuffer;
-@property (nonatomic, assign) GLuint triangleIndexBuffer;
-@property (nonatomic, assign) int vertexSize;
-@property (nonatomic, assign) int lineIndexCount;
-@property (nonatomic, assign) int triangleIndexCount;
-
-- (void) cleanup;
-
-@end
 
 //
 // OpenGLView interface

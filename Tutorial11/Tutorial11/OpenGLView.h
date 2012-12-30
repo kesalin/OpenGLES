@@ -13,22 +13,6 @@
 #import "GLESMath.h"
 
 //
-// DrawableVBO interface
-//
-@interface DrawableVBO : NSObject
-
-@property (nonatomic, assign) GLuint vertexBuffer;
-@property (nonatomic, assign) GLuint lineIndexBuffer;
-@property (nonatomic, assign) GLuint triangleIndexBuffer;
-@property (nonatomic, assign) int vertexSize;
-@property (nonatomic, assign) int lineIndexCount;
-@property (nonatomic, assign) int triangleIndexCount;
-
-- (void) cleanup;
-
-@end
-
-//
 // OpenGLView interface
 //
 @interface OpenGLView : UIView 

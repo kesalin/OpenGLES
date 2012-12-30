@@ -10,34 +10,7 @@
 #import "GLESUtils.h"
 #import "Quaternion.h"
 #import "TextureManager.h"
-
-//
-// DrawableVBO implementation
-//
-@implementation DrawableVBO
-
-@synthesize vertexBuffer, lineIndexBuffer, triangleIndexBuffer;
-@synthesize vertexSize, lineIndexCount, triangleIndexCount;
-
-- (void) cleanup
-{
-    if (vertexBuffer != 0) {
-        glDeleteBuffers(1, &vertexBuffer);
-        vertexBuffer = 0;
-    }
-    
-    if (lineIndexBuffer != 0) {
-        glDeleteBuffers(1, &lineIndexBuffer);
-        lineIndexBuffer = 0;
-    }
-    
-    if (triangleIndexBuffer) {
-        glDeleteBuffers(1, &triangleIndexBuffer);
-        triangleIndexBuffer = 0;
-    }
-}
-
-@end
+#import "DrawableVBOFactory.h"
 
 //
 // OpenGLView anonymous category
@@ -60,6 +33,7 @@
 - (void)destoryBuffers;
 
 - (void)setupProgram;
+- (void)getSlotsFromProgram;
 - (void)setupProjection;
 - (void)setupLight;
 
@@ -69,8 +43,10 @@
 - (void)setupVBOs;
 - (void)destoryVBOs;
 
-- (vec3)mapToSphere:(ivec2) touchpoint;
 - (void)updateSurface;
+- (void)drawSurface;
+
+- (vec3)mapToSphere:(ivec2) touchpoint;
 - (void)resetRotation;
 
 @end
@@ -214,26 +190,7 @@
     
     glUseProgram(_programHandle);
     
-    // Get the attribute and uniform slot from program
-    //
-    _projectionSlot = glGetUniformLocation(_programHandle, "projection");
-    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
-    _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
-
-    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
-    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
-    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
-    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
-    
-    _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
-    _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
-    _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
-    
-    _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
-    _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
-    _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
-    _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
-    _alphaSlot = glGetUniformLocation(_programHandle, "Alpha");
+    [self getSlotsFromProgram];
 }
 
 #pragma mark - Surface
@@ -248,95 +205,24 @@
     [self render];
 }
 
-- (DrawableVBO *)createVBOsForCube
-{
-    const GLfloat vertices[] = {
-        -1.5f, -1.5f, 1.5f, 0, 0, 1, 0, 1,
-        -1.5f, 1.5f, 1.5f, 0, 0, 1, 0, 0,
-        1.5f, 1.5f, 1.5f, 0, 0, 1, 1, 0,
-        1.5f, -1.5f, 1.5f, 0, 0, 1, 1, 1,
-        
-        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 0, 1,
-        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 0, 0,
-        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 1, 0,
-        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 1, 1,
-        
-        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1,
-        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350, 0, 0,
-        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350, 1, 0,
-        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 1, 1,
-        
-        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 0, 1,
-        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350, 0, 0,
-        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350, 1, 0,
-        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1,
-        
-        -1.5f, 1.5f, 1.5f, 0, 1, 0, 0, 2,
-        -1.5f, 1.5f, -1.5f, 0, 1, 0, 0, 0,
-        1.5f, 1.5f, -1.5f, 0, 1, 0, 2, 0,
-        1.5f, 1.5f, 1.5f, 0, 1, 0, 2, 2,
-        
-        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350, 0, 1,
-        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350, 0, 0,
-        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350, 1, 0,
-        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350, 1, 1
-    };
-    
-    const GLushort indices[] = {
-        // Front face
-        0, 1, 3, 1, 2, 3,
-        
-        // Back face
-        7, 5, 4, 7, 6, 5,
-        
-        // Left face
-        8, 9, 10, 8, 10, 11,
-        
-        // Right face
-        12, 13, 14, 12, 14, 15,
-        
-        // Up face
-        16, 17, 18, 16, 18, 19,
-        
-        // Down face
-        20, 21, 22, 20, 22, 23
-    };
-    
-    // Create the VBO for the vertice.
-    //
-    int vertexSize = 8;
-    GLuint vertexBuffer;
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    // Create the VBO for the triangle indice
-    //
-    int triangleIndexCount = sizeof(indices)/sizeof(indices[0]);
-    GLuint triangleIndexBuffer; 
-    glGenBuffers(1, &triangleIndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndexCount * sizeof(GLushort), indices, GL_STATIC_DRAW);
-    
-    DrawableVBO * vbo = [[DrawableVBO alloc] init];
-    vbo.vertexBuffer = vertexBuffer;
-    vbo.triangleIndexBuffer = triangleIndexBuffer;
-    vbo.vertexSize = vertexSize;
-    vbo.triangleIndexCount = triangleIndexCount;
-    
-    return vbo;
-}
-
 - (void)setupVBOs
 {
     if (_vboArray == nil) {
         _vboArray = [[NSMutableArray alloc] init];
         
-        DrawableVBO * vbo = [self createVBOsForCube];
+        DrawableVBO * vbo = [DrawableVBOFactory createDrawableVBO:SurfaceSphere];
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:0];
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCube];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceKleinBottle];
+        [_vboArray addObject:vbo];
+        vbo = nil;
+        
+        [self setCurrentSurface:1]; // Change model
     } 
 }
 
@@ -352,6 +238,30 @@
 
 
 #pragma mark - Draw object
+
+- (void)getSlotsFromProgram
+{
+    // Get the attribute and uniform slot from program
+    //
+    _projectionSlot = glGetUniformLocation(_programHandle, "projection");
+    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
+    _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
+    
+    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
+    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
+    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
+    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
+    
+    _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
+    _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
+    _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
+    
+    _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
+    _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
+    _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
+    _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
+    _alphaSlot = glGetUniformLocation(_programHandle, "Alpha");
+}
 
 -(void)setupProjection
 {

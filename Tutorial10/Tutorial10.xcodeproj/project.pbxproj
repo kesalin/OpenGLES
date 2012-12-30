@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		215CE66F168741CC009A8029 /* wooden.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 215CE66D168741C2009A8029 /* wooden.pvr */; };
+		217B297E168FE139005D2F2C /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 217B297D168FE139005D2F2C /* DrawableVBOFactory.mm */; };
 		2194C74516871C3F00600663 /* flower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74316871C2C00600663 /* flower.jpg */; };
 		2194C74916871ED200600663 /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 2194C74816871EC300600663 /* wooden.png */; };
 		219B99C916858C6E00A0E13C /* TextureLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 219B99C816858C6E00A0E13C /* TextureLoader.mm */; };
@@ -35,6 +36,8 @@
 		215CE66D168741C2009A8029 /* wooden.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = wooden.pvr; path = Texture/wooden.pvr; sourceTree = "<group>"; };
 		215CE6711687442E009A8029 /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTGlobal.h; path = PowerVR/PVRTGlobal.h; sourceTree = "<group>"; };
 		215CE6721687442E009A8029 /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTTexture.h; path = PowerVR/PVRTTexture.h; sourceTree = "<group>"; };
+		217B297C168FE139005D2F2C /* DrawableVBOFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableVBOFactory.h; path = Surface/DrawableVBOFactory.h; sourceTree = "<group>"; };
+		217B297D168FE139005D2F2C /* DrawableVBOFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DrawableVBOFactory.mm; path = Surface/DrawableVBOFactory.mm; sourceTree = "<group>"; };
 		2194C74316871C2C00600663 /* flower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = flower.jpg; path = Texture/flower.jpg; sourceTree = "<group>"; };
 		2194C74816871EC300600663 /* wooden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wooden.png; path = Texture/wooden.png; sourceTree = "<group>"; };
 		219B99C716858C6E00A0E13C /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = Utils/TextureLoader.h; sourceTree = "<group>"; };
@@ -197,6 +200,8 @@
 		21D1A2F2168F322300410011 /* Surface */ = {
 			isa = PBXGroup;
 			children = (
+				217B297C168FE139005D2F2C /* DrawableVBOFactory.h */,
+				217B297D168FE139005D2F2C /* DrawableVBOFactory.mm */,
 				21D1A2F4168F323C00410011 /* ParametricEquations.h */,
 				21D1A2F5168F323C00410011 /* ParametricSurface.cpp */,
 				21D1A2F6168F323C00410011 /* ParametricSurface.h */,
@@ -282,6 +287,7 @@
 				219B99C916858C6E00A0E13C /* TextureLoader.mm in Sources */,
 				219B99D41685B16300A0E13C /* TextureManager.m in Sources */,
 				21D1A2F7168F323C00410011 /* ParametricSurface.cpp in Sources */,
+				217B297E168FE139005D2F2C /* DrawableVBOFactory.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
