@@ -43,8 +43,10 @@
 
 - (void)setupVBOs;
 - (void)destoryVBOs;
-
 - (void)drawSurface:(DrawableVBO *)vbo;
+
+- (void)disableLight:(Boolean)disableLight disableTexture:(Boolean)disableTexture;
+- (void)updateTransform:(const KSMatrix4 *)projection modelView:(const KSMatrix4 *) modelView;
 
 - (vec3)mapToSphere:(ivec2) touchpoint;
 - (void)resetRotation;
@@ -55,15 +57,6 @@
 // OpenGLView implementation
 //
 @implementation OpenGLView
-
-@synthesize lightPosition = _lightPosition;
-@synthesize diffuse = _diffuse;
-@synthesize shininess = _shininess;
-@synthesize ambient = _ambient;
-@synthesize specular = _specular;
-@synthesize blendMode = _blendMode;
-@synthesize textureIndex = _textureIndex;
-@synthesize alpha = _alpha;
 
 #pragma mark- Initilize GL
 
@@ -292,22 +285,14 @@
     
     // Set up some default material parameters.
     //
-    _lightPosition.x = _lightPosition.y = 0.0;
-    _lightPosition.z = 1.0;
+    _lightPosition.x = _lightPosition.y = _lightPosition.z = 1.0;
     
     _ambient.r = _ambient.g = _ambient.b = 0.04f;
     _ambient.a = 0.5f;
 
     _specular.r = _specular.g = _specular.b = _specular.a = 0.5f;
-    
-    _diffuse.r = 1.0;
-    _diffuse.g = 1.0;
-    _diffuse.b = 1.0;
-    _diffuse.a = 1.0;
-
-    _shininess = 10;
-    _blendMode = 0;
-    _alpha = 0.5;    // alpha for blend mode 17
+    _diffuse.r = _diffuse.g = _diffuse.b = _diffuse.a = 0.8f;
+    _shininess = 20;
 }
 
 #pragma mark - Texture
@@ -381,7 +366,7 @@
     _disableLightSlot = glGetUniformLocation(_programHandle, "disableLight");
 }
 
-- (void)updateGLState:(Boolean)disableLight disableTexture:(Boolean)disableTexture
+- (void)disableLight:(Boolean)disableLight disableTexture:(Boolean)disableTexture
 {
     glUniform1i(_disableLightSlot, (disableLight ? 1 : 0));
     glUniform1i(_disableTextureSlot, (disableTexture ? 1 : 0));
@@ -471,7 +456,7 @@
     
     ksTranslate(&_modelViewMatrix, 0.0, mirrorY, 0.0);
 
-    [self updateGLState:YES disableTexture:YES];
+    [self disableLight:YES disableTexture:YES];
     [self updateTransform:&_projectionMatrix modelView:&_modelViewMatrix];
     [self drawSurface:mirror];
 
@@ -498,7 +483,7 @@
     [self updateLights];
     
     glBindTexture(GL_TEXTURE_2D, objectTexture);
-    [self updateGLState:NO disableTexture:NO];
+    [self disableLight:NO disableTexture:NO];
     [self updateTransform:&_mirrorProjectionMatrix modelView:&reflectionModelView];
     [self drawSurface:object];
 
@@ -527,7 +512,7 @@
                            GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);    // Alpha factors
     
     ksTranslate(&_modelViewMatrix, 0, mirrorY - objectY, 0);
-    [self updateGLState:YES disableTexture:NO];
+    [self disableLight:YES disableTexture:NO];
     [self updateTransform:&_projectionMatrix modelView:&_modelViewMatrix];
     [self drawSurface:mirror];
 
@@ -639,24 +624,5 @@
     return mapped / radius;
 }
 
-#pragma mark light Properties
-
-- (void)setLightPosition:(KSVec3)lightPosition
-{
-    _lightPosition = lightPosition;
-    [self render];
-}
-
--(void)setShininess:(GLfloat)shininess
-{
-    _shininess = shininess;
-    [self render];
-}
-
--(void)setDiffuse:(KSColor)diffuse
-{
-    _diffuse = diffuse;
-    [self render];
-}
 
 @end

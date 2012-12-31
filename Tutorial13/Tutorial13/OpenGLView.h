@@ -63,15 +63,6 @@
     GLuint _disableLightSlot;
 }
 
-@property (nonatomic, assign) KSVec3 lightPosition;
-@property (nonatomic, assign) KSColor ambient;
-@property (nonatomic, assign) KSColor specular;
-@property (nonatomic, assign) KSColor diffuse;
-@property (nonatomic, assign) GLfloat shininess;
-@property (nonatomic, assign) NSUInteger blendMode;
-@property (nonatomic, assign) NSUInteger textureIndex;
-@property (nonatomic, assign) GLfloat alpha;
-
 - (void)render;
 - (void)cleanup;
 
