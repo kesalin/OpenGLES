@@ -60,16 +60,21 @@
 - (void)destoryBuffers;
 
 - (void)setupProgram;
+- (void)getSlotsFromProgram;
 - (void)setupProjection;
-- (void)setupLight;
+
+- (void)setupLights;
+- (void)updateLights;
 
 - (DrawableVBO *)createVBO:(int)surfaceType;
 - (void)setupVBOs;
 - (void)destoryVBOs;
 
 - (ISurface *)createSurface:(int)surfaceType;
-- (vec3)mapToSphere:(ivec2) touchpoint;
 - (void)updateSurface;
+- (void)drawSurface:(DrawableVBO *)vbo;
+
+- (vec3)mapToSphere:(ivec2) touchpoint;
 - (void)resetRotation;
 
 @end
@@ -208,19 +213,7 @@
     
     glUseProgram(_programHandle);
     
-    // Get the attribute and uniform slot from program
-    //
-    _projectionSlot = glGetUniformLocation(_programHandle, "projection");
-    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
-    _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
-    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
-    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
-    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
-    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
-    
-    _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
-    _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
-    _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
+    [self getSlotsFromProgram];
 }
 
 #pragma mark - Surface
@@ -276,16 +269,17 @@ const int SurfaceMaxCount = 6;
 
 - (DrawableVBO *)createVBOsForCube
 {
+    const GLfloat size = 1.8f;
     const GLfloat vertices[] = {
-        -1.5f, -1.5f, 1.5f, -0.577350, -0.577350, 0.577350,
-        -1.5f, 1.5f, 1.5f, -0.577350, 0.577350, 0.577350,
-        1.5f, 1.5f, 1.5f, 0.577350, 0.577350, 0.577350,
-        1.5f, -1.5f, 1.5f, 0.577350, -0.577350, 0.577350,
+        -size, -size, size, -0.577350, -0.577350, 0.577350,
+        -size, size, size, -0.577350, 0.577350, 0.577350,
+        size, size, size, 0.577350, 0.577350, 0.577350,
+        size, -size, size, 0.577350, -0.577350, 0.577350,
         
-        1.5f, -1.5f, -1.5f, 0.577350, -0.577350, -0.577350,
-        1.5f, 1.5f, -1.5f, 0.577350, 0.577350, -0.577350,
-        -1.5f, 1.5f, -1.5f, -0.577350, 0.577350, -0.577350,
-        -1.5f, -1.5f, -1.5f, -0.577350, -0.577350, -0.577350
+        size, -size, -size, 0.577350, -0.577350, -0.577350,
+        size, size, -size, 0.577350, 0.577350, -0.577350,
+        -size, size, -size, -0.577350, 0.577350, -0.577350,
+        -size, -size, -size, -0.577350, -0.577350, -0.577350
     };
     
     const GLushort indices[] = {
@@ -410,28 +404,44 @@ const int SurfaceMaxCount = 6;
     _currentVBO = nil;
 }
 
+- (void)drawSurface:(DrawableVBO *)vbo
+{
+    if (vbo == nil)
+        return;
+    
+    int stride = [vbo vertexSize] * sizeof(GLfloat);
+    const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
+    
+    glBindBuffer(GL_ARRAY_BUFFER, [vbo vertexBuffer]);
+    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
+    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);    
+    
+    // Draw the triangles.
+    //
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [vbo triangleIndexBuffer]);
+    glDrawElements(GL_TRIANGLES, [vbo triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+}
 
 #pragma mark - Draw object
 
--(void)setupProjection
+- (void)getSlotsFromProgram
 {
-    float width = self.frame.size.width;
-    float height = self.frame.size.height;
-    
-    // Generate a perspective matrix with a 60 degree FOV
+    // Get the attribute and uniform slot from program
     //
-    ksMatrixLoadIdentity(&_projectionMatrix);
-    float aspect = width / height;
-    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 10.0f);
+    _projectionSlot = glGetUniformLocation(_programHandle, "projection");
+    _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
+    _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
+    _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
+    _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
+    _specularSlot = glGetUniformLocation(_programHandle, "vSpecularMaterial");
+    _shininessSlot = glGetUniformLocation(_programHandle, "shininess");
     
-    // Load projection matrix
-    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
-    
-    //glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
+    _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
+    _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
+    _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
 }
 
-- (void)setupLight
+- (void)setupLights
 {                 
     // Initialize various state.
     //
@@ -451,11 +461,20 @@ const int SurfaceMaxCount = 6;
     _shininess = 10;
 }
 
+- (void)updateLights
+{
+    glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
+    glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
+    glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
+    glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
+    glUniform1f(_shininessSlot, _shininess);
+}
+
 - (void)updateSurface
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -7);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
     
     ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     
@@ -469,31 +488,25 @@ const int SurfaceMaxCount = 6;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
     
-    // Update light
-    //
-    glUniform3f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b);
-    glUniform3f(_specularSlot, _specular.r, _specular.g, _specular.b);
-    glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
-    glVertexAttrib3f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b);
-    glUniform1f(_shininessSlot, _shininess);
+    [self updateLights];
 }
 
-- (void)drawSurface
+- (void)setupProjection
 {
-    if (_currentVBO == nil)
-        return;
+    float width = self.frame.size.width;
+    float height = self.frame.size.height;
     
-    int stride = [_currentVBO vertexSize] * sizeof(GLfloat);
-    const GLvoid* normalOffset = (const GLvoid*)(3 * sizeof(GLfloat));
-
-    glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
-    glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
-    glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);    
-    
-    // Draw the triangles.
+    // Generate a perspective matrix with a 60 degree FOV
     //
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, [_currentVBO triangleIndexBuffer]);
-    glDrawElements(GL_TRIANGLES, [_currentVBO triangleIndexCount], GL_UNSIGNED_SHORT, 0);
+    ksMatrixLoadIdentity(&_projectionMatrix);
+    float aspect = width / height;
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 4.0f, 20.0f);
+    
+    // Load projection matrix
+    glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
+    
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 }
 
 - (void)render
@@ -509,7 +522,7 @@ const int SurfaceMaxCount = 6;
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);    
     
     [self updateSurface];
-    [self drawSurface];
+    [self drawSurface:_currentVBO];
 
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -525,7 +538,7 @@ const int SurfaceMaxCount = 6;
         [self setupProgram];
         [self setupProjection];
         
-        [self setupLight];
+        [self setupLights];
         
         [self resetRotation];
     }

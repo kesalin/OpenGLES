@@ -4,12 +4,12 @@ attribute vec4 vPosition;
 
 uniform mat3 normalMatrix;
 uniform vec3 vLightPosition;
-uniform vec3 vAmbientMaterial;
-uniform vec3 vSpecularMaterial;
+uniform vec4 vAmbientMaterial;
+uniform vec4 vSpecularMaterial;
 uniform float shininess;
 
 attribute vec3 vNormal;
-attribute vec3 vDiffuseMaterial;
+attribute vec4 vDiffuseMaterial;
 
 varying vec4 vDestinationColor;
 
@@ -26,8 +26,7 @@ void main(void)
     float sf = max(0.0, dot(N, H));
     sf = pow(sf, shininess);
 
-    vec3 color = vAmbientMaterial + df * vDiffuseMaterial + sf * vSpecularMaterial;
-    vDestinationColor = vec4(color, 1);
+    vDestinationColor = vAmbientMaterial + df * vDiffuseMaterial + sf * vSpecularMaterial;
     
     //vDestinationColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
