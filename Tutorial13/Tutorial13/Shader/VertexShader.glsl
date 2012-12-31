@@ -30,6 +30,6 @@ void main(void)
 
     vec4 color = vAmbientMaterial + df * vDiffuseMaterial + sf * vSpecularMaterial;
     vDestinationColor = color;
-    vDestinationColor = df * vDiffuseMaterial;
+    //vDestinationColor = df * vDiffuseMaterial;
     vTextureCoordOut = vTextureCoord;
 }

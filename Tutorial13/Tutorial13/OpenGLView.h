@@ -20,8 +20,9 @@
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
     GLuint _colorRenderBuffer;
-    GLuint _depthRenderBuffer;
-    GLuint _stencilRenderBuffer;
+    GLuint _depthStencilRenderBuffer;
+    //GLuint _depthRenderBuffer;
+    //GLuint _stencilRenderBuffer;
     GLuint _frameBuffer;
     
     GLuint _programHandle;
@@ -73,6 +74,5 @@
 
 - (void)render;
 - (void)cleanup;
-- (void)setCurrentSurface:(int)index;
 
 @end

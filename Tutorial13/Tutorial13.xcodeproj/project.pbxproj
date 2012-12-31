@@ -23,10 +23,7 @@
 		21E94A71169060E700FBDB0B /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21E94A6E169060E700FBDB0B /* ParametricSurface.cpp */; };
 		21E94A811690617400FBDB0B /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7A1690612F00FBDB0B /* FragmentShader.glsl */; };
 		21E94A821690617400FBDB0B /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7B1690612F00FBDB0B /* VertexShader.glsl */; };
-		21E94A831690617400FBDB0B /* CS.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7C1690614800FBDB0B /* CS.png */; };
 		21E94A841690617400FBDB0B /* detail.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7D1690614800FBDB0B /* detail.png */; };
-		21E94A851690617400FBDB0B /* flower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7E1690614800FBDB0B /* flower.jpg */; };
-		21E94A861690617400FBDB0B /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A7F1690614800FBDB0B /* light.png */; };
 		21E94A871690617400FBDB0B /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E94A801690614800FBDB0B /* wooden.png */; };
 		21E94A891690617C00FBDB0B /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E94A881690617C00FBDB0B /* OpenGLES.framework */; };
 		21E94A8B1690618200FBDB0B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21E94A8A1690618200FBDB0B /* QuartzCore.framework */; };
@@ -66,10 +63,7 @@
 		21E94A741690610800FBDB0B /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTTexture.h; path = PowerVR/PVRTTexture.h; sourceTree = "<group>"; };
 		21E94A7A1690612F00FBDB0B /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = FragmentShader.glsl; path = Shader/FragmentShader.glsl; sourceTree = "<group>"; };
 		21E94A7B1690612F00FBDB0B /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = VertexShader.glsl; path = Shader/VertexShader.glsl; sourceTree = "<group>"; };
-		21E94A7C1690614800FBDB0B /* CS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CS.png; path = Texture/CS.png; sourceTree = "<group>"; };
 		21E94A7D1690614800FBDB0B /* detail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = detail.png; path = Texture/detail.png; sourceTree = "<group>"; };
-		21E94A7E1690614800FBDB0B /* flower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = flower.jpg; path = Texture/flower.jpg; sourceTree = "<group>"; };
-		21E94A7F1690614800FBDB0B /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = light.png; path = Texture/light.png; sourceTree = "<group>"; };
 		21E94A801690614800FBDB0B /* wooden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wooden.png; path = Texture/wooden.png; sourceTree = "<group>"; };
 		21E94A881690617C00FBDB0B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21E94A8A1690618200FBDB0B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -156,10 +150,7 @@
 		21E94A5A169060C000FBDB0B /* Texture */ = {
 			isa = PBXGroup;
 			children = (
-				21E94A7C1690614800FBDB0B /* CS.png */,
 				21E94A7D1690614800FBDB0B /* detail.png */,
-				21E94A7E1690614800FBDB0B /* flower.jpg */,
-				21E94A7F1690614800FBDB0B /* light.png */,
 				21E94A801690614800FBDB0B /* wooden.png */,
 			);
 			name = Texture;
@@ -265,10 +256,7 @@
 			files = (
 				21E94A811690617400FBDB0B /* FragmentShader.glsl in Resources */,
 				21E94A821690617400FBDB0B /* VertexShader.glsl in Resources */,
-				21E94A831690617400FBDB0B /* CS.png in Resources */,
 				21E94A841690617400FBDB0B /* detail.png in Resources */,
-				21E94A851690617400FBDB0B /* flower.jpg in Resources */,
-				21E94A861690617400FBDB0B /* light.png in Resources */,
 				21E94A871690617400FBDB0B /* wooden.png in Resources */,
 				21E94A481690608200FBDB0B /* InfoPlist.strings in Resources */,
 				21E94A511690608200FBDB0B /* MainStoryboard.storyboard in Resources */,
@@ -403,6 +391,7 @@
 				21E94A591690608300FBDB0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

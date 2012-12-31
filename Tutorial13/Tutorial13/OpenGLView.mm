@@ -18,7 +18,6 @@
 @interface OpenGLView()
 {
     NSMutableArray * _vboArray; 
-    DrawableVBO * _currentVBO;
     
     ivec2 _fingerStart;
     Quaternion _orientation;
@@ -116,18 +115,17 @@
     int width, height;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-    
-    // Create a depth buffer that has the same size as the color buffer.
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
-    
-    // Create a stencil buffer.
-    
-    glGenRenderbuffers(1, &_stencilRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _stencilRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
 
+    // Create a depth buffer & stencil buffer that has the same size as the color buffer.
+    // NOTES:
+    // In OpenGL ES 2.0 on iOS, you have to create a combined depth and stencil renderbuffer
+    // using GL_DEPTH24_STENCIL8_OES, and then attach it to the bound framebuffer as both
+    // GL_DEPTH_ATTACHMENT and GL_STENCIL_ATTACHMENT.
+    //
+    glGenRenderbuffers(1, &_depthStencilRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthStencilRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
+    
     // Setup frame buffer
     //
     glGenFramebuffers(1, &_frameBuffer);
@@ -138,8 +136,40 @@
                               GL_RENDERBUFFER, _colorRenderBuffer);
     
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                              GL_RENDERBUFFER, _depthRenderBuffer);
+                              GL_RENDERBUFFER, _depthStencilRenderBuffer);
     
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                              GL_RENDERBUFFER, _depthStencilRenderBuffer);
+    
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status != GL_FRAMEBUFFER_COMPLETE) {
+        NSLog(@"Failed to setup framebuffer.");
+    }
+    
+//    // Create a depth buffer that has the same size as the color buffer.
+//    //
+//    glGenRenderbuffers(1, &_depthRenderBuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+//    
+//    // Create a stencil buffer.
+//    //
+//    glGenRenderbuffers(1, &_stencilRenderBuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, _stencilRenderBuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
+//
+//    // Setup frame buffer
+//    //
+//    glGenFramebuffers(1, &_frameBuffer);
+//    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+//    
+//    // Attach color render buffer and depth render buffer to frameBuffer
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+//                              GL_RENDERBUFFER, _colorRenderBuffer);
+//    
+//    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+//                              GL_RENDERBUFFER, _depthRenderBuffer);
+//    
 //    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
 //                              GL_RENDERBUFFER, _stencilRenderBuffer);
     
@@ -158,8 +188,9 @@
 
 - (void)destoryBuffers
 {
-    [self destoryBuffer: &_stencilRenderBuffer];
-    [self destoryBuffer: &_depthRenderBuffer];
+    [self destoryBuffer: &_depthStencilRenderBuffer];
+//    [self destoryBuffer: &_stencilRenderBuffer];
+//    [self destoryBuffer: &_depthRenderBuffer];
     [self destoryBuffer: &_colorRenderBuffer];
     [self destoryBuffer: &_frameBuffer];
 }
@@ -206,34 +237,18 @@
 
 #pragma mark - Surface
 
-- (void)setCurrentSurface:(int)index
-{
-    index = index % [_vboArray count];
-    _currentVBO = [_vboArray objectAtIndex:index];
-    
-    [self resetRotation];
-
-    [self render];
-}
-
 - (void)setupVBOs
 {
     if (_vboArray == nil) {
         _vboArray = [[NSMutableArray alloc] init];
         
-        DrawableVBO * vbo = [DrawableVBOFactory createDrawableVBO:SurfaceKleinBottle];
+        DrawableVBO * vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCone];
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceCone];
+        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceKleinBottle];
         [_vboArray addObject:vbo];
         vbo = nil;
-        
-        vbo = [DrawableVBOFactory createDrawableVBO:SurfaceQuad];
-        [_vboArray addObject:vbo];
-        vbo = nil;
-        
-        [self setCurrentSurface:1]; // Change model
     } 
 }
 
@@ -243,8 +258,6 @@
         [vbo cleanup];
     }
     _vboArray = nil;
-    
-    _currentVBO = nil;
 }
 
 - (void)drawSurface:(DrawableVBO *)vbo
@@ -302,12 +315,10 @@
 - (void)setupTextures
 {    
     NSArray * textureFiles = [NSArray arrayWithObjects:
-                              @"wooden.png",
-                              @"flower.jpg",
-                              @"cs.png",
-                              @"light.png",
                               @"detail.png",
+                              @"wooden.png",
                               nil];
+
     _textureCount = [textureFiles count];
     _textures = new GLuint[_textureCount];
     
@@ -322,16 +333,18 @@
 
     _textureIndex = 0;              // Current texture index for texture stage 1
     
-    glUniform1i(_sampler0Slot, 0);  // texture stage 0
+    glUniform1i(_sampler0Slot, 0);                  // texture stage 0
     glEnableVertexAttribArray(_textureCoordSlot);   // Enable texture coord
 }
 
 - (void)destoryTextures
 {
     if (_textures != NULL) {
-        for (NSUInteger i = 0; i < 4; i++) {
+        for (NSUInteger i = 0; i < _textureCount; i++) {
             [TextureHelper deleteTexture:&_textures[i]];
         }
+
+        _textures = NULL;
     }
 }
 
@@ -404,23 +417,16 @@
     float width = self.frame.size.width;
     float height = self.frame.size.height;
     
-    //float shift = -1.25;
-    float near = 5;
-    float far = 50;
-    
     // Generate a perspective matrix with a 60 degree FOV
     //
     ksMatrixLoadIdentity(&_projectionMatrix);
     ksMatrixLoadIdentity(&_mirrorProjectionMatrix);
     
     float aspect = width / height;
-    ksPerspective(&_projectionMatrix, 60.0, aspect, near, far);
+    ksPerspective(&_projectionMatrix, 60.0, aspect, 5, 20);
     
     ksCopyMatrix4(&_mirrorProjectionMatrix, &_projectionMatrix);
     ksScale(&_mirrorProjectionMatrix, 1.0, -1.0, 1.0);
-    
-    //    ksFrustum(&_projectionMatrix, -1, 1, -aspect, aspect, near, far);
-    //    ksFrustum(&_projectionMatrix, -1, 1, aspect + shift, -aspect + shift, near, far);
     
     // Initialize states
     //
@@ -433,18 +439,14 @@
     if (_context == nil)
         return;
 
-    const float DiskY = -1.35f;
-    const float KnotY = 2.5f;
-    GLfloat theta = 0.0;
+    const float mirrorY = -1.5f;
+    const float objectY = 2.5f;
     
-    DrawableVBO * disk = [_vboArray objectAtIndex:1];
-    GLuint diskTexture = _textures[4];
+    DrawableVBO * mirror = [_vboArray objectAtIndex:0];
+    GLuint mirrorTexture = _textures[0];
     
-    DrawableVBO * knot = [_vboArray objectAtIndex:0];
-    GLuint knotTexture = _textures[0];
-    
-//    DrawableVBO * bgQuad = [_vboArray objectAtIndex:2];
-//    GLuint bgTexture = _textures[0];
+    DrawableVBO * object = [_vboArray objectAtIndex:1];
+    GLuint objectTexture = _textures[1];
     
     glClearColor(0.0f, 1.0f, 0.0f, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -457,24 +459,23 @@
     ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
     ksRotate(&_modelViewMatrix, 30, 1, 0, 0);
 
-    // Render the disk to the stencil buffer
+    // Render the mirror to the stencil buffer
     //
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, 0xff, 0xff);
     glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
     
-    glStencilMask(GL_TRUE);
     glDepthMask(GL_FALSE);
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     
-    ksTranslate(&_modelViewMatrix, 0.0, DiskY, 0.0);
+    ksTranslate(&_modelViewMatrix, 0.0, mirrorY, 0.0);
 
     [self updateGLState:YES disableTexture:YES];
     [self updateTransform:&_projectionMatrix modelView:&_modelViewMatrix];
-    [self drawSurface:disk];
+    [self drawSurface:mirror];
 
-    ksTranslate(&_modelViewMatrix, 0.0, -DiskY, 0.0);
+    ksTranslate(&_modelViewMatrix, 0.0, -mirrorY, 0.0);
     
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDepthMask(GL_TRUE);
@@ -485,10 +486,9 @@
     //
     glStencilFunc(GL_EQUAL, 0xff, 0xff);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-    glBindTexture(GL_TEXTURE_2D, knotTexture);
+    glBindTexture(GL_TEXTURE_2D, objectTexture);
     
-    ksRotate(&_modelViewMatrix, theta, 0, 1, 0);
-    ksTranslate(&_modelViewMatrix, 0, KnotY, 0);
+    ksTranslate(&_modelViewMatrix, 0, objectY, 0);
     KSMatrix4 reflectionModelView;
     ksCopyMatrix4(&reflectionModelView, &_modelViewMatrix);
     ksMatrixMultiply(&reflectionModelView, &_rotationMatrix, &reflectionModelView);
@@ -497,12 +497,11 @@
     _diffuse.a = 0.6;
     [self updateLights];
     
-    glBindTexture(GL_TEXTURE_2D, knotTexture);
+    glBindTexture(GL_TEXTURE_2D, objectTexture);
     [self updateGLState:NO disableTexture:NO];
     [self updateTransform:&_mirrorProjectionMatrix modelView:&reflectionModelView];
-    [self drawSurface:knot];
-    
-    glStencilMask(GL_FALSE);
+    [self drawSurface:object];
+
     glDisable(GL_STENCIL_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     
@@ -517,41 +516,26 @@
     ksCopyMatrix4(&knotModelView, &_modelViewMatrix);
     ksMatrixMultiply(&knotModelView, &_rotationMatrix, &knotModelView);
     [self updateTransform:&_projectionMatrix modelView:&knotModelView];
-    [self drawSurface:knot];
+    [self drawSurface:object];
     
     
-    // Render the disk with front-to-back blending.
+    // Render the mirror with front-to-back blending.
     //
-    ksTranslate(&_modelViewMatrix, 0, DiskY - KnotY, 0);
-    glBindTexture(GL_TEXTURE_2D, diskTexture);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, mirrorTexture);
     glBlendFuncSeparate(GL_DST_ALPHA, GL_ONE,                   // RGB factors
                            GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);    // Alpha factors
     
-    glEnable(GL_BLEND);
-    ksRotate(&_modelViewMatrix, -theta, 0, 1, 0);
-
-    glBindTexture(GL_TEXTURE_2D, diskTexture);
+    ksTranslate(&_modelViewMatrix, 0, mirrorY - objectY, 0);
     [self updateGLState:YES disableTexture:NO];
     [self updateTransform:&_projectionMatrix modelView:&_modelViewMatrix];
-    [self drawSurface:disk];
-    
-    
-    // Render the background.
-    //
-    //glColor4f(0.5, 0.5, 0.5, 1);
-//    glBindTexture(GL_TEXTURE_2D, bgTexture);
-//
-//    float near = 5.0;
-//    KSMatrix4 bgModelView;
-//    ksMatrixLoadIdentity(&bgModelView);
-//    ksTranslate(&bgModelView, 0, 0, -near * 2);
-//    
-//    [self updateTransform:&_projectionMatrix modelView:&bgModelView];
-//    [self drawSurface:bgQuad];
-//    //glColor4f(1, 1, 1, 1);
+    [self drawSurface:mirror];
 
     glDisable(GL_BLEND);
     
+    
+    // present render buffer
+    //
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
