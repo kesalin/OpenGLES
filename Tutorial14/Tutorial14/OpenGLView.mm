@@ -58,6 +58,8 @@
 //
 @implementation OpenGLView
 
+@synthesize textureMode = _textureMode;
+
 #pragma mark- Initilize GL
 
 + (Class)layerClass {
@@ -215,7 +217,7 @@
         [_vboArray addObject:vbo];
         vbo = nil;
         
-        [self setCurrentSurface:1]; // Change model
+        [self setCurrentSurface:0]; // Change model
     } 
 }
 
@@ -250,50 +252,48 @@
     _diffuse.r = _diffuse.g = _diffuse.b = _diffuse.a = 0.8;
     
     _shininess = 20;
-    _blendMode = 17;
-    _alpha = 0.6;    // alpha for blend mode 17
-    
-    [self updateLights];
 }
 
 - (void)updateLights
 {
-    // Update light
-    //
-    glUniform1i(_blendModeSlot, _blendMode);
     glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
     glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
     glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
     glVertexAttrib4f(_diffuseSlot, _diffuse.r, _diffuse.g, _diffuse.b, _diffuse.a);
     glUniform1f(_shininessSlot, _shininess);
-    glUniform1f(_alphaSlot, _alpha);
 }
 
 #pragma mark - Texture
 
 - (void)setupTextures
 {
-    // Load texture for stage 0
+    // Load texture for stage 0 - Cubemap
     //
 	glActiveTexture(GL_TEXTURE0);
-    _textureForStage0 = [TextureHelper createTexture:@"wooden.png" isPVR:FALSE];
+    _textureCubemap = [TextureHelper createTextureCubemap:@"wooden.png"];
     
-    // Load texture for stage 1
+    // Load texture for stage 1 - 2D
     //
     glActiveTexture(GL_TEXTURE1);
-    _textureForStage1 = [TextureHelper createTexture:@"cs.png" isPVR:FALSE];
-
+    _texture2D = [TextureHelper createTexture:@"wooden.png" isPVR:FALSE];
     
-    glUniform1i(_sampler0Slot, 0);  // texture stage 0
-    glUniform1i(_sampler1Slot, 1);  // texture stage 1
+    glUniform1i(_samplerCubemapSlot, 0);
+    glUniform1i(_sampler2DSlot, 1);
     
     glEnableVertexAttribArray(_textureCoordSlot);   // Enable texture coord
+    
+    _textureMode = 0;   // default cube map
+}
+
+- (void)updateTextures
+{
+    glUniform1i(_textureModeSlot, _textureMode);
 }
 
 - (void)destoryTextures
 {
-    [TextureHelper deleteTexture:&_textureForStage0];
-    [TextureHelper deleteTexture:&_textureForStage1];
+    [TextureHelper deleteTexture:&_textureCubemap];
+    [TextureHelper deleteTexture:&_texture2D];
 }
 
 #pragma mark - Draw object
@@ -314,12 +314,11 @@
     _positionSlot = glGetAttribLocation(_programHandle, "vPosition");
     _normalSlot = glGetAttribLocation(_programHandle, "vNormal");
     _diffuseSlot = glGetAttribLocation(_programHandle, "vDiffuseMaterial");
-    
+
+    _textureModeSlot = glGetUniformLocation(_programHandle, "textureMode");
+    _samplerCubemapSlot = glGetUniformLocation(_programHandle, "samplerForCube");
+    _sampler2DSlot = glGetUniformLocation(_programHandle, "samplerFor2D");
     _textureCoordSlot = glGetAttribLocation(_programHandle, "vTextureCoord");
-    _sampler0Slot = glGetUniformLocation(_programHandle, "Sampler0");
-    _sampler1Slot = glGetUniformLocation(_programHandle, "Sampler1");
-    _blendModeSlot = glGetUniformLocation(_programHandle, "BlendMode");
-    _alphaSlot = glGetUniformLocation(_programHandle, "Alpha");
 }
 
 -(void)setupProjection
@@ -339,6 +338,7 @@
     // Initialize states
     //
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 }
 
 - (void)resetRotation
@@ -352,7 +352,7 @@
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -8);
+    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -9);
     
     ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
     
@@ -365,6 +365,10 @@
     KSMatrix3 normalMatrix3;
     ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
+    
+    [self updateLights];
+    
+    [self updateTextures];
 }
 
 - (void)drawSurface
@@ -379,7 +383,6 @@
     glBindBuffer(GL_ARRAY_BUFFER, [_currentVBO vertexBuffer]);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(_normalSlot, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
-    
     glVertexAttribPointer(_textureCoordSlot, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
     
     // Draw the triangles.
@@ -504,4 +507,12 @@
     return mapped / radius;
 }
 
+#pragma mark - properties
+
+- (void) setTextureMode:(GLint)textureMode
+{
+    _textureMode = textureMode;
+    
+    [self render];
+}
 @end

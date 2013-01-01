@@ -14,6 +14,7 @@ attribute vec3 vDiffuseMaterial;
 
 varying vec4 vDestinationColor;
 varying vec2 vTextureCoordOut;
+varying vec3 vDestinationNormal;
 
 void main(void)
 {
@@ -32,4 +33,5 @@ void main(void)
     vDestinationColor = vec4(color, 1);
     
     vTextureCoordOut = vTextureCoord;
+    vDestinationNormal = vNormal;
 }

@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong) IBOutlet OpenGLView * openglView;
 
+- (IBAction)textureModeSegmentValueChanged:(id)sender;
+
 @end

@@ -49,18 +49,17 @@
     
     // For texture
     //
+    GLint _samplerCubemapSlot;
+    GLint _sampler2DSlot;
+    GLint _textureModeSlot;
     GLint _textureCoordSlot;
-    GLint _sampler0Slot;
-    GLint _sampler1Slot;
-    GLint _blendModeSlot;
-    GLint _alphaSlot;
     
-    GLuint _textureForStage0;
-    GLuint _textureForStage1;
-    NSUInteger _blendMode;
-    GLfloat _alpha;
+    GLuint _textureCubemap;
+    GLuint _texture2D;
+    GLint _textureMode;
 }
 
+@property (nonatomic, assign) GLint textureMode;
 
 - (void)render;
 - (void)cleanup;

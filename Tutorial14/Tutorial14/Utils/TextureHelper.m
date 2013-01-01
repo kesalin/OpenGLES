@@ -160,6 +160,91 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
++ (void)setImageTextureCubmap:(TextureLoader *)loader
+{
+    void* pixels = [loader imageData];
+    CGSize size = [loader imageSize];
+    
+    GLenum format;
+    TextureFormat tf = [loader textureFormat];
+    switch (tf) {
+        case TextureFormatGray:
+            format = GL_LUMINANCE;
+            break;
+        case TextureFormatGrayAlpha:
+            format = GL_LUMINANCE_ALPHA;
+            break;
+        case TextureFormatRGB:
+            format = GL_RGB;
+            break;
+        case TextureFormatRGBA:
+            format = GL_RGBA;
+            break;
+            
+        default:
+            NSLog(@"ERROR: invalid texture format! %d", tf);
+            break;
+    }
+    
+    GLenum type;
+    int bitsPerComponent = [loader bitsPerComponent];
+    switch (bitsPerComponent) {
+        case 8:
+            type = GL_UNSIGNED_BYTE;
+            break;
+        case 4:
+            if (format == GL_RGBA) {
+                type = GL_UNSIGNED_SHORT_4_4_4_4;
+                break;
+            }
+            // fall through
+        default:
+            NSLog(@"ERROR: invalid texture format! %d, bitsPerComponent %d", tf, bitsPerComponent);
+            break;
+    }
+    
+    // Load the cube face
+    //
+    // X
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, size.width, size.height, 0, format, type, pixels);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, size.width, size.height, 0, format, type, pixels);
+    
+    // Y
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, size.width, size.height, 0, format, type, pixels);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, size.width, size.height, 0, format, type, pixels);    
+    
+    // Z
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
+    
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+// Create a simple cubemap with a 1x1 face with a different color for each face
+//
++ (GLuint)createTextureCubemap:(NSString *)textureFile
+{
+    TextureLoader * loader = [[TextureLoader alloc] init];
+    [loader loadImage:textureFile isPOT:FALSE];
+    
+    GLuint textureHandle = 0;
+    glGenTextures(1, &textureHandle);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureHandle);
+    
+    glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    [self setImageTextureCubmap:loader];
+    
+    [loader unload];
+    loader = nil;
+    
+    return textureHandle;
+}
+
 + (GLuint)createTexture:(NSString *)textureFile isPVR:(Boolean)isPVR
 {
     TextureLoader * loader = [[TextureLoader alloc] init];
@@ -171,7 +256,6 @@
     }
     
     GLuint textureHandle = 0;
-    
     glGenTextures(1, &textureHandle);
     glBindTexture(GL_TEXTURE_2D, textureHandle);
     

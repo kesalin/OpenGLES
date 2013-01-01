@@ -62,4 +62,14 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#pragma mark - UI Events
+
+- (void)textureModeSegmentValueChanged:(id)sender
+{
+    UISegmentedControl * segment = (UISegmentedControl *)sender;
+    NSInteger value = [segment selectedSegmentIndex];
+    
+    self.openglView.textureMode = value;
+}
+
 @end

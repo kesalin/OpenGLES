@@ -11,6 +11,7 @@
 @interface TextureHelper : NSObject
 
 + (GLuint)createTexture:(NSString *)textureFilename isPVR:(Boolean)isPVR;
++ (GLuint)createTextureCubemap:(NSString *)textureFilename;
 + (void)deleteTexture:(GLuint *)textureHandle;
 
 @end
