@@ -217,7 +217,7 @@
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
     glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
     
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
 // Create a simple cubemap with a 1x1 face with a different color for each face
