@@ -73,7 +73,7 @@ https://github.com/kesalin/OpenGLES/blob/master/Tutorial12/Tutorial12-Texture%20
 Tutorial13: Stencil Buffer
 https://github.com/kesalin/OpenGLES/blob/master/Tutorial13/Tutorial13-Stencil%20Buffer.png
 
-Tutorial13: Cubemap Texture
+Tutorial14: Cubemap Texture
 https://github.com/kesalin/OpenGLES/blob/master/Tutorial14/Tutorial14-TextureCube.png
 
 
