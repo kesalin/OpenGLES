@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21361FF116971564004B9D1E /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 21361FEC16971564004B9D1E /* GLESUtils.m */; };
+		21361FF216971564004B9D1E /* ksMatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 21361FED16971564004B9D1E /* ksMatrix.c */; };
+		21361FF316971564004B9D1E /* ksVector.c in Sources */ = {isa = PBXBuildFile; fileRef = 21361FEF16971564004B9D1E /* ksVector.c */; };
 		21C124FA167D9B8D00E80909 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21C124F9167D9B8D00E80909 /* icon.png */; };
 		21D50FBA16639C56001D4B74 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D50FB916639C56001D4B74 /* UIKit.framework */; };
 		21D50FBC16639C56001D4B74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D50FBB16639C56001D4B74 /* Foundation.framework */; };
@@ -16,16 +19,20 @@
 		21D50FCA16639C56001D4B74 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D50FC916639C56001D4B74 /* AppDelegate.m */; };
 		21D50FCD16639C56001D4B74 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D50FCB16639C56001D4B74 /* MainStoryboard.storyboard */; };
 		21D50FD016639C56001D4B74 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D50FCF16639C56001D4B74 /* ViewController.m */; };
-		21D50FDE1663A1D8001D4B74 /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D50FDB1663A1D8001D4B74 /* GLESUtils.m */; };
 		21D50FDF1663A1D8001D4B74 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D50FDD1663A1D8001D4B74 /* OpenGLView.m */; };
 		21D50FE21663A1F0001D4B74 /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21D50FE01663A1E4001D4B74 /* FragmentShader.glsl */; };
 		21D50FE31663A1F0001D4B74 /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 21D50FE11663A1E4001D4B74 /* VertexShader.glsl */; };
 		21D50FE51663A2A7001D4B74 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D50FE41663A2A7001D4B74 /* QuartzCore.framework */; };
 		21D50FE71663A2B0001D4B74 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D50FE61663A2B0001D4B74 /* OpenGLES.framework */; };
-		21D5100C1663ADB1001D4B74 /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 21D5100B1663ADB1001D4B74 /* GLESMath.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21361FEB16971564004B9D1E /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESUtils.h; path = Utils/GLESUtils.h; sourceTree = "<group>"; };
+		21361FEC16971564004B9D1E /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLESUtils.m; path = Utils/GLESUtils.m; sourceTree = "<group>"; };
+		21361FED16971564004B9D1E /* ksMatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ksMatrix.c; path = Utils/ksMatrix.c; sourceTree = "<group>"; };
+		21361FEE16971564004B9D1E /* ksMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ksMatrix.h; path = Utils/ksMatrix.h; sourceTree = "<group>"; };
+		21361FEF16971564004B9D1E /* ksVector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ksVector.c; path = Utils/ksVector.c; sourceTree = "<group>"; };
+		21361FF016971564004B9D1E /* ksVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ksVector.h; path = Utils/ksVector.h; sourceTree = "<group>"; };
 		21C124F9167D9B8D00E80909 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 		21D50FB516639C56001D4B74 /* Tutorial03.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial03.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21D50FB916639C56001D4B74 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -40,16 +47,12 @@
 		21D50FCC16639C56001D4B74 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		21D50FCE16639C56001D4B74 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		21D50FCF16639C56001D4B74 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		21D50FDA1663A1D8001D4B74 /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLESUtils.h; sourceTree = "<group>"; };
-		21D50FDB1663A1D8001D4B74 /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
 		21D50FDC1663A1D8001D4B74 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		21D50FDD1663A1D8001D4B74 /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		21D50FE01663A1E4001D4B74 /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
 		21D50FE11663A1E4001D4B74 /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; };
 		21D50FE41663A2A7001D4B74 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		21D50FE61663A2B0001D4B74 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		21D5100B1663ADB1001D4B74 /* GLESMath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GLESMath.c; sourceTree = "<group>"; };
-		21D5100D1663ADC4001D4B74 /* GLESMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLESMath.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,10 +133,12 @@
 		21D5100E1663ADCE001D4B74 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				21D5100B1663ADB1001D4B74 /* GLESMath.c */,
-				21D5100D1663ADC4001D4B74 /* GLESMath.h */,
-				21D50FDA1663A1D8001D4B74 /* GLESUtils.h */,
-				21D50FDB1663A1D8001D4B74 /* GLESUtils.m */,
+				21361FEB16971564004B9D1E /* GLESUtils.h */,
+				21361FEC16971564004B9D1E /* GLESUtils.m */,
+				21361FED16971564004B9D1E /* ksMatrix.c */,
+				21361FEE16971564004B9D1E /* ksMatrix.h */,
+				21361FEF16971564004B9D1E /* ksVector.c */,
+				21361FF016971564004B9D1E /* ksVector.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -207,9 +212,10 @@
 				21D50FC616639C56001D4B74 /* main.m in Sources */,
 				21D50FCA16639C56001D4B74 /* AppDelegate.m in Sources */,
 				21D50FD016639C56001D4B74 /* ViewController.m in Sources */,
-				21D50FDE1663A1D8001D4B74 /* GLESUtils.m in Sources */,
 				21D50FDF1663A1D8001D4B74 /* OpenGLView.m in Sources */,
-				21D5100C1663ADB1001D4B74 /* GLESMath.c in Sources */,
+				21361FF116971564004B9D1E /* GLESUtils.m in Sources */,
+				21361FF216971564004B9D1E /* ksMatrix.c in Sources */,
+				21361FF316971564004B9D1E /* ksVector.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

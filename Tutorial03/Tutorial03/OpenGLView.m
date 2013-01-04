@@ -160,14 +160,14 @@
     
     // Translate away from the viewer
     //
-    ksTranslate(&_modelViewMatrix, self.posX, self.posY, self.posZ);
+    ksMatrixTranslate(&_modelViewMatrix, self.posX, self.posY, self.posZ);
     
     // Rotate the triangle
     //
-    ksRotate(&_modelViewMatrix, self.rotateX, 1.0, 0.0, 0.0);
+    ksMatrixRotate(&_modelViewMatrix, self.rotateX, 1.0, 0.0, 0.0);
     
     // Scale the triangle
-    ksScale(&_modelViewMatrix, 1.0, 1.0, self.scaleZ);
+    ksMatrixScale(&_modelViewMatrix, 1.0, 1.0, self.scaleZ);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
@@ -176,9 +176,9 @@
 - (void)drawTriangle
 {
     GLfloat vertices[] = {
-        0.0f,  0.5f, 0.0f, 
-        -0.5f, -0.5f, 0.0f,
-        0.5f,  -0.5f, 0.0f };
+        0.0f,  0.7f, 0.0f, 
+        -0.7f, -0.7f, 0.0f,
+        0.7f,  -0.7f, 0.0f };
     
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
@@ -191,11 +191,11 @@
 - (void)drawTriCone
 {
     GLfloat vertices[] = {
-        0.5f, 0.5f, 0.0f, 
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 
-        0.0f, 0.0f, -0.707f,
+        0.7f, 0.7f, 0.0f, 
+        0.7f, -0.7f, 0.0f,
+        -0.7f, -0.7f, 0.0f,
+        -0.7f, 0.7f, 0.0f, 
+        0.0f, 0.0f, -1.0f,
     };
     
     GLubyte indices[] = {

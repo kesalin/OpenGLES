@@ -13,8 +13,8 @@
 // Declare private members inside anonymous category
 @interface OpenGLView()
 {
-    KSMatrix4 _shouldModelViewMatrix;
-    KSMatrix4 _elbowModelViewMatrix;
+    ksMatrix4 _shouldModelViewMatrix;
+    ksMatrix4 _elbowModelViewMatrix;
     
     float _rotateColorCube;
     
@@ -37,7 +37,7 @@
 - (void)updateColorCubeTransform;
 - (void)drawColorCube;
 
-- (void)drawCube:(KSVec4) color;
+- (void)drawCube:(ksColor) color;
 
 @end
 
@@ -173,16 +173,16 @@
 {
     ksMatrixLoadIdentity(&_shouldModelViewMatrix);
     
-    ksTranslate(&_shouldModelViewMatrix, -0.0, 0.0, -5.5);
+    ksMatrixTranslate(&_shouldModelViewMatrix, -0.0, 0.0, -5.5);
     
     // Rotate the shoulder
     //
-    ksRotate(&_shouldModelViewMatrix, self.rotateShoulder, 0.0, 0.0, 1.0);
+    ksMatrixRotate(&_shouldModelViewMatrix, self.rotateShoulder, 0.0, 0.0, 1.0);
     
     // Scale the cube to be a shoulder
     //
-    ksCopyMatrix4(&_modelViewMatrix, &_shouldModelViewMatrix);
-    ksScale(&_modelViewMatrix, 1.5, 0.6, 0.6);
+    ksMatrixCopy(&_modelViewMatrix, &_shouldModelViewMatrix);
+    ksMatrixScale(&_modelViewMatrix, 1.5, 0.6, 0.6);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
@@ -192,25 +192,25 @@
 {
     // Relative to shoulder
     //
-    ksCopyMatrix4(&_elbowModelViewMatrix, &_shouldModelViewMatrix);
+    ksMatrixCopy(&_elbowModelViewMatrix, &_shouldModelViewMatrix);
     
     // Translate away from shoulder
     //
-    ksTranslate(&_elbowModelViewMatrix, 1.5, 0.0, 0.0);
+    ksMatrixTranslate(&_elbowModelViewMatrix, 1.5, 0.0, 0.0);
     
     // Rotate the elbow
     //
-    ksRotate(&_elbowModelViewMatrix, self.rotateElbow, 0.0, 0.0, 1.0);
+    ksMatrixRotate(&_elbowModelViewMatrix, self.rotateElbow, 0.0, 0.0, 1.0);
     
     // Scale the cube to be a elbow
-    ksCopyMatrix4(&_modelViewMatrix, &_elbowModelViewMatrix);
-    ksScale(&_modelViewMatrix, 1.0, 0.4, 0.4);
+    ksMatrixCopy(&_modelViewMatrix, &_elbowModelViewMatrix);
+    ksMatrixScale(&_modelViewMatrix, 1.0, 0.4, 0.4);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
 }
 
-- (void)drawCube:(KSVec4) color
+- (void)drawCube:(ksColor) color
 {
     GLfloat vertices[] = {
         0.0f, -0.5f, 0.5f,
@@ -230,7 +230,7 @@
         0, 7, 1, 6, 2, 5, 3, 4
     };
     
-    glVertexAttrib4f(_colorSlot, color[0], color[1], color[2], color[3]);
+    glVertexAttrib4f(_colorSlot, color.r, color.g, color.b, color.a);
     glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, 0, vertices );
     glEnableVertexAttribArray(_positionSlot);
     
@@ -241,7 +241,7 @@
 { 
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+    ksMatrixTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
@@ -273,9 +273,9 @@
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
     
-    ksTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
+    ksMatrixTranslate(&_modelViewMatrix, 0.0, -2, -5.5);
     
-    ksRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
+    ksMatrixRotate(&_modelViewMatrix, _rotateColorCube, 0.0, 1.0, 0.0);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
@@ -328,8 +328,8 @@
     if (_context == nil)
         return;
     
-    KSVec4 colorRed = {1, 0, 0, 1};
-    KSVec4 colorWhite = {1, 1, 1, 1};
+    ksColor colorRed = {1, 0, 0, 1};
+    ksColor colorWhite = {1, 1, 1, 1};
 
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);

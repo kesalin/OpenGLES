@@ -125,9 +125,22 @@ void ksMatrixMultiply(KSMatrix4 *result, const KSMatrix4 *srcA, const KSMatrix4 
     memcpy(result, &tmp, sizeof(KSMatrix4));
 }
 
-void ksCopyMatrix4(KSMatrix4 *result, const KSMatrix4 * target)
+void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src)
 {
-    memcpy(result, target, sizeof(KSMatrix4));
+    memcpy(target, src, sizeof(KSMatrix4));
+}
+
+void ksMatrix4ToMatrix3(KSMatrix3 * t, const KSMatrix4 * src)
+{
+    t->m[0][0] = src->m[0][0];
+    t->m[0][1] = src->m[0][1];
+    t->m[0][2] = src->m[0][2];
+    t->m[1][0] = src->m[1][0];
+    t->m[1][1] = src->m[1][1];
+    t->m[1][2] = src->m[1][2];
+    t->m[2][0] = src->m[2][0];
+    t->m[2][1] = src->m[2][1];
+    t->m[2][2] = src->m[2][2];
 }
 
 void ksMatrixLoadIdentity(KSMatrix4 *result)

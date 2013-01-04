@@ -2,7 +2,7 @@
 //  GLESMath.h
 //
 //  Created by kesalin@gmail.com on 12-11-26.
-//  Copyright (c) 2012 Äê http://blog.csdn.net/kesalin/. All rights reserved.
+//  Copyright (c) 2012. http://blog.csdn.net/kesalin/. All rights reserved.
 //
 
 #ifndef __GLESMATH_H__
@@ -27,19 +27,43 @@ typedef unsigned char 		byte;
 
 typedef struct
 {
+	GLfloat   m[3][3];
+} KSMatrix3;
+
+typedef struct
+{
 	GLfloat   m[4][4];
 } KSMatrix4;
 
-typedef GLfloat KSVec_t;
-typedef KSVec_t KSVec2[2];
-typedef KSVec_t KSVec3[3];
-typedef KSVec_t KSVec4[4];
+typedef struct KSVec3 {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+} KSVec3;
+
+typedef struct KSVec4 {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+    GLfloat w;
+} KSVec4;
+
+typedef struct {
+    GLfloat r;
+    GLfloat g;
+    GLfloat b;
+    GLfloat a;
+} KSColor;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void ksCopyMatrix4(KSMatrix4 *result, const KSMatrix4 * target);
+unsigned int ksNextPot(unsigned int n);
+    
+void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src);
+
+void ksMatrix4ToMatrix3(KSMatrix3 * target, const KSMatrix4 * src);
 
 //
 /// multiply matrix specified by result with a scaling matrix and return new matrix in result

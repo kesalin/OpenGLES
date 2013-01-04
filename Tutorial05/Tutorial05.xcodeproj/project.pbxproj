@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21361FFF169715DD004B9D1E /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 21361FFA169715DD004B9D1E /* GLESUtils.m */; };
+		21362000169715DD004B9D1E /* ksMatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 21361FFB169715DD004B9D1E /* ksMatrix.c */; };
+		21362001169715DD004B9D1E /* ksVector.c in Sources */ = {isa = PBXBuildFile; fileRef = 21361FFD169715DD004B9D1E /* ksVector.c */; };
 		21C12501167D9BA800E80909 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 21C12500167D9BA800E80909 /* icon.png */; };
 		E36B8EE416739A11008B4C5A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36B8EE316739A11008B4C5A /* UIKit.framework */; };
 		E36B8EE616739A11008B4C5A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36B8EE516739A11008B4C5A /* Foundation.framework */; };
@@ -16,8 +19,6 @@
 		E36B8EF416739A11008B4C5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E36B8EF316739A11008B4C5A /* AppDelegate.m */; };
 		E36B8EF716739A11008B4C5A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E36B8EF516739A11008B4C5A /* MainStoryboard.storyboard */; };
 		E36B8EFA16739A11008B4C5A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E36B8EF916739A11008B4C5A /* ViewController.m */; };
-		E36B8F0616739BE3008B4C5A /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = E36B8F0016739BE3008B4C5A /* GLESMath.c */; };
-		E36B8F0716739BE3008B4C5A /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E36B8F0316739BE3008B4C5A /* GLESUtils.m */; };
 		E36B8F0816739BE3008B4C5A /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = E36B8F0516739BE3008B4C5A /* OpenGLView.m */; };
 		E36B8F0C16739C19008B4C5A /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = E36B8F0A16739C0A008B4C5A /* FragmentShader.glsl */; };
 		E36B8F0D16739C19008B4C5A /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = E36B8F0B16739C0A008B4C5A /* VertexShader.glsl */; };
@@ -26,6 +27,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21361FF9169715DD004B9D1E /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESUtils.h; path = Utils/GLESUtils.h; sourceTree = "<group>"; };
+		21361FFA169715DD004B9D1E /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLESUtils.m; path = Utils/GLESUtils.m; sourceTree = "<group>"; };
+		21361FFB169715DD004B9D1E /* ksMatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ksMatrix.c; path = Utils/ksMatrix.c; sourceTree = "<group>"; };
+		21361FFC169715DD004B9D1E /* ksMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ksMatrix.h; path = Utils/ksMatrix.h; sourceTree = "<group>"; };
+		21361FFD169715DD004B9D1E /* ksVector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ksVector.c; path = Utils/ksVector.c; sourceTree = "<group>"; };
+		21361FFE169715DD004B9D1E /* ksVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ksVector.h; path = Utils/ksVector.h; sourceTree = "<group>"; };
 		21C12500167D9BA800E80909 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = SOURCE_ROOT; };
 		E36B8EDF16739A11008B4C5A /* Tutorial05.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial05.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E36B8EE316739A11008B4C5A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -40,10 +47,6 @@
 		E36B8EF616739A11008B4C5A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		E36B8EF816739A11008B4C5A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		E36B8EF916739A11008B4C5A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		E36B8F0016739BE3008B4C5A /* GLESMath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GLESMath.c; sourceTree = "<group>"; };
-		E36B8F0116739BE3008B4C5A /* GLESMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLESMath.h; sourceTree = "<group>"; };
-		E36B8F0216739BE3008B4C5A /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLESUtils.h; sourceTree = "<group>"; };
-		E36B8F0316739BE3008B4C5A /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLESUtils.m; sourceTree = "<group>"; };
 		E36B8F0416739BE3008B4C5A /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
 		E36B8F0516739BE3008B4C5A /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
 		E36B8F0A16739C0A008B4C5A /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
@@ -130,10 +133,12 @@
 		E36B8F0916739BF0008B4C5A /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E36B8F0016739BE3008B4C5A /* GLESMath.c */,
-				E36B8F0116739BE3008B4C5A /* GLESMath.h */,
-				E36B8F0216739BE3008B4C5A /* GLESUtils.h */,
-				E36B8F0316739BE3008B4C5A /* GLESUtils.m */,
+				21361FF9169715DD004B9D1E /* GLESUtils.h */,
+				21361FFA169715DD004B9D1E /* GLESUtils.m */,
+				21361FFB169715DD004B9D1E /* ksMatrix.c */,
+				21361FFC169715DD004B9D1E /* ksMatrix.h */,
+				21361FFD169715DD004B9D1E /* ksVector.c */,
+				21361FFE169715DD004B9D1E /* ksVector.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -207,9 +212,10 @@
 				E36B8EF016739A11008B4C5A /* main.m in Sources */,
 				E36B8EF416739A11008B4C5A /* AppDelegate.m in Sources */,
 				E36B8EFA16739A11008B4C5A /* ViewController.m in Sources */,
-				E36B8F0616739BE3008B4C5A /* GLESMath.c in Sources */,
-				E36B8F0716739BE3008B4C5A /* GLESUtils.m in Sources */,
 				E36B8F0816739BE3008B4C5A /* OpenGLView.m in Sources */,
+				21361FFF169715DD004B9D1E /* GLESUtils.m in Sources */,
+				21362000169715DD004B9D1E /* ksMatrix.c in Sources */,
+				21362001169715DD004B9D1E /* ksVector.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

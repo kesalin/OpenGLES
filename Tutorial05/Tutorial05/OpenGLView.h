@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
-#import "GLESMath.h"
+#import "ksMatrix.h"
 
 @interface OpenGLView : UIView {
     CAEAGLLayer* _eaglLayer;
@@ -24,8 +24,8 @@
     GLuint _projectionSlot;
     GLuint _colorSlot;
     
-    KSMatrix4 _modelViewMatrix;
-    KSMatrix4 _projectionMatrix;
+    ksMatrix4 _modelViewMatrix;
+    ksMatrix4 _projectionMatrix;
     
     float _rotateShoulder;
     float _rotateElbow;

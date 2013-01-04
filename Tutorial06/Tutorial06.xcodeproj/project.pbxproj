@@ -27,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		213620131697192E004B9D1E /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Tutorial06/Utils/Vector.h; sourceTree = "<group>"; };
 		2194531A167952E7009B9493 /* Tutorial06.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial06.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2194531E167952E7009B9493 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		21945320167952E7009B9493 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -44,7 +45,6 @@
 		2194533E167953E5009B9493 /* GLESMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESMath.h; path = Tutorial06/Utils/GLESMath.h; sourceTree = "<group>"; };
 		2194533F167953E5009B9493 /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESUtils.h; path = Tutorial06/Utils/GLESUtils.h; sourceTree = "<group>"; };
 		21945340167953E5009B9493 /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLESUtils.m; path = Tutorial06/Utils/GLESUtils.m; sourceTree = "<group>"; };
-		21945341167953E5009B9493 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Tutorial06/Utils/Vector.h; sourceTree = "<group>"; };
 		21945344167953ED009B9493 /* ParametricEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricEquations.h; path = Tutorial06/Surface/ParametricEquations.h; sourceTree = "<group>"; };
 		21945345167953ED009B9493 /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParametricSurface.cpp; path = Tutorial06/Surface/ParametricSurface.cpp; sourceTree = "<group>"; };
 		21945346167953ED009B9493 /* ParametricSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricSurface.h; path = Tutorial06/Surface/ParametricSurface.h; sourceTree = "<group>"; };
@@ -136,12 +136,12 @@
 		2194533B167952F1009B9493 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				213620131697192E004B9D1E /* Vector.h */,
 				21CFA821167C64F30076854B /* Quaternion.h */,
 				2194533D167953E5009B9493 /* GLESMath.c */,
 				2194533E167953E5009B9493 /* GLESMath.h */,
 				2194533F167953E5009B9493 /* GLESUtils.h */,
 				21945340167953E5009B9493 /* GLESUtils.m */,
-				21945341167953E5009B9493 /* Vector.h */,
 			);
 			name = Utils;
 			path = ..;
