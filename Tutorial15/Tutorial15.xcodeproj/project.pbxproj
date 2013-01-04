@@ -1,0 +1,398 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2135AD1516945D4100C8083F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD1416945D4100C8083F /* UIKit.framework */; };
+		2135AD1716945D4100C8083F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD1616945D4100C8083F /* Foundation.framework */; };
+		2135AD1916945D4100C8083F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD1816945D4100C8083F /* CoreGraphics.framework */; };
+		2135AD1F16945D4100C8083F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD1D16945D4100C8083F /* InfoPlist.strings */; };
+		2135AD2116945D4100C8083F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD2016945D4100C8083F /* main.m */; };
+		2135AD2516945D4100C8083F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD2416945D4100C8083F /* AppDelegate.m */; };
+		2135AD2816945D4100C8083F /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD2616945D4100C8083F /* MainStoryboard.storyboard */; };
+		2135AD2B16945D4100C8083F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD2A16945D4100C8083F /* ViewController.m */; };
+		2135AD3C16945D8500C8083F /* GLESMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD3216945D8500C8083F /* GLESMath.c */; };
+		2135AD3D16945D8500C8083F /* GLESUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD3516945D8500C8083F /* GLESUtils.m */; };
+		2135AD3E16945D8500C8083F /* TextureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD3816945D8500C8083F /* TextureHelper.m */; };
+		2135AD3F16945D8500C8083F /* TextureLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD3A16945D8500C8083F /* TextureLoader.mm */; };
+		2135AD4916945DBD00C8083F /* DrawableVBOFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD4516945DBD00C8083F /* DrawableVBOFactory.mm */; };
+		2135AD4A16945DBD00C8083F /* ParametricSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD4716945DBD00C8083F /* ParametricSurface.cpp */; };
+		2135AD5316945DE200C8083F /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2135AD5216945DE200C8083F /* OpenGLView.mm */; };
+		2135AD5416945E1B00C8083F /* CS.png in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD4F16945DD700C8083F /* CS.png */; };
+		2135AD5516945E1B00C8083F /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD5016945DD700C8083F /* wooden.png */; };
+		2135AD5616945E1B00C8083F /* FragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD4B16945DC700C8083F /* FragmentShader.glsl */; };
+		2135AD5716945E1B00C8083F /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD4C16945DC700C8083F /* VertexShader.glsl */; };
+		2135AD5916945E2400C8083F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD5816945E2400C8083F /* OpenGLES.framework */; };
+		2135AD5B16945E2900C8083F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD5A16945E2900C8083F /* QuartzCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2135AD1016945D4100C8083F /* Tutorial15.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial15.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2135AD1416945D4100C8083F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2135AD1616945D4100C8083F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2135AD1816945D4100C8083F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2135AD1C16945D4100C8083F /* Tutorial15-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tutorial15-Info.plist"; sourceTree = "<group>"; };
+		2135AD1E16945D4100C8083F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2135AD2016945D4100C8083F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2135AD2216945D4100C8083F /* Tutorial15-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tutorial15-Prefix.pch"; sourceTree = "<group>"; };
+		2135AD2316945D4100C8083F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		2135AD2416945D4100C8083F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2135AD2716945D4100C8083F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		2135AD2916945D4100C8083F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		2135AD2A16945D4100C8083F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		2135AD3216945D8500C8083F /* GLESMath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = GLESMath.c; path = Utils/GLESMath.c; sourceTree = "<group>"; };
+		2135AD3316945D8500C8083F /* GLESMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESMath.h; path = Utils/GLESMath.h; sourceTree = "<group>"; };
+		2135AD3416945D8500C8083F /* GLESUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLESUtils.h; path = Utils/GLESUtils.h; sourceTree = "<group>"; };
+		2135AD3516945D8500C8083F /* GLESUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLESUtils.m; path = Utils/GLESUtils.m; sourceTree = "<group>"; };
+		2135AD3616945D8500C8083F /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utils/Quaternion.h; sourceTree = "<group>"; };
+		2135AD3716945D8500C8083F /* TextureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureHelper.h; path = Utils/TextureHelper.h; sourceTree = "<group>"; };
+		2135AD3816945D8500C8083F /* TextureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextureHelper.m; path = Utils/TextureHelper.m; sourceTree = "<group>"; };
+		2135AD3916945D8500C8083F /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = Utils/TextureLoader.h; sourceTree = "<group>"; };
+		2135AD3A16945D8500C8083F /* TextureLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextureLoader.mm; path = Utils/TextureLoader.mm; sourceTree = "<group>"; };
+		2135AD3B16945D8500C8083F /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utils/Vector.h; sourceTree = "<group>"; };
+		2135AD4416945DBD00C8083F /* DrawableVBOFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableVBOFactory.h; path = Surface/DrawableVBOFactory.h; sourceTree = "<group>"; };
+		2135AD4516945DBD00C8083F /* DrawableVBOFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DrawableVBOFactory.mm; path = Surface/DrawableVBOFactory.mm; sourceTree = "<group>"; };
+		2135AD4616945DBD00C8083F /* ParametricEquations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricEquations.h; path = Surface/ParametricEquations.h; sourceTree = "<group>"; };
+		2135AD4716945DBD00C8083F /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParametricSurface.cpp; path = Surface/ParametricSurface.cpp; sourceTree = "<group>"; };
+		2135AD4816945DBD00C8083F /* ParametricSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParametricSurface.h; path = Surface/ParametricSurface.h; sourceTree = "<group>"; };
+		2135AD4B16945DC700C8083F /* FragmentShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = FragmentShader.glsl; path = Shader/FragmentShader.glsl; sourceTree = "<group>"; };
+		2135AD4C16945DC700C8083F /* VertexShader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = VertexShader.glsl; path = Shader/VertexShader.glsl; sourceTree = "<group>"; };
+		2135AD4D16945DCE00C8083F /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTGlobal.h; path = PowerVR/PVRTGlobal.h; sourceTree = "<group>"; };
+		2135AD4E16945DCE00C8083F /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTTexture.h; path = PowerVR/PVRTTexture.h; sourceTree = "<group>"; };
+		2135AD4F16945DD700C8083F /* CS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CS.png; path = Texture/CS.png; sourceTree = "<group>"; };
+		2135AD5016945DD700C8083F /* wooden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wooden.png; path = Texture/wooden.png; sourceTree = "<group>"; };
+		2135AD5116945DE200C8083F /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
+		2135AD5216945DE200C8083F /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
+		2135AD5816945E2400C8083F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		2135AD5A16945E2900C8083F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2135AD0D16945D4100C8083F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2135AD5B16945E2900C8083F /* QuartzCore.framework in Frameworks */,
+				2135AD5916945E2400C8083F /* OpenGLES.framework in Frameworks */,
+				2135AD1516945D4100C8083F /* UIKit.framework in Frameworks */,
+				2135AD1716945D4100C8083F /* Foundation.framework in Frameworks */,
+				2135AD1916945D4100C8083F /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2135AD0516945D4100C8083F = {
+			isa = PBXGroup;
+			children = (
+				2135AD1A16945D4100C8083F /* Tutorial15 */,
+				2135AD1316945D4100C8083F /* Frameworks */,
+				2135AD1116945D4100C8083F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2135AD1116945D4100C8083F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD1016945D4100C8083F /* Tutorial15.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2135AD1316945D4100C8083F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD5A16945E2900C8083F /* QuartzCore.framework */,
+				2135AD5816945E2400C8083F /* OpenGLES.framework */,
+				2135AD1416945D4100C8083F /* UIKit.framework */,
+				2135AD1616945D4100C8083F /* Foundation.framework */,
+				2135AD1816945D4100C8083F /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2135AD1A16945D4100C8083F /* Tutorial15 */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD4316945DAD00C8083F /* Tetxture */,
+				2135AD4216945DA400C8083F /* PowerVR */,
+				2135AD4116945D9A00C8083F /* Shader */,
+				2135AD4016945D8B00C8083F /* Surface */,
+				2135AD3116945D7100C8083F /* Utils */,
+				2135AD2316945D4100C8083F /* AppDelegate.h */,
+				2135AD2416945D4100C8083F /* AppDelegate.m */,
+				2135AD2916945D4100C8083F /* ViewController.h */,
+				2135AD2A16945D4100C8083F /* ViewController.m */,
+				2135AD5116945DE200C8083F /* OpenGLView.h */,
+				2135AD5216945DE200C8083F /* OpenGLView.mm */,
+				2135AD1B16945D4100C8083F /* Supporting Files */,
+			);
+			path = Tutorial15;
+			sourceTree = "<group>";
+		};
+		2135AD1B16945D4100C8083F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD2616945D4100C8083F /* MainStoryboard.storyboard */,
+				2135AD1C16945D4100C8083F /* Tutorial15-Info.plist */,
+				2135AD1D16945D4100C8083F /* InfoPlist.strings */,
+				2135AD2016945D4100C8083F /* main.m */,
+				2135AD2216945D4100C8083F /* Tutorial15-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2135AD3116945D7100C8083F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD3216945D8500C8083F /* GLESMath.c */,
+				2135AD3316945D8500C8083F /* GLESMath.h */,
+				2135AD3416945D8500C8083F /* GLESUtils.h */,
+				2135AD3516945D8500C8083F /* GLESUtils.m */,
+				2135AD3616945D8500C8083F /* Quaternion.h */,
+				2135AD3716945D8500C8083F /* TextureHelper.h */,
+				2135AD3816945D8500C8083F /* TextureHelper.m */,
+				2135AD3916945D8500C8083F /* TextureLoader.h */,
+				2135AD3A16945D8500C8083F /* TextureLoader.mm */,
+				2135AD3B16945D8500C8083F /* Vector.h */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		2135AD4016945D8B00C8083F /* Surface */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD4416945DBD00C8083F /* DrawableVBOFactory.h */,
+				2135AD4516945DBD00C8083F /* DrawableVBOFactory.mm */,
+				2135AD4616945DBD00C8083F /* ParametricEquations.h */,
+				2135AD4716945DBD00C8083F /* ParametricSurface.cpp */,
+				2135AD4816945DBD00C8083F /* ParametricSurface.h */,
+			);
+			name = Surface;
+			sourceTree = "<group>";
+		};
+		2135AD4116945D9A00C8083F /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD4B16945DC700C8083F /* FragmentShader.glsl */,
+				2135AD4C16945DC700C8083F /* VertexShader.glsl */,
+			);
+			name = Shader;
+			sourceTree = "<group>";
+		};
+		2135AD4216945DA400C8083F /* PowerVR */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD4D16945DCE00C8083F /* PVRTGlobal.h */,
+				2135AD4E16945DCE00C8083F /* PVRTTexture.h */,
+			);
+			name = PowerVR;
+			sourceTree = "<group>";
+		};
+		2135AD4316945DAD00C8083F /* Tetxture */ = {
+			isa = PBXGroup;
+			children = (
+				2135AD4F16945DD700C8083F /* CS.png */,
+				2135AD5016945DD700C8083F /* wooden.png */,
+			);
+			name = Tetxture;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2135AD0F16945D4100C8083F /* Tutorial15 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2135AD2E16945D4100C8083F /* Build configuration list for PBXNativeTarget "Tutorial15" */;
+			buildPhases = (
+				2135AD0C16945D4100C8083F /* Sources */,
+				2135AD0D16945D4100C8083F /* Frameworks */,
+				2135AD0E16945D4100C8083F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tutorial15;
+			productName = Tutorial15;
+			productReference = 2135AD1016945D4100C8083F /* Tutorial15.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2135AD0716945D4100C8083F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "http://blog.csdn.net/kesalin/";
+			};
+			buildConfigurationList = 2135AD0A16945D4100C8083F /* Build configuration list for PBXProject "Tutorial15" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2135AD0516945D4100C8083F;
+			productRefGroup = 2135AD1116945D4100C8083F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2135AD0F16945D4100C8083F /* Tutorial15 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2135AD0E16945D4100C8083F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2135AD5416945E1B00C8083F /* CS.png in Resources */,
+				2135AD5516945E1B00C8083F /* wooden.png in Resources */,
+				2135AD5616945E1B00C8083F /* FragmentShader.glsl in Resources */,
+				2135AD5716945E1B00C8083F /* VertexShader.glsl in Resources */,
+				2135AD1F16945D4100C8083F /* InfoPlist.strings in Resources */,
+				2135AD2816945D4100C8083F /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2135AD0C16945D4100C8083F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2135AD2116945D4100C8083F /* main.m in Sources */,
+				2135AD2516945D4100C8083F /* AppDelegate.m in Sources */,
+				2135AD2B16945D4100C8083F /* ViewController.m in Sources */,
+				2135AD3C16945D8500C8083F /* GLESMath.c in Sources */,
+				2135AD3D16945D8500C8083F /* GLESUtils.m in Sources */,
+				2135AD3E16945D8500C8083F /* TextureHelper.m in Sources */,
+				2135AD3F16945D8500C8083F /* TextureLoader.mm in Sources */,
+				2135AD4916945DBD00C8083F /* DrawableVBOFactory.mm in Sources */,
+				2135AD4A16945DBD00C8083F /* ParametricSurface.cpp in Sources */,
+				2135AD5316945DE200C8083F /* OpenGLView.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2135AD1D16945D4100C8083F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2135AD1E16945D4100C8083F /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2135AD2616945D4100C8083F /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2135AD2716945D4100C8083F /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2135AD2C16945D4100C8083F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2135AD2D16945D4100C8083F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2135AD2F16945D4100C8083F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tutorial15/Tutorial15-Prefix.pch";
+				INFOPLIST_FILE = "Tutorial15/Tutorial15-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		2135AD3016945D4100C8083F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tutorial15/Tutorial15-Prefix.pch";
+				INFOPLIST_FILE = "Tutorial15/Tutorial15-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2135AD0A16945D4100C8083F /* Build configuration list for PBXProject "Tutorial15" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2135AD2C16945D4100C8083F /* Debug */,
+				2135AD2D16945D4100C8083F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2135AD2E16945D4100C8083F /* Build configuration list for PBXNativeTarget "Tutorial15" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2135AD2F16945D4100C8083F /* Debug */,
+				2135AD3016945D4100C8083F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2135AD0716945D4100C8083F /* Project object */;
+}
