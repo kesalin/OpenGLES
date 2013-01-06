@@ -143,25 +143,25 @@ void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src)
 void ksTranspose(KSMatrix4 *result, const KSMatrix4 * src)
 {
     KSMatrix4 tmp;
-    tmp->m[0][0] = src->m[0][0]; 
-    tmp->m[0][1] = src->m[1][0];
-    tmp->m[0][2] = src->m[2][0];
-    tmp->m[0][3] = src->m[3][0];
+    tmp.m[0][0] = src->m[0][0]; 
+    tmp.m[0][1] = src->m[1][0];
+    tmp.m[0][2] = src->m[2][0];
+    tmp.m[0][3] = src->m[3][0];
     
-    tmp->m[1][0] = src->m[0][1]; 
-    tmp->m[1][1] = src->m[1][1];
-    tmp->m[1][2] = src->m[2][1];
-    tmp->m[1][3] = src->m[3][1];
+    tmp.m[1][0] = src->m[0][1]; 
+    tmp.m[1][1] = src->m[1][1];
+    tmp.m[1][2] = src->m[2][1];
+    tmp.m[1][3] = src->m[3][1];
     
-    tmp->m[2][0] = src->m[0][2]; 
-    tmp->m[2][1] = src->m[1][2];
-    tmp->m[2][2] = src->m[2][2];
-    tmp->m[2][3] = src->m[3][2];
+    tmp.m[2][0] = src->m[0][2]; 
+    tmp.m[2][1] = src->m[1][2];
+    tmp.m[2][2] = src->m[2][2];
+    tmp.m[2][3] = src->m[3][2];
     
-    tmp->m[3][0] = src->m[0][3]; 
-    tmp->m[3][1] = src->m[1][3];
-    tmp->m[3][2] = src->m[2][3];
-    tmp->m[3][3] = src->m[3][3];
+    tmp.m[3][0] = src->m[0][3]; 
+    tmp.m[3][1] = src->m[1][3];
+    tmp.m[3][2] = src->m[2][3];
+    tmp.m[3][3] = src->m[3][3];
     
     memcpy(result, &tmp, sizeof(KSMatrix4));
 }

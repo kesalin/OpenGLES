@@ -28,6 +28,12 @@
 		2178CFDB1692BAB7000B0073 /* wooden.png in Resources */ = {isa = PBXBuildFile; fileRef = 2178CFBC1692BA64000B0073 /* wooden.png */; };
 		2178CFDD1692BABD000B0073 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2178CFDC1692BABD000B0073 /* OpenGLES.framework */; };
 		2178CFDF1692BAC3000B0073 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2178CFDE1692BAC3000B0073 /* QuartzCore.framework */; };
+		2195704F16999F3A00571370 /* front.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704816999F2700571370 /* front.png */; };
+		2195705016999F3A00571370 /* ground.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704916999F2700571370 /* ground.png */; };
+		2195705116999F3A00571370 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704A16999F2700571370 /* left.png */; };
+		2195705216999F3A00571370 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704B16999F2700571370 /* back.png */; };
+		2195705316999F3A00571370 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704C16999F2700571370 /* right.png */; };
+		2195705416999F3A00571370 /* sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 2195704D16999F2700571370 /* sky.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +75,12 @@
 		2178CFDE1692BAC3000B0073 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2178CFE01692BAE5000B0073 /* PVRTGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTGlobal.h; path = PowerVR/PVRTGlobal.h; sourceTree = "<group>"; };
 		2178CFE11692BAE5000B0073 /* PVRTTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PVRTTexture.h; path = PowerVR/PVRTTexture.h; sourceTree = "<group>"; };
+		2195704816999F2700571370 /* front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = front.png; path = Texture/front.png; sourceTree = "<group>"; };
+		2195704916999F2700571370 /* ground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ground.png; path = Texture/ground.png; sourceTree = "<group>"; };
+		2195704A16999F2700571370 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left.png; path = Texture/left.png; sourceTree = "<group>"; };
+		2195704B16999F2700571370 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Texture/back.png; sourceTree = "<group>"; };
+		2195704C16999F2700571370 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = right.png; path = Texture/right.png; sourceTree = "<group>"; };
+		2195704D16999F2700571370 /* sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sky.png; path = Texture/sky.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +200,12 @@
 		2178CFBA1692BA43000B0073 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
+				2195704816999F2700571370 /* front.png */,
+				2195704916999F2700571370 /* ground.png */,
+				2195704A16999F2700571370 /* left.png */,
+				2195704B16999F2700571370 /* back.png */,
+				2195704C16999F2700571370 /* right.png */,
+				2195704D16999F2700571370 /* sky.png */,
 				2178CFBB1692BA64000B0073 /* CS.png */,
 				2178CFBC1692BA64000B0073 /* wooden.png */,
 			);
@@ -254,6 +272,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2195704F16999F3A00571370 /* front.png in Resources */,
+				2195705016999F3A00571370 /* ground.png in Resources */,
+				2195705116999F3A00571370 /* left.png in Resources */,
+				2195705216999F3A00571370 /* back.png in Resources */,
+				2195705316999F3A00571370 /* right.png in Resources */,
+				2195705416999F3A00571370 /* sky.png in Resources */,
 				2178CFD81692BAB7000B0073 /* FragmentShader.glsl in Resources */,
 				2178CFD91692BAB7000B0073 /* VertexShader.glsl in Resources */,
 				2178CFDA1692BAB7000B0073 /* CS.png in Resources */,
@@ -391,6 +415,7 @@
 				2178CFB61692B9BC000B0073 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

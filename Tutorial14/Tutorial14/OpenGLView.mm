@@ -267,10 +267,16 @@
 
 - (void)setupTextures
 {
+    NSArray * textureFilenames = [NSArray arrayWithObjects:
+                                  @"right.png", @"left.png", 
+                                  @"sky.png", @"ground.png",
+                                  @"front.png", @"back.png",
+                                  nil];
+    
     // Load texture for stage 0 - Cubemap
     //
 	glActiveTexture(GL_TEXTURE0);
-    _textureCubemap = [TextureHelper createTextureCubemap:@"wooden.png"];
+    _textureCubemap = [TextureHelper createTextureCubemap:textureFilenames];
     
     // Load texture for stage 1 - 2D
     //

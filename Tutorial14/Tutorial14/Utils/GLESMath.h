@@ -65,6 +65,8 @@ void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src);
 
 void ksMatrix4ToMatrix3(KSMatrix3 * target, const KSMatrix4 * src);
 
+void ksTranspose(KSMatrix4 *result, const KSMatrix4 * src);
+
 //
 /// multiply matrix specified by result with a scaling matrix and return new matrix in result
 /// result Specifies the input matrix.  Scaled matrix is returned in result.

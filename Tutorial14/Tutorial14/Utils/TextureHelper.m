@@ -14,6 +14,7 @@
 + (void)setImageTexture:(TextureLoader *)loader;
 + (void)setPVRTexture:(TextureLoader *)loader;
 + (void)setTextureParameter;
++ (void)setImageTextureCubmap:(TextureLoader *)loader target:(GLenum)target;
 
 @end
 
@@ -160,7 +161,7 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
-+ (void)setImageTextureCubmap:(TextureLoader *)loader
++ (void)setImageTextureCubmap:(TextureLoader *)loader target:(GLenum)target
 {
     void* pixels = [loader imageData];
     CGSize size = [loader imageSize];
@@ -203,29 +204,25 @@
             break;
     }
     
-    // Load the cube face
-    //
-    // X
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, size.width, size.height, 0, format, type, pixels);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, size.width, size.height, 0, format, type, pixels);
-    
-    // Y
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, size.width, size.height, 0, format, type, pixels);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, size.width, size.height, 0, format, type, pixels);    
-    
-    // Z
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, size.width, size.height, 0, format, type, pixels);
-    
-    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+    glTexImage2D(target, 0, format, size.width, size.height, 0, format, type, pixels);
 }
 
 // Create a simple cubemap with a 1x1 face with a different color for each face
 //
-+ (GLuint)createTextureCubemap:(NSString *)textureFile
++ (GLuint)createTextureCubemap:(NSArray *)textureFilenames
 {
-    TextureLoader * loader = [[TextureLoader alloc] init];
-    [loader loadImage:textureFile isPOT:FALSE];
+    if ([textureFilenames count] < 6) {
+        NSLog(@"Error: No enough texture files.");
+        return 0;
+    }
+
+    NSMutableArray * loaders = [NSMutableArray arrayWithCapacity:6];
+    for (NSString * filename in textureFilenames) {
+        TextureLoader * loader = [[TextureLoader alloc] init];
+        [loader loadImage:filename isPOT:FALSE];
+        
+        [loaders addObject:loader];
+    }
     
     GLuint textureHandle = 0;
     glGenTextures(1, &textureHandle);
@@ -237,10 +234,28 @@
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
     
-    [self setImageTextureCubmap:loader];
+    // Load the cube face
+    //
+    // X
+    [self setImageTextureCubmap:[loaders objectAtIndex:0] target:GL_TEXTURE_CUBE_MAP_POSITIVE_X];
+    [self setImageTextureCubmap:[loaders objectAtIndex:1] target:GL_TEXTURE_CUBE_MAP_NEGATIVE_X];
     
-    [loader unload];
-    loader = nil;
+    // Y
+    [self setImageTextureCubmap:[loaders objectAtIndex:2] target:GL_TEXTURE_CUBE_MAP_POSITIVE_Y];
+    [self setImageTextureCubmap:[loaders objectAtIndex:3] target:GL_TEXTURE_CUBE_MAP_NEGATIVE_Y];
+    
+    // Z
+    [self setImageTextureCubmap:[loaders objectAtIndex:4] target:GL_TEXTURE_CUBE_MAP_POSITIVE_Z];
+    [self setImageTextureCubmap:[loaders objectAtIndex:5] target:GL_TEXTURE_CUBE_MAP_NEGATIVE_Z];
+    
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+    
+    // Unload
+    //
+    for (TextureLoader * loader in loaders) {
+        [loader unload];
+    }
+    loaders = nil;
     
     return textureHandle;
 }
