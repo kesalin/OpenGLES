@@ -242,8 +242,8 @@
     
     // Set up some default material parameters.
     //
-    _lightPosition.x = _lightPosition.y = 0.0;
-    _lightPosition.z = 1.0;
+    _lightPosition.x = _lightPosition.y = 1.0;
+    _lightPosition.z = 10.0;
     
     _ambient.r = _ambient.g = _ambient.b = 0.04f;
     _ambient.a = 0.5f;
@@ -252,10 +252,14 @@
     _diffuse.r = _diffuse.g = _diffuse.b = _diffuse.a = 0.8;
     
     _shininess = 20;
+    
+    _eyePosition.x = _eyePosition.y = 0.0;
+    _eyePosition.z = 1.0;
 }
 
 - (void)updateLights
 {
+    glUniform3f(_eyePositionSlot, _eyePosition.x, _eyePosition.y, _eyePosition.z);
     glUniform3f(_lightPositionSlot, _lightPosition.x, _lightPosition.y, _lightPosition.z);
     glUniform4f(_ambientSlot, _ambient.r, _ambient.g, _ambient.b, _ambient.a);
     glUniform4f(_specularSlot, _specular.r, _specular.g, _specular.b, _specular.a);
@@ -311,6 +315,8 @@
     _projectionSlot = glGetUniformLocation(_programHandle, "projection");
     _modelViewSlot = glGetUniformLocation(_programHandle, "modelView");
     _normalMatrixSlot = glGetUniformLocation(_programHandle, "normalMatrix");
+    _modelSlot = glGetUniformLocation(_programHandle, "model");
+    _eyePositionSlot = glGetUniformLocation(_programHandle, "eyePosition");
     
     _lightPositionSlot = glGetUniformLocation(_programHandle, "vLightPosition");
     _ambientSlot = glGetUniformLocation(_programHandle, "vAmbientMaterial");
@@ -357,13 +363,13 @@
 - (void)updateSurface
 {
     ksMatrixLoadIdentity(&_modelViewMatrix);
-    
     ksTranslate(&_modelViewMatrix, 0.0, 0.0, -9);
-    
     ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
+    ksMatrix4ToMatrix3(&_modelMatrix, &_modelViewMatrix);
     
     // Load the model-view matrix
     glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
+    glUniformMatrix3fv(_modelSlot, 1, GL_FALSE, (GLfloat*)&_modelMatrix.m[0][0]);
     
     // Load the normal matrix.
     // It's orthogonal, so its Inverse-Transpose is itself!
