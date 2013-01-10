@@ -252,9 +252,6 @@
     _diffuse.r = _diffuse.g = _diffuse.b = _diffuse.a = 0.8;
     
     _shininess = 20;
-    
-    _eyePosition.x = _eyePosition.y = 0.0;
-    _eyePosition.z = 1.0;
 }
 
 - (void)updateLights
@@ -347,6 +344,15 @@
     // Load projection matrix
     glUniformMatrix4fv(_projectionSlot, 1, GL_FALSE, (GLfloat*)&_projectionMatrix.m[0][0]);
     
+    // Generate a view matrix
+    //
+    _eyePosition.x = _eyePosition.y = 0.0;
+    _eyePosition.z = 1.0;
+    KSVec3 target = {0.0, 0.0, -1};
+    KSVec3 up = {0.0, 1.0, 0};
+    ksMatrixLoadIdentity(&_viewBaseMatrix);
+    ksLookAt(&_viewBaseMatrix, &_eyePosition, &target, &up);
+    
     // Initialize states
     //
     glEnable(GL_DEPTH_TEST);
@@ -362,20 +368,34 @@
 
 - (void)updateSurface
 {
-    ksMatrixLoadIdentity(&_modelViewMatrix);
-    ksTranslate(&_modelViewMatrix, 0.0, 0.0, -9);
-    ksMatrixMultiply(&_modelViewMatrix, &_rotationMatrix, &_modelViewMatrix);
-    ksMatrix4ToMatrix3(&_modelMatrix, &_modelViewMatrix);
+    // Model matrix
+    //
+    KSMatrix4 modelMatrix;
+    ksMatrixLoadIdentity(&modelMatrix);
+    ksMatrixMultiply(&modelMatrix, &_rotationMatrix, &modelMatrix);
     
-    // Load the model-view matrix
-    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&_modelViewMatrix.m[0][0]);
-    glUniformMatrix3fv(_modelSlot, 1, GL_FALSE, (GLfloat*)&_modelMatrix.m[0][0]);
+    KSMatrix3 modelMatrix3;
+    ksMatrix4ToMatrix3(&modelMatrix3, &modelMatrix);
+    glUniformMatrix3fv(_modelSlot, 1, GL_FALSE, (GLfloat*)&modelMatrix3.m[0][0]);
+
+    // View matrix
+    //
+    KSMatrix4 viewMatrix;
+    ksCopyMatrix4(&viewMatrix, &_viewBaseMatrix);
+    ksTranslate(&viewMatrix, 0.0, 0.0, -9);
+    
+    // Model-View matrix
+    //
+    KSMatrix4 modelViewMatrix;
+    ksMatrixLoadIdentity(&modelViewMatrix);
+    ksMatrixMultiply(&modelViewMatrix, &modelMatrix, &viewMatrix);
+    glUniformMatrix4fv(_modelViewSlot, 1, GL_FALSE, (GLfloat*)&modelViewMatrix.m[0][0]);
     
     // Load the normal matrix.
     // It's orthogonal, so its Inverse-Transpose is itself!
     //
     KSMatrix3 normalMatrix3;
-    ksMatrix4ToMatrix3(&normalMatrix3, &_modelViewMatrix);
+    ksMatrix4ToMatrix3(&normalMatrix3, &modelViewMatrix);
     glUniformMatrix3fv(_normalMatrixSlot, 1, GL_FALSE, (GLfloat*)&normalMatrix3.m[0][0]);
     
     [self updateLights];

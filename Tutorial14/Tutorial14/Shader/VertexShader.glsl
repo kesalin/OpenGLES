@@ -40,7 +40,7 @@ void main(void)
     
     // compute relect direction
     //
-    vec3 eyeDirection = normalize(vEyePosition - vPosition.xyz);
+    vec3 eyeDirection = normalize(vPosition.xyz - vEyePosition);
     vReflectDirection = reflect(eyeDirection, vNormal); // Reflection in object space
     vReflectDirection = model * vReflectDirection;      // Transform to world sapce
 }

@@ -29,9 +29,8 @@
     GLuint _projectionSlot;
     GLuint _modelSlot;
     GLuint _eyePositionSlot;
-    
-    KSMatrix3 _modelMatrix;
-    KSMatrix4 _modelViewMatrix;
+
+    KSMatrix4 _viewBaseMatrix;
     KSMatrix4 _projectionMatrix;
     KSVec3 _eyePosition;
     

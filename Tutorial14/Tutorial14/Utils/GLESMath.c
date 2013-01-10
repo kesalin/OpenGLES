@@ -23,6 +23,41 @@ unsigned int ksNextPot(unsigned int n)
 }
 
 //
+// Vectoer math utils
+//
+
+float ksVectorLength(const KSVec3 * in)
+{
+	return (float)sqrt(in->x * in->x + in->y * in->y + in->z * in->z);
+}
+
+void ksCrossProduct(KSVec3 * out, const KSVec3 * a, const KSVec3 * b)
+{
+	out->x = a->y * b->z - a->z * b->y;
+	out->y = a->z * b->x - a->x * b->z;
+	out->z = a->x * b->y - b->y * a->x;
+}
+
+void ksVectorSubtract(KSVec3 * out, const KSVec3 * a, const KSVec3 * b)
+{
+	out->x = a->x - b->x;
+	out->y = a->y - b->y;
+	out->z = a->z - b->z;
+}
+
+void ksVectorNormalize(KSVec3 * v)
+{
+	float length = ksVectorLength(v);
+	if (length != 0)
+	{
+		length = 1.0 / length;
+		v->x *= length;
+		v->y *= length;
+		v->z *= length;
+	}
+}
+
+//
 // Matrix math utils
 //
 
@@ -189,6 +224,137 @@ void ksMatrixLoadIdentity(KSMatrix4 *result)
     result->m[3][3] = 1.0f;
 }
 
+int ksInvert(KSMatrix4 * out, const KSMatrix4 * in)
+{
+    float * m = (float *)(&in->m[0][0]);
+	float * om = (float *)(&out->m[0][0]);
+	double inv[16], det;
+	int i;
+    
+	inv[0] = m[5]  * m[10] * m[15] - 
+    m[5]  * m[11] * m[14] - 
+    m[9]  * m[6]  * m[15] + 
+    m[9]  * m[7]  * m[14] +
+    m[13] * m[6]  * m[11] - 
+    m[13] * m[7]  * m[10];
+    
+	inv[4] = -m[4]  * m[10] * m[15] + 
+    m[4]  * m[11] * m[14] + 
+    m[8]  * m[6]  * m[15] - 
+    m[8]  * m[7]  * m[14] - 
+    m[12] * m[6]  * m[11] + 
+    m[12] * m[7]  * m[10];
+    
+	inv[8] = m[4]  * m[9] * m[15] - 
+    m[4]  * m[11] * m[13] - 
+    m[8]  * m[5] * m[15] + 
+    m[8]  * m[7] * m[13] + 
+    m[12] * m[5] * m[11] - 
+    m[12] * m[7] * m[9];
+    
+	inv[12] = -m[4]  * m[9] * m[14] + 
+    m[4]  * m[10] * m[13] +
+    m[8]  * m[5] * m[14] - 
+    m[8]  * m[6] * m[13] - 
+    m[12] * m[5] * m[10] + 
+    m[12] * m[6] * m[9];
+    
+	inv[1] = -m[1]  * m[10] * m[15] + 
+    m[1]  * m[11] * m[14] + 
+    m[9]  * m[2] * m[15] - 
+    m[9]  * m[3] * m[14] - 
+    m[13] * m[2] * m[11] + 
+    m[13] * m[3] * m[10];
+    
+	inv[5] = m[0]  * m[10] * m[15] - 
+    m[0]  * m[11] * m[14] - 
+    m[8]  * m[2] * m[15] + 
+    m[8]  * m[3] * m[14] + 
+    m[12] * m[2] * m[11] - 
+    m[12] * m[3] * m[10];
+    
+	inv[9] = -m[0]  * m[9] * m[15] + 
+    m[0]  * m[11] * m[13] + 
+    m[8]  * m[1] * m[15] - 
+    m[8]  * m[3] * m[13] - 
+    m[12] * m[1] * m[11] + 
+    m[12] * m[3] * m[9];
+    
+	inv[13] = m[0]  * m[9] * m[14] - 
+    m[0]  * m[10] * m[13] - 
+    m[8]  * m[1] * m[14] + 
+    m[8]  * m[2] * m[13] + 
+    m[12] * m[1] * m[10] - 
+    m[12] * m[2] * m[9];
+    
+	inv[2] = m[1]  * m[6] * m[15] - 
+    m[1]  * m[7] * m[14] - 
+    m[5]  * m[2] * m[15] + 
+    m[5]  * m[3] * m[14] + 
+    m[13] * m[2] * m[7] - 
+    m[13] * m[3] * m[6];
+    
+	inv[6] = -m[0]  * m[6] * m[15] + 
+    m[0]  * m[7] * m[14] + 
+    m[4]  * m[2] * m[15] - 
+    m[4]  * m[3] * m[14] - 
+    m[12] * m[2] * m[7] + 
+    m[12] * m[3] * m[6];
+    
+	inv[10] = m[0]  * m[5] * m[15] - 
+    m[0]  * m[7] * m[13] - 
+    m[4]  * m[1] * m[15] + 
+    m[4]  * m[3] * m[13] + 
+    m[12] * m[1] * m[7] - 
+    m[12] * m[3] * m[5];
+    
+	inv[14] = -m[0]  * m[5] * m[14] + 
+    m[0]  * m[6] * m[13] + 
+    m[4]  * m[1] * m[14] - 
+    m[4]  * m[2] * m[13] - 
+    m[12] * m[1] * m[6] + 
+    m[12] * m[2] * m[5];
+    
+	inv[3] = -m[1] * m[6] * m[11] + 
+    m[1] * m[7] * m[10] + 
+    m[5] * m[2] * m[11] - 
+    m[5] * m[3] * m[10] - 
+    m[9] * m[2] * m[7] + 
+    m[9] * m[3] * m[6];
+    
+	inv[7] = m[0] * m[6] * m[11] - 
+    m[0] * m[7] * m[10] - 
+    m[4] * m[2] * m[11] + 
+    m[4] * m[3] * m[10] + 
+    m[8] * m[2] * m[7] - 
+    m[8] * m[3] * m[6];
+    
+	inv[11] = -m[0] * m[5] * m[11] + 
+    m[0] * m[7] * m[9] + 
+    m[4] * m[1] * m[11] - 
+    m[4] * m[3] * m[9] - 
+    m[8] * m[1] * m[7] + 
+    m[8] * m[3] * m[5];
+    
+	inv[15] = m[0] * m[5] * m[10] - 
+    m[0] * m[6] * m[9] - 
+    m[4] * m[1] * m[10] + 
+    m[4] * m[2] * m[9] + 
+    m[8] * m[1] * m[6] - 
+    m[8] * m[2] * m[5];
+    
+	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+    
+	if (det == 0)
+		return 0;
+    
+	det = 1.0 / det;
+	for (i = 0; i < 16; i++)
+		*om++ = (float)(inv[i] * det);
+    
+	return 1;
+}
+
 void ksFrustum(KSMatrix4 *result, float left, float right, float bottom, float top, float nearZ, float farZ)
 {
     float       deltaX = right - left;
@@ -246,4 +412,49 @@ void ksOrtho(KSMatrix4 *result, float left, float right, float bottom, float top
     ortho.m[3][2] = -(nearZ + farZ) / deltaZ;
     
     ksMatrixMultiply(result, &ortho, result);
+}
+
+void ksLookAt(KSMatrix4 * result, const KSVec3 * eye, const KSVec3 * target, const KSVec3 * up)
+{
+    KSVec3 side, up2, forward ;
+	//ksVec4 eyePrime;
+	KSMatrix4 transMat;
+    
+	ksVectorSubtract(&forward, target, eye);
+	ksVectorNormalize(&forward);
+    
+	ksCrossProduct(&side, up, &forward);
+	ksVectorNormalize(&side );
+    
+	ksCrossProduct(&up2, &side, &forward);
+	ksVectorNormalize(&up2);
+    
+	ksMatrixLoadIdentity(result);
+	result->m[0][0] = side.x;
+	result->m[0][1] = side.y;
+	result->m[0][2] = side.z;
+	result->m[1][0] = up2.x;
+	result->m[1][1] = up2.y;
+	result->m[1][2] = up2.z;
+	result->m[2][0] = -forward.x;
+	result->m[2][1] = -forward.y;
+	result->m[2][2] = -forward.z;
+    
+	ksMatrixLoadIdentity(&transMat);
+	ksTranslate(&transMat, -eye->x, -eye->y, -eye->z);
+    
+	ksMatrixMultiply(result, result, &transMat);
+    
+	//eyePrime.x = -eye->x;
+	//eyePrime.y = -eye->y;
+	//eyePrime.z = -eye->z;
+	//eyePrime.w = 1;
+    
+	//ksMatrixMultiplyVector(&eyePrime, result, &eyePrime);
+	//ksMatrixTranspose(result, result);
+    
+	//result->m[3][0] = eyePrime.x;
+	//result->m[3][1] = eyePrime.y;
+	//result->m[3][2] = eyePrime.z;
+	//result->m[3][3] = eyePrime.w;
 }

@@ -60,6 +60,14 @@ extern "C" {
 #endif
 
 unsigned int ksNextPot(unsigned int n);
+
+float ksVectorLength(const KSVec3 * in);
+    
+void ksCrossProduct(KSVec3 * out, const KSVec3 * a, const KSVec3 * b);
+    
+void ksVectorSubtract(KSVec3 * out, const KSVec3 * a, const KSVec3 * b);
+    
+void ksVectorNormalize(KSVec3 * v);
     
 void ksCopyMatrix4(KSMatrix4 * target, const KSMatrix4 * src);
 
@@ -67,6 +75,8 @@ void ksMatrix4ToMatrix3(KSMatrix3 * target, const KSMatrix4 * src);
 
 void ksTranspose(KSMatrix4 *result, const KSMatrix4 * src);
 
+int ksInvert(KSMatrix4 * out, const KSMatrix4 * in);
+    
 //
 /// multiply matrix specified by result with a scaling matrix and return new matrix in result
 /// result Specifies the input matrix.  Scaled matrix is returned in result.
@@ -129,6 +139,8 @@ void ksOrtho(KSMatrix4 *result, float left, float right, float bottom, float top
 /// nearZ, farZ Distances to the near and far depth clipping planes.  Both distances must be positive.
 //
 void ksFrustum(KSMatrix4 *result, float left, float right, float bottom, float top, float nearZ, float farZ);
+    
+void ksLookAt(KSMatrix4 * result, const KSVec3 * eye, const KSVec3 * target, const KSVec3 * up);
 
 #ifdef __cplusplus
 }
