@@ -372,7 +372,7 @@
     //
     KSMatrix4 modelMatrix;
     ksMatrixLoadIdentity(&modelMatrix);
-    ksMatrixMultiply(&modelMatrix, &_rotationMatrix, &modelMatrix);
+    ksMatrixMultiply(&modelMatrix, &_rotationMatrix, &modelMatrix); // Rotate model
     
     KSMatrix3 modelMatrix3;
     ksMatrix4ToMatrix3(&modelMatrix3, &modelMatrix);
@@ -383,6 +383,9 @@
     KSMatrix4 viewMatrix;
     ksCopyMatrix4(&viewMatrix, &_viewBaseMatrix);
     ksTranslate(&viewMatrix, 0.0, 0.0, -9);
+    
+    //ksMatrixMultiply(&viewMatrix, &_rotationMatrix, &viewMatrix); // Rotate camera
+    
     
     // Model-View matrix
     //
