@@ -307,7 +307,7 @@
     // Load texture for stage 0 - Cubemap
     //
 	glActiveTexture(GL_TEXTURE0);
-    _textureCubemap = [TextureHelper createTextureCubemap:@"wooden.png"];
+    _textureCubemap = [TextureHelper createTextureCubemap:@"tibet.jpg"];
     
     // Load texture for stage 1 - 2D
     //

@@ -28,6 +28,7 @@
 		2135AD5716945E1B00C8083F /* VertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2135AD4C16945DC700C8083F /* VertexShader.glsl */; };
 		2135AD5916945E2400C8083F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD5816945E2400C8083F /* OpenGLES.framework */; };
 		2135AD5B16945E2900C8083F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135AD5A16945E2900C8083F /* QuartzCore.framework */; };
+		E30E95EF169FB2E100650366 /* tibet.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E30E95ED169FB2CF00650366 /* tibet.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,7 @@
 		2135AD5216945DE200C8083F /* OpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenGLView.mm; sourceTree = "<group>"; };
 		2135AD5816945E2400C8083F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		2135AD5A16945E2900C8083F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E30E95ED169FB2CF00650366 /* tibet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = tibet.jpg; path = Texture/tibet.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 		2135AD4316945DAD00C8083F /* Tetxture */ = {
 			isa = PBXGroup;
 			children = (
+				E30E95ED169FB2CF00650366 /* tibet.jpg */,
 				2135AD4F16945DD700C8083F /* CS.png */,
 				2135AD5016945DD700C8083F /* wooden.png */,
 			);
@@ -254,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E30E95EF169FB2E100650366 /* tibet.jpg in Resources */,
 				2135AD5416945E1B00C8083F /* CS.png in Resources */,
 				2135AD5516945E1B00C8083F /* wooden.png in Resources */,
 				2135AD5616945E1B00C8083F /* FragmentShader.glsl in Resources */,
@@ -391,6 +395,7 @@
 				2135AD3016945D4100C8083F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
